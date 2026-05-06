@@ -38,4 +38,22 @@
 - [x] Ajustar tarjetas, sidebar, filtros y tablas para mayor densidad operativa.
 - [x] Mantener pestaña histórica, filtros por fecha, cliente y SDR sin pérdida funcional.
 - [x] Validar TypeScript, build y vista previa del nuevo diseño compacto.
-- [ ] Guardar checkpoint final del rediseño CRM compacto.
+- [x] Guardar checkpoint final del rediseño CRM compacto.
+
+# Pendientes para refrescar data actualizada
+
+- [x] Identificar la fuente de datos y scripts actuales usados por el dashboard.
+- [x] Descargar o extraer la versión más reciente de la data real disponible localmente.
+- [x] Normalizar registros diarios e históricos sin inventar datos.
+- [x] Integrar la data renovada en el frontend conservando filtros y diseño compacto.
+- [x] Validar TypeScript, build y vista previa con los nuevos totales.
+- [ ] Guardar checkpoint final con data refrescada.
+
+# Continuación de actualización de data
+
+- [x] Verificar si existen archivos Excel/CSV nuevos en Descargas o en la carpeta de actualización.
+- [x] Confirmar que los archivos disponibles sean válidos y más recientes que la versión integrada.
+- [x] Ejecutar normalización de pipeline principal e histórico SDR con las fuentes accesibles.
+- [x] Comparar metadatos antes/después: registros, rango de fechas, clientes, citas y firmas.
+- [x] Validar build y navegación de vistas diaria e histórica.
+- [ ] Guardar checkpoint con la data refrescada o documentar limitación si no hay fuente nueva válida.

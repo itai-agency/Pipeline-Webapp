@@ -43,7 +43,7 @@ export const pipelineData = {
       "CONVERSACIONES": 5,
       "MQL": 2,
       "SQL": 0,
-      "CITAS": 0,
+      "CITAS": 1,
       "FIRMAS": 0,
       "SEMANA": "2026-05-01"
     },
@@ -133,7 +133,7 @@ export const pipelineData = {
       "CONVERSACIONES": 9,
       "MQL": 3,
       "SQL": 0,
-      "CITAS": 0,
+      "CITAS": 1,
       "FIRMAS": 0,
       "SEMANA": "2026-05-01"
     },
@@ -294,7 +294,7 @@ export const pipelineData = {
       "CONVERSACIONES": 56,
       "MQL": 9,
       "SQL": 1,
-      "CITAS": 1,
+      "CITAS": 2,
       "FIRMAS": 0
     },
     {
@@ -303,7 +303,7 @@ export const pipelineData = {
       "CONVERSACIONES": 37,
       "MQL": 12,
       "SQL": 4,
-      "CITAS": 1,
+      "CITAS": 2,
       "FIRMAS": 0
     },
     {
@@ -551,7 +551,7 @@ export const pipelineData = {
     "CONVERSACIONES": 301,
     "MQL": 32,
     "SQL": 7,
-    "CITAS": 6,
+    "CITAS": 8,
     "FIRMAS": 0
   },
   "weeklyByClient": [
@@ -568,7 +568,7 @@ export const pipelineData = {
       "CONVERSACIONES": 56,
       "MQL": 9,
       "SQL": 1,
-      "CITAS": 1,
+      "CITAS": 2,
       "FIRMAS": 0
     },
     {
@@ -576,7 +576,7 @@ export const pipelineData = {
       "CONVERSACIONES": 37,
       "MQL": 12,
       "SQL": 4,
-      "CITAS": 1,
+      "CITAS": 2,
       "FIRMAS": 0
     },
     {
@@ -610,7 +610,7 @@ export const pipelineData = {
       "CONVERSACIONES": 49,
       "MQL": 9,
       "SQL": 2,
-      "CITAS": 1,
+      "CITAS": 2,
       "FIRMAS": 0
     },
     {
@@ -618,7 +618,7 @@ export const pipelineData = {
       "CONVERSACIONES": 56,
       "MQL": 7,
       "SQL": 2,
-      "CITAS": 2,
+      "CITAS": 3,
       "FIRMAS": 0
     },
     {
@@ -644,7 +644,7 @@ export const pipelineData = {
       "CONVERSACIONES": 37,
       "MQL": 12,
       "SQL": 4,
-      "CITAS": 1,
+      "CITAS": 2,
       "FIRMAS": 0
     },
     {
@@ -668,7 +668,7 @@ export const pipelineData = {
       "CONVERSACIONES": 56,
       "MQL": 9,
       "SQL": 1,
-      "CITAS": 1,
+      "CITAS": 2,
       "FIRMAS": 0
     },
     {
