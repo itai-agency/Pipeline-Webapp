@@ -1,13 +1,14 @@
 /*
- * Filosofía visual: webapp operativa de seguimiento diario para pipeline de clientes.
- * La interfaz reduce el efecto presentación y prioriza navegación persistente, controles compactos y decisiones accionables.
- * Pregunta guía: ¿esta pantalla ayuda a Sinahi a saber qué destrabar hoy?
+ * Filosofía visual: webapp SaaS analytics operativa alineada a Inmoleads.
+ * La pantalla debe permitir revisar el pipeline diario y abrir una pestaña histórica para detectar qué cliente/SDR requiere destrabe por fecha.
+ * Pregunta guía: ¿esta interacción ayuda a Sinahi a elegir el siguiente cliente a desbloquear?
  */
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
   ArrowDownRight,
   ArrowRight,
+  BarChart3,
   CalendarDays,
   CheckCircle2,
   Clock3,
@@ -26,12 +27,14 @@ import {
   BarChart,
   CartesianGrid,
   Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import { pipelineData, stageLabels, type PipelineRow } from "@/lib/pipelineData";
+import { sdrHistoryData, type SdrHistoryRow } from "@/lib/sdrHistoryData";
 
 type ClientRisk = {
   client: string;
@@ -45,6 +48,8 @@ type ClientRisk = {
   reason: string;
   action: string;
 };
+
+type SdrTotals = { CITAS: number; FIRMAS: number };
 
 const fmt = new Intl.NumberFormat("es-MX");
 const pctFmt = new Intl.NumberFormat("es-MX", { style: "percent", maximumFractionDigits: 1 });
@@ -60,6 +65,21 @@ function shortDate(value?: string | null) {
   if (!value) return "—";
   const [, month, day] = value.split("-");
   return `${day}/${month}`;
+}
+
+function monthLabel(value: string) {
+  const labels: Record<string, string> = {
+    "2026-01": "Ene 2026",
+    "2026-02": "Feb 2026",
+    "2026-03": "Mar 2026",
+    "2026-04": "Abr 2026",
+    "2026-05": "May 2026",
+    ENERO: "Enero",
+    FEBRERO: "Febrero",
+    MARZO: "Marzo",
+    ABRIL: "Abril",
+  };
+  return labels[value] ?? value;
 }
 
 function ratio(numerator: number, denominator: number) {
@@ -80,10 +100,32 @@ function sumRows(rows: PipelineRow[]) {
   );
 }
 
+function sumSdrRows(rows: SdrHistoryRow[]): SdrTotals {
+  return rows.reduce(
+    (acc, row) => {
+      acc.CITAS += row.CITAS || 0;
+      acc.FIRMAS += row.FIRMAS || 0;
+      return acc;
+    },
+    { CITAS: 0, FIRMAS: 0 },
+  );
+}
+
 function groupByClient(rows: PipelineRow[]) {
   const grouped = new Map<string, PipelineRow[]>();
   rows.forEach((row) => grouped.set(row.CLIENTE, [...(grouped.get(row.CLIENTE) ?? []), row]));
   return Array.from(grouped.entries()).map(([client, clientRows]) => ({ client, ...sumRows(clientRows) }));
+}
+
+function groupSdr(rows: SdrHistoryRow[], key: "CLIENTE" | "SDR" | "MES" | "FECHA") {
+  const grouped = new Map<string, SdrTotals>();
+  rows.forEach((row) => {
+    const current = grouped.get(row[key]) ?? { CITAS: 0, FIRMAS: 0 };
+    current.CITAS += row.CITAS;
+    current.FIRMAS += row.FIRMAS;
+    grouped.set(row[key], current);
+  });
+  return Array.from(grouped.entries()).map(([name, totals]) => ({ name, ...totals }));
 }
 
 function buildRisks(rows: PipelineRow[]): ClientRisk[] {
@@ -147,13 +189,26 @@ function Kpi({ label, value, detail, tone = "neutral" }: { label: string; value:
 export default function Home() {
   const daily = pipelineData.daily as unknown as PipelineRow[];
   const history = pipelineData.history as unknown as PipelineRow[];
+  const sdrRows = sdrHistoryData.records as unknown as SdrHistoryRow[];
+
   const availableDates = useMemo(() => Array.from(new Set(daily.map((row) => row.FECHA).filter((date): date is string => Boolean(date)))).sort(), [daily]);
   const clients = useMemo(() => Array.from(new Set(daily.map((row) => row.CLIENTE))).sort(), [daily]);
   const latestDate = availableDates.at(-1) ?? "";
 
+  const historicalDates = useMemo(() => Array.from(new Set(sdrRows.map((row) => row.FECHA))).sort(), [sdrRows]);
+  const historicalMonths = useMemo(() => Array.from(new Set(sdrRows.map((row) => row.MES))).sort(), [sdrRows]);
+  const historicalClients = useMemo(() => Array.from(new Set(sdrRows.map((row) => row.CLIENTE))).sort(), [sdrRows]);
+  const historicalSdrs = useMemo(() => Array.from(new Set(sdrRows.map((row) => row.SDR))).sort(), [sdrRows]);
+
+  const [activeTab, setActiveTab] = useState<"diario" | "historico">("diario");
   const [selectedDate, setSelectedDate] = useState<string>(latestDate);
   const [selectedClient, setSelectedClient] = useState<string>("Todos");
   const [query, setQuery] = useState<string>("");
+  const [selectedMonth, setSelectedMonth] = useState<string>("Todos");
+  const [selectedHistoricalDate, setSelectedHistoricalDate] = useState<string>("Todas");
+  const [selectedSdr, setSelectedSdr] = useState<string>("Todos");
+  const [rangeStart, setRangeStart] = useState<string>(historicalDates[0] ?? "");
+  const [rangeEnd, setRangeEnd] = useState<string>(historicalDates.at(-1) ?? "");
 
   const filteredRows = useMemo(() => {
     return daily.filter((row) => {
@@ -164,9 +219,22 @@ export default function Home() {
     });
   }, [daily, selectedDate, selectedClient, query]);
 
+  const filteredSdrRows = useMemo(() => {
+    return sdrRows.filter((row) => {
+      const monthMatch = selectedMonth === "Todos" || row.MES === selectedMonth;
+      const dateMatch = selectedHistoricalDate === "Todas" || row.FECHA === selectedHistoricalDate;
+      const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
+      const sdrMatch = selectedSdr === "Todos" || row.SDR === selectedSdr;
+      const rangeMatch = (!rangeStart || row.FECHA >= rangeStart) && (!rangeEnd || row.FECHA <= rangeEnd);
+      const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase()) || row.SDR.toLowerCase().includes(query.toLowerCase());
+      return monthMatch && dateMatch && clientMatch && sdrMatch && rangeMatch && queryMatch;
+    });
+  }, [sdrRows, selectedMonth, selectedHistoricalDate, selectedClient, selectedSdr, rangeStart, rangeEnd, query]);
+
   const totals = useMemo(() => sumRows(filteredRows), [filteredRows]);
+  const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
   const todayRows = useMemo(() => daily.filter((row) => row.FECHA === latestDate), [daily, latestDate]);
-  const risks = useMemo(() => buildRisks(selectedDate === "Todas" ? filteredRows : filteredRows), [filteredRows, selectedDate]);
+  const risks = useMemo(() => buildRisks(filteredRows), [filteredRows]);
   const criticalCount = risks.filter((risk) => risk.level !== "Estable").length;
   const clientRows = useMemo(() => groupByClient(filteredRows).sort((a, b) => b.CONVERSACIONES - a.CONVERSACIONES), [filteredRows]);
 
@@ -187,6 +255,12 @@ export default function Home() {
     });
   }, [history]);
 
+  const sdrMonthTrend = useMemo(() => groupSdr(filteredSdrRows, "MES").map((row) => ({ ...row, name: monthLabel(row.name) })), [filteredSdrRows]);
+  const sdrDateTrend = useMemo(() => groupSdr(filteredSdrRows, "FECHA").map((row) => ({ ...row, name: shortDate(row.name) })), [filteredSdrRows]);
+  const sdrClientRanking = useMemo(() => groupSdr(filteredSdrRows, "CLIENTE").sort((a, b) => b.CITAS - a.CITAS), [filteredSdrRows]);
+  const sdrRanking = useMemo(() => groupSdr(filteredSdrRows, "SDR").sort((a, b) => b.CITAS - a.CITAS), [filteredSdrRows]);
+  const closureRate = ratio(sdrTotals.FIRMAS, sdrTotals.CITAS);
+
   const funnelValues = stageLabels.map((stage) => ({ label: stage, value: totals[stage] ?? 0 }));
   const maxFunnel = Math.max(...funnelValues.map((stage) => stage.value), 1);
   const latestRisk = risks[0];
@@ -195,16 +269,16 @@ export default function Home() {
     <main className="app-shell">
       <aside className="app-sidebar">
         <div className="brand-block">
-          <div className="brand-mark">PC</div>
+          <div className="brand-mark">IL</div>
           <div>
-            <strong>Pipeline Clientes</strong>
+            <strong>Inmoleads Pipeline</strong>
             <span>Sinahi · operación diaria</span>
           </div>
         </div>
         <nav className="side-nav" aria-label="Navegación del dashboard">
-          <a href="#resumen" className="active"><LayoutDashboard size={17} /> Resumen</a>
+          <button className={activeTab === "diario" ? "active" : ""} onClick={() => setActiveTab("diario")}><LayoutDashboard size={17} /> Diario</button>
+          <button className={activeTab === "historico" ? "active" : ""} onClick={() => setActiveTab("historico")}><CalendarDays size={17} /> Histórico</button>
           <a href="#bloqueos"><AlertTriangle size={17} /> Bloqueos</a>
-          <a href="#clientes"><Users size={17} /> Clientes</a>
           <a href="#detalle"><ListChecks size={17} /> Detalle</a>
         </nav>
         <div className="sidebar-status">
@@ -218,216 +292,424 @@ export default function Home() {
         <header className="app-topbar">
           <div>
             <p>Dashboard operativo</p>
-            <h1>Seguimiento diario del pipeline</h1>
+            <h1>{activeTab === "diario" ? "Seguimiento diario del pipeline" : "Histórico SDR de citas y firmas"}</h1>
           </div>
           <div className="topbar-health">
-            <Clock3 size={16} />
-            <span>{criticalCount} clientes requieren revisión</span>
+            {activeTab === "diario" ? <Clock3 size={16} /> : <BarChart3 size={16} />}
+            <span>{activeTab === "diario" ? `${criticalCount} clientes requieren revisión` : `${fmt.format(filteredSdrRows.length)} registros históricos filtrados`}</span>
           </div>
         </header>
+
+        <section className="tab-switch" aria-label="Pestañas principales">
+          <button className={activeTab === "diario" ? "active" : ""} onClick={() => setActiveTab("diario")}>Operación diaria</button>
+          <button className={activeTab === "historico" ? "active" : ""} onClick={() => setActiveTab("historico")}>Histórico por fechas</button>
+        </section>
 
         <section className="filter-bar" aria-label="Controles de operación">
           <div className="search-box">
             <Search size={17} />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar cliente" />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={activeTab === "diario" ? "Buscar cliente" : "Buscar cliente o SDR"} />
           </div>
-          <label>
-            Fecha
-            <select value={selectedDate} onChange={(event) => setSelectedDate(event.target.value)}>
-              <option value="Todas">Todas</option>
-              {availableDates.map((date) => <option key={date} value={date}>{formatDate(date)}</option>)}
-            </select>
-          </label>
-          <label>
-            Cliente
-            <select value={selectedClient} onChange={(event) => setSelectedClient(event.target.value)}>
-              <option value="Todos">Todos</option>
-              {clients.map((client) => <option key={client} value={client}>{client}</option>)}
-            </select>
-          </label>
+          {activeTab === "diario" ? (
+            <>
+              <label>
+                Fecha
+                <select value={selectedDate} onChange={(event) => setSelectedDate(event.target.value)}>
+                  <option value="Todas">Todas</option>
+                  {availableDates.map((date) => <option key={date} value={date}>{formatDate(date)}</option>)}
+                </select>
+              </label>
+              <label>
+                Cliente
+                <select value={selectedClient} onChange={(event) => setSelectedClient(event.target.value)}>
+                  <option value="Todos">Todos</option>
+                  {clients.map((client) => <option key={client} value={client}>{client}</option>)}
+                </select>
+              </label>
+            </>
+          ) : (
+            <>
+              <label>
+                Mes
+                <select value={selectedMonth} onChange={(event) => setSelectedMonth(event.target.value)}>
+                  <option value="Todos">Todos</option>
+                  {historicalMonths.map((month) => <option key={month} value={month}>{monthLabel(month)}</option>)}
+                </select>
+              </label>
+              <label>
+                Día
+                <select value={selectedHistoricalDate} onChange={(event) => setSelectedHistoricalDate(event.target.value)}>
+                  <option value="Todas">Todos</option>
+                  {historicalDates.map((date) => <option key={date} value={date}>{formatDate(date)}</option>)}
+                </select>
+              </label>
+              <label>
+                Cliente
+                <select value={selectedClient} onChange={(event) => setSelectedClient(event.target.value)}>
+                  <option value="Todos">Todos</option>
+                  {historicalClients.map((client) => <option key={client} value={client}>{client}</option>)}
+                </select>
+              </label>
+              <label>
+                SDR
+                <select value={selectedSdr} onChange={(event) => setSelectedSdr(event.target.value)}>
+                  <option value="Todos">Todos</option>
+                  {historicalSdrs.map((sdr) => <option key={sdr} value={sdr}>{sdr}</option>)}
+                </select>
+              </label>
+              <label>
+                Desde
+                <input type="date" value={rangeStart} onChange={(event) => setRangeStart(event.target.value)} />
+              </label>
+              <label>
+                Hasta
+                <input type="date" value={rangeEnd} onChange={(event) => setRangeEnd(event.target.value)} />
+              </label>
+            </>
+          )}
         </section>
 
-        <section id="resumen" className="app-grid app-grid--kpis">
-          <Kpi label="Conversaciones" value={fmt.format(totals.CONVERSACIONES)} detail="volumen capturado" />
-          <Kpi label="MQL" value={fmt.format(totals.MQL)} detail={`${pctFmt.format(ratio(totals.MQL, totals.CONVERSACIONES))} de conversión`} tone="good" />
-          <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(ratio(totals.SQL, totals.MQL))} de MQL`} tone={ratio(totals.SQL, totals.MQL) < 0.25 ? "warn" : "good"} />
-          <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(ratio(totals.CITAS, totals.SQL || totals.MQL))} avance`} />
-          <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(ratio(totals.FIRMAS, totals.CITAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
-        </section>
+        {activeTab === "diario" ? (
+          <>
+            <section id="resumen" className="app-grid app-grid--kpis">
+              <Kpi label="Conversaciones" value={fmt.format(totals.CONVERSACIONES)} detail="volumen capturado" />
+              <Kpi label="MQL" value={fmt.format(totals.MQL)} detail={`${pctFmt.format(ratio(totals.MQL, totals.CONVERSACIONES))} de conversión`} tone="good" />
+              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(ratio(totals.SQL, totals.MQL))} de MQL`} tone={ratio(totals.SQL, totals.MQL) < 0.25 ? "warn" : "good"} />
+              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(ratio(totals.CITAS, totals.SQL || totals.MQL))} avance`} />
+              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(ratio(totals.FIRMAS, totals.CITAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
+            </section>
 
-        <section className="ops-layout">
-          <article className="app-card priority-card" id="bloqueos">
-            <div className="card-head">
-              <div>
-                <span>Próxima acción</span>
-                <h2>{latestRisk ? latestRisk.client : "Sin bloqueo"}</h2>
-              </div>
-              <AlertTriangle />
-            </div>
-            <p>{latestRisk ? latestRisk.reason : "No hay señales críticas con este filtro."}</p>
-            <div className="action-strip">
-              <strong>{latestRisk ? latestRisk.action : "Mantener seguimiento"}</strong>
-              <ArrowRight size={18} />
-            </div>
-          </article>
-
-          <article className="app-card funnel-card">
-            <div className="card-head compact">
-              <div>
-                <span>Embudo</span>
-                <h2>Etapas filtradas</h2>
-              </div>
-              <Target />
-            </div>
-            <div className="mini-funnel">
-              {funnelValues.map((stage) => (
-                <div key={stage.label}>
-                  <div className="mini-funnel__label"><span>{stage.label}</span><strong>{fmt.format(stage.value)}</strong></div>
-                  <div className="mini-funnel__track"><i style={{ width: `${Math.max(7, (stage.value / maxFunnel) * 100)}%` }} /></div>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="app-card chart-card">
-            <div className="card-head compact">
-              <div>
-                <span>Tendencia</span>
-                <h2>Movimiento diario</h2>
-              </div>
-              <TrendingUp />
-            </div>
-            <ResponsiveContainer width="100%" height={230}>
-              <AreaChart data={dailyTrend} margin={{ left: -24, right: 8, top: 10, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="areaConversations" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0f5138" stopOpacity={0.28} />
-                    <stop offset="95%" stopColor="#0f5138" stopOpacity={0.02} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid stroke="#e2ddd2" strokeDasharray="3 4" />
-                <XAxis dataKey="fecha" tickLine={false} axisLine={false} />
-                <YAxis tickLine={false} axisLine={false} />
-                <Tooltip />
-                <Area type="monotone" dataKey="CONVERSACIONES" stroke="#26302d" fill="url(#areaConversations)" strokeWidth={2} />
-                <Line type="monotone" dataKey="MQL" stroke="#0f5138" strokeWidth={2} />
-                <Line type="monotone" dataKey="SQL" stroke="#c96528" strokeWidth={2} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </article>
-        </section>
-
-        <section className="two-column">
-          <article className="app-card" id="clientes">
-            <div className="card-head compact">
-              <div>
-                <span>Clientes</span>
-                <h2>Ranking operativo</h2>
-              </div>
-              <Users />
-            </div>
-            <div className="client-list">
-              {risks.map((risk) => (
-                <div className="client-row" key={risk.client}>
+            <section className="ops-layout">
+              <article className="app-card priority-card" id="bloqueos">
+                <div className="card-head">
                   <div>
-                    <strong>{risk.client}</strong>
-                    <span>{risk.reason}</span>
+                    <span>Próxima acción</span>
+                    <h2>{latestRisk ? latestRisk.client : "Sin bloqueo"}</h2>
                   </div>
-                  <div className={`risk-pill risk-pill--${risk.level.toLowerCase().replace("í", "i")}`}>{risk.level}</div>
-                  <small>{fmt.format(risk.conversations)} conv · {fmt.format(risk.citas)} citas</small>
+                  <AlertTriangle />
                 </div>
-              ))}
-            </div>
-          </article>
+                <p>{latestRisk ? latestRisk.reason : "No hay señales críticas con este filtro."}</p>
+                <div className="action-strip">
+                  <strong>{latestRisk ? latestRisk.action : "Mantener seguimiento"}</strong>
+                  <ArrowRight size={18} />
+                </div>
+              </article>
 
-          <article className="app-card">
-            <div className="card-head compact">
-              <div>
-                <span>Comparativo</span>
-                <h2>Volumen por cliente</h2>
+              <article className="app-card funnel-card">
+                <div className="card-head compact">
+                  <div>
+                    <span>Embudo</span>
+                    <h2>Etapas filtradas</h2>
+                  </div>
+                  <Target />
+                </div>
+                <div className="mini-funnel">
+                  {funnelValues.map((stage) => (
+                    <div key={stage.label}>
+                      <div className="mini-funnel__label"><span>{stage.label}</span><strong>{fmt.format(stage.value)}</strong></div>
+                      <div className="mini-funnel__track"><i style={{ width: `${Math.max(7, (stage.value / maxFunnel) * 100)}%` }} /></div>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              <article className="app-card chart-card">
+                <div className="card-head compact">
+                  <div>
+                    <span>Tendencia</span>
+                    <h2>Movimiento diario</h2>
+                  </div>
+                  <TrendingUp />
+                </div>
+                <ResponsiveContainer width="100%" height={230}>
+                  <AreaChart data={dailyTrend} margin={{ left: -24, right: 8, top: 10, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="areaConversations" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#0f8a5f" stopOpacity={0.28} />
+                        <stop offset="95%" stopColor="#0f8a5f" stopOpacity={0.02} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke="#e5eadf" strokeDasharray="3 4" />
+                    <XAxis dataKey="fecha" tickLine={false} axisLine={false} />
+                    <YAxis tickLine={false} axisLine={false} />
+                    <Tooltip />
+                    <Area type="monotone" dataKey="CONVERSACIONES" stroke="#173d33" fill="url(#areaConversations)" strokeWidth={2} />
+                    <Line type="monotone" dataKey="MQL" stroke="#0f8a5f" strokeWidth={2} />
+                    <Line type="monotone" dataKey="SQL" stroke="#f36f21" strokeWidth={2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </article>
+            </section>
+
+            <section className="two-column">
+              <article className="app-card" id="clientes">
+                <div className="card-head compact">
+                  <div>
+                    <span>Clientes</span>
+                    <h2>Ranking operativo</h2>
+                  </div>
+                  <Users />
+                </div>
+                <div className="client-list">
+                  {risks.map((risk) => (
+                    <div className="client-row" key={risk.client}>
+                      <div>
+                        <strong>{risk.client}</strong>
+                        <span>{risk.reason}</span>
+                      </div>
+                      <div className={`risk-pill risk-pill--${risk.level.toLowerCase().replace("í", "i")}`}>{risk.level}</div>
+                      <small>{fmt.format(risk.conversations)} conv · {fmt.format(risk.citas)} citas</small>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              <article className="app-card">
+                <div className="card-head compact">
+                  <div>
+                    <span>Comparativo</span>
+                    <h2>Volumen por cliente</h2>
+                  </div>
+                  <ArrowDownRight />
+                </div>
+                <ResponsiveContainer width="100%" height={310}>
+                  <BarChart data={clientRows} layout="vertical" margin={{ left: 16, right: 16, top: 4, bottom: 0 }}>
+                    <CartesianGrid stroke="#e5eadf" strokeDasharray="3 4" horizontal={false} />
+                    <XAxis type="number" axisLine={false} tickLine={false} />
+                    <YAxis type="category" dataKey="client" width={110} axisLine={false} tickLine={false} />
+                    <Tooltip />
+                    <Bar dataKey="CONVERSACIONES" fill="#173d33" radius={[0, 5, 5, 0]} />
+                    <Bar dataKey="CITAS" fill="#f36f21" radius={[0, 5, 5, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </article>
+            </section>
+
+            <section className="app-card history-strip">
+              <div className="card-head compact">
+                <div>
+                  <span>Histórico mensual</span>
+                  <h2>Contexto de desempeño</h2>
+                </div>
+                <CalendarDays />
               </div>
-              <ArrowDownRight />
-            </div>
-            <ResponsiveContainer width="100%" height={310}>
-              <BarChart data={clientRows} layout="vertical" margin={{ left: 16, right: 16, top: 4, bottom: 0 }}>
-                <CartesianGrid stroke="#e2ddd2" strokeDasharray="3 4" horizontal={false} />
-                <XAxis type="number" axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="client" width={110} axisLine={false} tickLine={false} />
-                <Tooltip />
-                <Bar dataKey="CONVERSACIONES" fill="#26302d" radius={[0, 5, 5, 0]} />
-                <Bar dataKey="CITAS" fill="#c96528" radius={[0, 5, 5, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </article>
-        </section>
-
-        <section className="app-card history-strip">
-          <div className="card-head compact">
-            <div>
-              <span>Histórico mensual</span>
-              <h2>Contexto de desempeño</h2>
-            </div>
-            <CalendarDays />
-          </div>
-          <div className="month-grid">
-            {historicalByMonth.map((month) => (
-              <div key={month.mes}>
-                <span>{month.mes}</span>
-                <strong>{fmt.format(month.CITAS)} citas</strong>
-                <small>{fmt.format(month.FIRMAS)} firmas · {moneyFmt.format(month.gasto)}</small>
+              <div className="month-grid">
+                {historicalByMonth.map((month) => (
+                  <div key={month.mes}>
+                    <span>{monthLabel(String(month.mes))}</span>
+                    <strong>{fmt.format(month.CITAS)} citas</strong>
+                    <small>{fmt.format(month.FIRMAS)} firmas · {moneyFmt.format(month.gasto)}</small>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
 
-        <section className="app-card detail-card" id="detalle">
-          <div className="card-head compact">
-            <div>
-              <span>Detalle accionable</span>
-              <h2>Seguimiento diario por cliente</h2>
-            </div>
-            <Filter />
-          </div>
-          <div className="data-table-wrap">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Cliente</th>
-                  <th>Conv.</th>
-                  <th>MQL</th>
-                  <th>SQL</th>
-                  <th>Citas</th>
-                  <th>Firmas</th>
-                  <th>Acción sugerida</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredRows
-                  .slice()
-                  .sort((a, b) => (b.CONVERSACIONES - a.CONVERSACIONES) || a.CLIENTE.localeCompare(b.CLIENTE))
-                  .map((row, index) => {
-                    const weak = row.CONVERSACIONES >= 10 && row.MQL === 0;
-                    const stuck = row.MQL > 0 && row.SQL === 0;
-                    const noAppointment = row.SQL > 0 && row.CITAS === 0;
-                    const note = weak ? "Revisar calificación" : noAppointment ? "Agendar cita" : stuck ? "Mover MQL a SQL" : row.CITAS > 0 ? "Seguimiento post-cita" : "Monitorear";
-                    return (
-                      <tr key={`${row.FECHA}-${row.CLIENTE}-${index}`}>
-                        <td>{formatDate(row.FECHA)}</td>
-                        <td><strong>{row.CLIENTE}</strong></td>
-                        <td>{fmt.format(row.CONVERSACIONES)}</td>
-                        <td>{fmt.format(row.MQL)}</td>
-                        <td>{fmt.format(row.SQL)}</td>
-                        <td>{fmt.format(row.CITAS)}</td>
-                        <td>{fmt.format(row.FIRMAS)}</td>
-                        <td><span className={weak || stuck || noAppointment ? "table-note table-note--warn" : "table-note"}>{note}</span></td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-        </section>
+            <section className="app-card detail-card" id="detalle">
+              <div className="card-head compact">
+                <div>
+                  <span>Detalle accionable</span>
+                  <h2>Seguimiento diario por cliente</h2>
+                </div>
+                <Filter />
+              </div>
+              <div className="data-table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Cliente</th>
+                      <th>Conv.</th>
+                      <th>MQL</th>
+                      <th>SQL</th>
+                      <th>Citas</th>
+                      <th>Firmas</th>
+                      <th>Acción sugerida</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredRows
+                      .slice()
+                      .sort((a, b) => (b.CONVERSACIONES - a.CONVERSACIONES) || a.CLIENTE.localeCompare(b.CLIENTE))
+                      .map((row, index) => {
+                        const weak = row.CONVERSACIONES >= 10 && row.MQL === 0;
+                        const stuck = row.MQL > 0 && row.SQL === 0;
+                        const noAppointment = row.SQL > 0 && row.CITAS === 0;
+                        const note = weak ? "Revisar calificación" : noAppointment ? "Agendar cita" : stuck ? "Mover MQL a SQL" : row.CITAS > 0 ? "Seguimiento post-cita" : "Monitorear";
+                        return (
+                          <tr key={`${row.FECHA}-${row.CLIENTE}-${index}`}>
+                            <td>{formatDate(row.FECHA)}</td>
+                            <td><strong>{row.CLIENTE}</strong></td>
+                            <td>{fmt.format(row.CONVERSACIONES)}</td>
+                            <td>{fmt.format(row.MQL)}</td>
+                            <td>{fmt.format(row.SQL)}</td>
+                            <td>{fmt.format(row.CITAS)}</td>
+                            <td>{fmt.format(row.FIRMAS)}</td>
+                            <td><span className={weak || stuck || noAppointment ? "table-note table-note--warn" : "table-note"}>{note}</span></td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </>
+        ) : (
+          <>
+            <section className="app-grid app-grid--kpis">
+              <Kpi label="Citas históricas" value={fmt.format(sdrTotals.CITAS)} detail={`${fmt.format(filteredSdrRows.length)} registros filtrados`} tone="good" />
+              <Kpi label="Firmas históricas" value={fmt.format(sdrTotals.FIRMAS)} detail={`${pctFmt.format(closureRate)} cierre sobre citas`} tone={closureRate < 0.08 ? "warn" : "good"} />
+              <Kpi label="Clientes" value={fmt.format(sdrClientRanking.length)} detail="con movimiento en filtro" />
+              <Kpi label="SDR activos" value={fmt.format(sdrRanking.length)} detail="asignados en histórico" />
+              <Kpi label="Rango" value={historicalDates.length ? `${shortDate(rangeStart)}–${shortDate(rangeEnd)}` : "—"} detail="selección temporal" />
+            </section>
+
+            <section className="ops-layout history-ops">
+              <article className="app-card priority-card">
+                <div className="card-head">
+                  <div>
+                    <span>Lectura histórica</span>
+                    <h2>{sdrClientRanking[0]?.name ?? "Sin datos"}</h2>
+                  </div>
+                  <CheckCircle2 />
+                </div>
+                <p>{sdrClientRanking[0] ? `${sdrClientRanking[0].name} concentra ${fmt.format(sdrClientRanking[0].CITAS)} citas y ${fmt.format(sdrClientRanking[0].FIRMAS)} firmas en el filtro actual.` : "No hay registros para el filtro seleccionado."}</p>
+                <div className="action-strip">
+                  <strong>Comparar desempeño por SDR y fecha antes del siguiente seguimiento</strong>
+                  <ArrowRight size={18} />
+                </div>
+              </article>
+
+              <article className="app-card chart-card history-chart">
+                <div className="card-head compact">
+                  <div>
+                    <span>Meses</span>
+                    <h2>Citas vs firmas</h2>
+                  </div>
+                  <TrendingUp />
+                </div>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={sdrMonthTrend} margin={{ left: -18, right: 8, top: 10, bottom: 0 }}>
+                    <CartesianGrid stroke="#e5eadf" strokeDasharray="3 4" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                    <YAxis axisLine={false} tickLine={false} />
+                    <Tooltip />
+                    <Bar dataKey="CITAS" fill="#0f8a5f" radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="FIRMAS" fill="#f36f21" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </article>
+
+              <article className="app-card chart-card history-chart">
+                <div className="card-head compact">
+                  <div>
+                    <span>Días</span>
+                    <h2>Movimiento por fecha</h2>
+                  </div>
+                  <CalendarDays />
+                </div>
+                <ResponsiveContainer width="100%" height={250}>
+                  <LineChart data={sdrDateTrend} margin={{ left: -18, right: 8, top: 10, bottom: 0 }}>
+                    <CartesianGrid stroke="#e5eadf" strokeDasharray="3 4" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                    <YAxis axisLine={false} tickLine={false} />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="CITAS" stroke="#0f8a5f" strokeWidth={3} dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="FIRMAS" stroke="#f36f21" strokeWidth={3} dot={{ r: 3 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </article>
+            </section>
+
+            <section className="two-column">
+              <article className="app-card">
+                <div className="card-head compact">
+                  <div>
+                    <span>Clientes</span>
+                    <h2>Ranking de citas históricas</h2>
+                  </div>
+                  <Users />
+                </div>
+                <div className="client-list">
+                  {sdrClientRanking.map((row) => (
+                    <div className="client-row" key={row.name}>
+                      <div>
+                        <strong>{row.name}</strong>
+                        <span>{pctFmt.format(ratio(row.FIRMAS, row.CITAS))} de firma sobre cita</span>
+                      </div>
+                      <div className="risk-pill risk-pill--estable">{fmt.format(row.FIRMAS)} firmas</div>
+                      <small>{fmt.format(row.CITAS)} citas</small>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              <article className="app-card">
+                <div className="card-head compact">
+                  <div>
+                    <span>SDR</span>
+                    <h2>Desempeño por responsable</h2>
+                  </div>
+                  <ArrowDownRight />
+                </div>
+                <ResponsiveContainer width="100%" height={310}>
+                  <BarChart data={sdrRanking} layout="vertical" margin={{ left: 16, right: 16, top: 4, bottom: 0 }}>
+                    <CartesianGrid stroke="#e5eadf" strokeDasharray="3 4" horizontal={false} />
+                    <XAxis type="number" axisLine={false} tickLine={false} />
+                    <YAxis type="category" dataKey="name" width={92} axisLine={false} tickLine={false} />
+                    <Tooltip />
+                    <Bar dataKey="CITAS" fill="#173d33" radius={[0, 5, 5, 0]} />
+                    <Bar dataKey="FIRMAS" fill="#f36f21" radius={[0, 5, 5, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </article>
+            </section>
+
+            <section className="app-card detail-card" id="detalle-historico">
+              <div className="card-head compact">
+                <div>
+                  <span>Detalle histórico</span>
+                  <h2>Citas y firmas por día, cliente y SDR</h2>
+                </div>
+                <Filter />
+              </div>
+              <div className="data-table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Mes</th>
+                      <th>Cliente</th>
+                      <th>SDR</th>
+                      <th>Citas</th>
+                      <th>Firmas</th>
+                      <th>Lectura</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredSdrRows
+                      .slice()
+                      .sort((a, b) => b.FECHA.localeCompare(a.FECHA) || b.CITAS - a.CITAS)
+                      .map((row, index) => {
+                        const rate = ratio(row.FIRMAS, row.CITAS);
+                        const note = row.CITAS > 0 && row.FIRMAS === 0 ? "Cita sin firma" : rate >= 0.2 ? "Buen cierre" : "Monitorear";
+                        return (
+                          <tr key={`${row.FECHA}-${row.CLIENTE}-${row.SDR}-${index}`}>
+                            <td>{formatDate(row.FECHA)}</td>
+                            <td>{monthLabel(row.MES)}</td>
+                            <td><strong>{row.CLIENTE}</strong></td>
+                            <td>{row.SDR}</td>
+                            <td>{fmt.format(row.CITAS)}</td>
+                            <td>{fmt.format(row.FIRMAS)}</td>
+                            <td><span className={row.CITAS > 0 && row.FIRMAS === 0 ? "table-note table-note--warn" : "table-note"}>{note}</span></td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </>
+        )}
       </section>
     </main>
   );

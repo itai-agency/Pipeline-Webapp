@@ -1,0 +1,7 @@
+# Hallazgos iniciales: histórico y marca Inmoleads
+
+El nuevo Google Sheet titulado **Dashboard Citas - Firmas SDR** está accesible desde la sesión autenticada y contiene al menos dos pestañas visibles: **Dashboard Semanal** y **Dashboard Mensual**. La pestaña semanal muestra una tabla de captura con los campos **Fecha**, **Semana**, **Mes**, **Cliente**, **SDR**, **Citas** y **Firmas**, lo que permite construir una vista histórica con filtros por día, semana, mes, cliente y SDR. La data visible empieza en marzo de 2026, aunque el objetivo operativo solicitado es incorporar el histórico desde enero si está disponible en las pestañas o cálculos del archivo.
+
+El sitio **www.inmoleads.pro** usa una identidad principalmente clara, con fondo blanco, navegación limpia, acentos verdes en elementos de menú/enlaces y un acento naranja intenso en métricas destacadas como “14 Ciudades” y “13 Estados”. La marca se comunica con una estética inmobiliaria profesional, orientada a confianza, cercanía y resultados. Para la webapp, esto sugiere mantener una base clara y funcional, usar **verde de marca** para navegación/estado positivo, **naranja de marca** para alertas, KPIs y llamados de atención, y evitar un look demasiado oscuro que se aleje del sitio principal.
+
+El rediseño debe conservar la estructura operativa tipo SaaS analytics, pero ajustar el sistema visual para que se sienta más alineado a Inmoleads: fondo claro, tarjetas limpias, acentos verdes/naranjas, jerarquía numérica clara y filtros temporales visibles en una pestaña histórica dedicada.

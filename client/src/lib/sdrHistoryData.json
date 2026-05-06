@@ -1,0 +1,481 @@
+{
+  "records": [
+    {
+      "FECHA": "2026-03-16",
+      "SEMANA": "12",
+      "MES": "2026-03",
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 10,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-16",
+      "SEMANA": "12",
+      "MES": "2026-03",
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 2,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-16",
+      "SEMANA": "12",
+      "MES": "2026-03",
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 1,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-16",
+      "SEMANA": "12",
+      "MES": "2026-03",
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 7,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-16",
+      "SEMANA": "12",
+      "MES": "2026-03",
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 2,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-23",
+      "SEMANA": "13",
+      "MES": "2026-03",
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 8,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-23",
+      "SEMANA": "13",
+      "MES": "2026-03",
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 1,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-23",
+      "SEMANA": "13",
+      "MES": "2026-03",
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 1,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-23",
+      "SEMANA": "13",
+      "MES": "2026-03",
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 2,
+      "FIRMAS": 1
+    },
+    {
+      "FECHA": "2026-03-23",
+      "SEMANA": "13",
+      "MES": "2026-03",
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 0,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-30",
+      "SEMANA": "14",
+      "MES": "2026-03",
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 8,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-30",
+      "SEMANA": "14",
+      "MES": "2026-03",
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 1,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-30",
+      "SEMANA": "14",
+      "MES": "2026-03",
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 1,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-30",
+      "SEMANA": "14",
+      "MES": "2026-03",
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 2,
+      "FIRMAS": 1
+    },
+    {
+      "FECHA": "2026-03-30",
+      "SEMANA": "14",
+      "MES": "2026-03",
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 3,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-06",
+      "SEMANA": "15",
+      "MES": "2026-04",
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 5,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-06",
+      "SEMANA": "15",
+      "MES": "2026-04",
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 4,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-06",
+      "SEMANA": "15",
+      "MES": "2026-04",
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 1,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-06",
+      "SEMANA": "15",
+      "MES": "2026-04",
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 4,
+      "FIRMAS": 2
+    },
+    {
+      "FECHA": "2026-04-06",
+      "SEMANA": "15",
+      "MES": "2026-04",
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 3,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-13",
+      "SEMANA": "16",
+      "MES": "2026-04",
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 4,
+      "FIRMAS": 3
+    },
+    {
+      "FECHA": "2026-04-13",
+      "SEMANA": "16",
+      "MES": "2026-04",
+      "CLIENTE": "DOS HOGARES",
+      "SDR": "Victoria",
+      "CITAS": 0,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-13",
+      "SEMANA": "16",
+      "MES": "2026-04",
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 6,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-13",
+      "SEMANA": "16",
+      "MES": "2026-04",
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 2,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-13",
+      "SEMANA": "16",
+      "MES": "2026-04",
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 5,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-13",
+      "SEMANA": "16",
+      "MES": "2026-04",
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 1,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-20",
+      "SEMANA": "17",
+      "MES": "2026-04",
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 4,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-20",
+      "SEMANA": "17",
+      "MES": "2026-04",
+      "CLIENTE": "DOS HOGARES",
+      "SDR": "Victoria",
+      "CITAS": 0,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-20",
+      "SEMANA": "17",
+      "MES": "2026-04",
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 4,
+      "FIRMAS": 2
+    },
+    {
+      "FECHA": "2026-04-20",
+      "SEMANA": "17",
+      "MES": "2026-04",
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 0,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-20",
+      "SEMANA": "17",
+      "MES": "2026-04",
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 5,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-04-20",
+      "SEMANA": "17",
+      "MES": "2026-04",
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 0,
+      "FIRMAS": 0
+    }
+  ],
+  "byMonth": [
+    {
+      "MES": "2026-03",
+      "CITAS": 49,
+      "FIRMAS": 2
+    },
+    {
+      "MES": "2026-04",
+      "CITAS": 48,
+      "FIRMAS": 7
+    }
+  ],
+  "byMonthClient": [
+    {
+      "MES": "2026-03",
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 5,
+      "FIRMAS": 0
+    },
+    {
+      "MES": "2026-03",
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 26,
+      "FIRMAS": 0
+    },
+    {
+      "MES": "2026-03",
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 11,
+      "FIRMAS": 2
+    },
+    {
+      "MES": "2026-03",
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 3,
+      "FIRMAS": 0
+    },
+    {
+      "MES": "2026-03",
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 4,
+      "FIRMAS": 0
+    },
+    {
+      "MES": "2026-04",
+      "CLIENTE": "DOS HOGARES",
+      "SDR": "Victoria",
+      "CITAS": 0,
+      "FIRMAS": 0
+    },
+    {
+      "MES": "2026-04",
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 4,
+      "FIRMAS": 0
+    },
+    {
+      "MES": "2026-04",
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 13,
+      "FIRMAS": 3
+    },
+    {
+      "MES": "2026-04",
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 14,
+      "FIRMAS": 2
+    },
+    {
+      "MES": "2026-04",
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 3,
+      "FIRMAS": 0
+    },
+    {
+      "MES": "2026-04",
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 14,
+      "FIRMAS": 2
+    }
+  ],
+  "byDate": [
+    {
+      "FECHA": "2026-03-16",
+      "CITAS": 22,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-03-23",
+      "CITAS": 12,
+      "FIRMAS": 1
+    },
+    {
+      "FECHA": "2026-03-30",
+      "CITAS": 15,
+      "FIRMAS": 1
+    },
+    {
+      "FECHA": "2026-04-06",
+      "CITAS": 17,
+      "FIRMAS": 2
+    },
+    {
+      "FECHA": "2026-04-13",
+      "CITAS": 18,
+      "FIRMAS": 3
+    },
+    {
+      "FECHA": "2026-04-20",
+      "CITAS": 13,
+      "FIRMAS": 2
+    }
+  ],
+  "byClient": [
+    {
+      "CLIENTE": "HOGARES",
+      "SDR": "Leonimar",
+      "CITAS": 39,
+      "FIRMAS": 3
+    },
+    {
+      "CLIENTE": "INQ",
+      "SDR": "Caridad",
+      "CITAS": 25,
+      "FIRMAS": 4
+    },
+    {
+      "CLIENTE": "MANOS AL HOGAR",
+      "SDR": "Victoria",
+      "CITAS": 18,
+      "FIRMAS": 2
+    },
+    {
+      "CLIENTE": "GRUPO ELIJO",
+      "SDR": "Joselyn",
+      "CITAS": 9,
+      "FIRMAS": 0
+    },
+    {
+      "CLIENTE": "INSPIRA",
+      "SDR": "Bryan",
+      "CITAS": 6,
+      "FIRMAS": 0
+    },
+    {
+      "CLIENTE": "DOS HOGARES",
+      "SDR": "Victoria",
+      "CITAS": 0,
+      "FIRMAS": 0
+    }
+  ],
+  "metadata": {
+    "source": "Dashboard Citas - Firmas SDR",
+    "sheet": "Dashboard Semanal",
+    "recordCount": 32,
+    "minDate": "2026-03-16",
+    "maxDate": "2026-04-20",
+    "months": [
+      "2026-03",
+      "2026-04"
+    ],
+    "clients": [
+      "DOS HOGARES",
+      "GRUPO ELIJO",
+      "HOGARES",
+      "INQ",
+      "INSPIRA",
+      "MANOS AL HOGAR"
+    ],
+    "sdrs": [
+      "Bryan",
+      "Caridad",
+      "Joselyn",
+      "Leonimar",
+      "Victoria"
+    ],
+    "totalCitas": 97,
+    "totalFirmas": 9
+  }
+}

@@ -1,0 +1,3272 @@
+[
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "Citas semana actual",
+    "semana": "Citas semana actual",
+    "mes": "Citas semana actual",
+    "cliente": "Citas semana actual",
+    "sdr": "Citas semana actual",
+    "citas": "Citas semana actual",
+    "firmas": "Citas semana actual"
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "Resumen semanal general",
+    "semana": "Resumen semanal general",
+    "mes": "Resumen semanal general",
+    "cliente": "Resumen semanal general",
+    "sdr": "Resumen semanal general",
+    "citas": "Resumen semanal general",
+    "firmas": "Resumen semanal general"
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "Semana",
+    "semana": "Semana",
+    "mes": "Semana",
+    "cliente": "Semana",
+    "sdr": "Semana",
+    "citas": "Semana",
+    "firmas": "Semana"
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": 12.0,
+    "semana": 12.0,
+    "mes": 12.0,
+    "cliente": 12.0,
+    "sdr": 12.0,
+    "citas": 12.0,
+    "firmas": 12.0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": 13.0,
+    "semana": 13.0,
+    "mes": 13.0,
+    "cliente": 13.0,
+    "sdr": 13.0,
+    "citas": 13.0,
+    "firmas": 13.0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": 14.0,
+    "semana": 14.0,
+    "mes": 14.0,
+    "cliente": 14.0,
+    "sdr": 14.0,
+    "citas": 14.0,
+    "firmas": 14.0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": 15.0,
+    "semana": 15.0,
+    "mes": 15.0,
+    "cliente": 15.0,
+    "sdr": 15.0,
+    "citas": 15.0,
+    "firmas": 15.0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": 16.0,
+    "semana": 16.0,
+    "mes": 16.0,
+    "cliente": 16.0,
+    "sdr": 16.0,
+    "citas": 16.0,
+    "firmas": 16.0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": 17.0,
+    "semana": 17.0,
+    "mes": 17.0,
+    "cliente": 17.0,
+    "sdr": 17.0,
+    "citas": 17.0,
+    "firmas": 17.0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-16T00:00:00",
+    "semana": 12.0,
+    "mes": "2026-03",
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 22,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-16T00:00:00",
+    "semana": 13.0,
+    "mes": "2026-03",
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 12,
+    "firmas": 1
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-16T00:00:00",
+    "semana": 14.0,
+    "mes": "2026-03",
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 15,
+    "firmas": 1
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-16T00:00:00",
+    "semana": 15.0,
+    "mes": "2026-03",
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 17,
+    "firmas": 2
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-16T00:00:00",
+    "semana": 16.0,
+    "mes": "2026-03",
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 18,
+    "firmas": 3
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-23T00:00:00",
+    "semana": 17.0,
+    "mes": "2026-03",
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": 13,
+    "firmas": 2
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-23T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-23T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-23T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-23T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-30T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-30T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-30T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-30T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-03-30T00:00:00",
+    "semana": null,
+    "mes": "2026-03",
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-06T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-06T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-06T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-06T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-06T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-13T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-13T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-13T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-13T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-13T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-13T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-20T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-20T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-20T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-20T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-20T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": "2026-04-20T00:00:00",
+    "semana": null,
+    "mes": "2026-04",
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": 0,
+    "firmas": 0
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Hogares",
+    "sdr": "Leonimar",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Dos Hogares",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Manos al hogar",
+    "sdr": "Victoria",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inspira",
+    "sdr": "Bryan",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Inq",
+    "sdr": "Caridad",
+    "citas": null,
+    "firmas": null
+  },
+  {
+    "sheet": "Dashboard Semanal",
+    "fecha": null,
+    "semana": null,
+    "mes": null,
+    "cliente": "Grupo elijo",
+    "sdr": "Joselyn",
+    "citas": null,
+    "firmas": null
+  }
+]

@@ -16,4 +16,16 @@
 - [x] Replantear sidebar, topbar, tarjetas y gráficos con un look más moderno y menos administrativo.
 - [x] Mejorar densidad visual sin perder claridad operativa para detectar bloqueos.
 - [x] Validar TypeScript, build y vista previa.
-- [ ] Guardar checkpoint final del rediseño.
+- [x] Guardar checkpoint final del rediseño.
+
+# Pendientes para actualización histórica y marca Inmoleads
+
+- [x] Acceder al nuevo Google Sheet histórico y descargar/exportar los datos desde enero.
+- [x] Revisar www.inmoleads.pro para identificar colores, tipografía y señales visuales de marca.
+- [x] Analizar pestañas, columnas y granularidad de la data histórica.
+- [x] Normalizar datos por día, mes, cliente y etapa del pipeline para consumo en la webapp.
+- [x] Agregar pestaña o sección histórica con filtros por mes, día y rango de fechas.
+- [x] Actualizar visualizaciones para que respondan a filtros temporales.
+- [x] Aplicar colores de marca de Inmoleads al sistema visual sin perder legibilidad.
+- [x] Validar TypeScript, build, datos renderizados y experiencia visual.
+- [ ] Guardar checkpoint final de la versión con histórico y branding.

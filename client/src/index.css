@@ -593,3 +593,196 @@
   .client-row { grid-template-columns: 1fr; align-items: start; }
   .client-row small { text-align: left; }
 }
+
+/*
+ * Ajuste Inmoleads histórico: la interfaz prioriza verde confianza, naranja acción y tarjetas de análisis compactas.
+ * Pregunta guía: ¿estos colores orientan la acción sin tapar la lectura numérica?
+ */
+:root {
+  --inmo-green: #0f8a5f;
+  --inmo-deep: #173d33;
+  --inmo-ink: #10231e;
+  --inmo-mint: #eaf7f0;
+  --inmo-orange: #f36f21;
+  --inmo-sand: #fff6ed;
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(15, 138, 95, 0.14), transparent 23%),
+    radial-gradient(circle at 82% 14%, rgba(243, 111, 33, 0.12), transparent 26%),
+    linear-gradient(135deg, #f6fbf7 0%, #f1f8f3 44%, #fff7ef 100%);
+}
+
+.brand-mark {
+  background: linear-gradient(135deg, var(--inmo-green) 0%, #20b37c 48%, var(--inmo-orange) 125%);
+  box-shadow: 0 14px 30px rgba(15, 138, 95, .28);
+}
+
+.brand-block strong,
+.app-topbar h1,
+.card-head h2,
+.client-row strong {
+  color: var(--inmo-ink);
+}
+
+.side-nav button,
+.side-nav a {
+  min-height: 46px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #5e716a;
+  text-decoration: none;
+  font-weight: 850;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: transparent;
+  width: 100%;
+  font: inherit;
+  transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
+}
+
+.side-nav button:hover,
+.side-nav a:hover {
+  transform: translateX(3px);
+  color: var(--inmo-ink);
+  background: rgba(255,255,255,.72);
+  box-shadow: 0 12px 26px rgba(23, 61, 51, .08);
+}
+
+.side-nav button.active,
+.side-nav a.active {
+  color: var(--inmo-ink);
+  background: #fff;
+  border-color: rgba(15, 138, 95, .22);
+  box-shadow: 0 16px 36px rgba(23, 61, 51, .09);
+}
+
+.side-nav button.active svg,
+.side-nav a.active svg,
+.app-topbar p,
+.search-box svg {
+  color: var(--inmo-green);
+}
+
+.sidebar-status {
+  background: linear-gradient(145deg, var(--inmo-deep) 0%, #0b2f25 58%, var(--inmo-orange) 170%);
+  box-shadow: 0 24px 48px rgba(23, 61, 51, .24);
+}
+
+.topbar-health {
+  background: linear-gradient(135deg, rgba(15, 138, 95, .13), rgba(255,255,255,.92));
+  color: var(--inmo-deep);
+  border-color: rgba(15, 138, 95, .2);
+  box-shadow: 0 14px 28px rgba(15, 138, 95, .1);
+}
+
+.tab-switch {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(255,255,255,.9);
+  box-shadow: 0 16px 42px rgba(23,61,51,.07), inset 0 0 0 1px rgba(15,138,95,.08);
+  backdrop-filter: blur(20px);
+}
+
+.tab-switch button {
+  border: 0;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 13px;
+  color: #60756e;
+  background: transparent;
+  font-weight: 950;
+  letter-spacing: -.01em;
+  transition: background .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.tab-switch button:hover {
+  transform: translateY(-1px);
+  color: var(--inmo-ink);
+}
+
+.tab-switch button.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--inmo-deep), var(--inmo-green));
+  box-shadow: 0 12px 24px rgba(15, 138, 95, .22);
+}
+
+.filter-bar {
+  grid-template-columns: minmax(220px, 1.2fr) repeat(auto-fit, minmax(132px, 1fr));
+  align-items: stretch;
+}
+
+.filter-bar label {
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.filter-bar input[type="date"] {
+  min-width: 0;
+}
+
+.app-kpi--good strong,
+.table-note:not(.table-note--warn) {
+  color: var(--inmo-green);
+}
+
+.app-kpi--warn strong,
+.table-note--warn,
+.risk-pill--critico,
+.risk-pill--atencion {
+  color: #c34b14;
+}
+
+.mini-funnel__track i {
+  background: linear-gradient(90deg, var(--inmo-deep), var(--inmo-green), var(--inmo-orange));
+}
+
+.history-ops {
+  grid-template-columns: minmax(260px, .72fr) minmax(280px, 1fr) minmax(280px, 1fr);
+}
+
+.history-chart {
+  min-height: 338px;
+}
+
+.history-strip,
+.detail-card,
+.app-card {
+  border-color: rgba(15, 138, 95, .09);
+}
+
+.data-table th {
+  color: #526963;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(15, 138, 95, .055);
+}
+
+@media (max-width: 1180px) {
+  .history-ops {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 920px) {
+  .tab-switch {
+    width: 100%;
+  }
+  .tab-switch button {
+    flex: 1;
+  }
+  .filter-bar {
+    position: relative;
+    top: auto;
+    grid-template-columns: 1fr;
+  }
+}
