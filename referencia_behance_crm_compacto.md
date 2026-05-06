@@ -1,0 +1,5 @@
+# Criterios visuales de referencia: CRM analytics SaaS compacto
+
+La nueva referencia se aleja del dashboard dramático y usa una composición más ligera, editorial y precisa. Predomina un fondo gris muy claro, tarjetas blancas con radios amplios pero suaves, sombras discretas, micro-accentos verde lima y negro, y jerarquías tipográficas más contenidas. El diseño comunica plataforma SaaS analítica mediante widgets densos, navegación lateral mínima, chips de estado, controles superiores compactos y gráficos con mucho aire interno.
+
+Para adaptar la webapp de pipeline, el rediseño debe bajar significativamente el tamaño de títulos y KPIs, evitar bloques demasiado heroicos, reducir contraste excesivamente oscuro, usar tarjetas más delgadas y organizar los módulos como una herramienta CRM de trabajo diario. La paleta de Inmoleads puede mantenerse con verde institucional, acentos lima/naranja muy controlados y superficies claras. El objetivo visual es que la pantalla se sienta más como producto SaaS profesional y menos como dashboard de presentación.

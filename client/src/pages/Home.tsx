@@ -1,7 +1,7 @@
 /*
- * Filosofía visual: webapp SaaS analytics operativa alineada a Inmoleads.
- * La pantalla debe permitir revisar el pipeline diario y abrir una pestaña histórica para detectar qué cliente/SDR requiere destrabe por fecha.
- * Pregunta guía: ¿esta interacción ayuda a Sinahi a elegir el siguiente cliente a desbloquear?
+ * Filosofía visual: CRM analytics SaaS compacto alineado a Inmoleads.
+ * La pantalla debe sentirse como herramienta operativa diaria: tipografía pequeña, tarjetas claras, filtros densos y lectura rápida por cliente/SDR.
+ * Pregunta guía: ¿esta interacción ayuda a Sinahi a elegir el siguiente cliente a desbloquear sin convertir la interfaz en presentación?
  */
 import { useMemo, useState } from "react";
 import {

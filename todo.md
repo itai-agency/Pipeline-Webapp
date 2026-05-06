@@ -28,4 +28,14 @@
 - [x] Actualizar visualizaciones para que respondan a filtros temporales.
 - [x] Aplicar colores de marca de Inmoleads al sistema visual sin perder legibilidad.
 - [x] Validar TypeScript, build, datos renderizados y experiencia visual.
-- [ ] Guardar checkpoint final de la versión con histórico y branding.
+- [x] Guardar checkpoint final de la versión con histórico y branding.
+
+# Pendientes para rediseño CRM analytics compacto
+
+- [x] Revisar la nueva referencia de Behance y extraer criterios visuales aplicables.
+- [x] Reducir escala tipográfica general: títulos, KPIs y tarjetas deben verse más compactos.
+- [x] Cambiar el estilo hacia CRM analytics SaaS moderno, más limpio y menos dramático.
+- [x] Ajustar tarjetas, sidebar, filtros y tablas para mayor densidad operativa.
+- [x] Mantener pestaña histórica, filtros por fecha, cliente y SDR sin pérdida funcional.
+- [x] Validar TypeScript, build y vista previa del nuevo diseño compacto.
+- [ ] Guardar checkpoint final del rediseño CRM compacto.
