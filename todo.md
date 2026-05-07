@@ -65,4 +65,20 @@
 - [x] Reejecutar normalización de pipeline principal e histórico SDR.
 - [x] Comparar totales y rangos de fecha contra la versión b12dc6b6.
 - [x] Validar TypeScript, build y navegación diaria/histórica.
-- [ ] Guardar nuevo checkpoint si hay cambios o documentar que no hubo cambios en la fuente.
+- [x] Guardar nuevo checkpoint si hay cambios o documentar que no hubo cambios en la fuente.
+
+# Verificación de corte 06/05/2026
+
+- [x] Confirmar si `pipelineData.ts` contiene registros del 06/05/2026: no contiene registros de esa fecha.
+- [x] Revisar archivos Excel/CSV disponibles para detectar filas con fecha 06/05/2026: no aparece en las fuentes locales accesibles.
+- [x] Determinar si la ausencia del 06/05/2026 se debe a fuente local desactualizada o a filtro/normalización: la fuente diaria local llega solo al 05/05/2026 y Google Sheets requiere acceso autenticado.
+- [x] Actualizar la data con la fuente autenticada que contiene corte 06/05/2026.
+- [x] Validar dashboard con corte corregido; queda pendiente registrar checkpoint final.
+
+# Fuente confirmada Google Sheets gid 135221143
+
+- [x] Usar como fuente principal el documento `1K-TdH3tk02Lu2i9zHGfXT7T2j691nANNzpQB8Fx_OxQ` con `gid=135221143`.
+- [x] Probar extracción directa de la pestaña confirmada por CSV/XLSX: devuelve pantalla de login, no datos exportables sin iniciar sesión.
+- [x] Confirmar si la pestaña confirmada contiene registros del 06/05/2026: 6 filas reales en RESPALDO_DIARIO.
+- [x] Adaptar normalización para la descarga autenticada Excel de la pestaña RESPALDO_DIARIO.
+- [x] Actualizar dashboard y validar build con la data accesible del 06/05/2026; queda pendiente registrar checkpoint final.
