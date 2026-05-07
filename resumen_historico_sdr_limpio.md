@@ -1,5 +1,6 @@
 # Histórico SDR limpio
 
+Fuente CSV: `/home/ubuntu/Downloads/refresh_probe_20260507_183708/sdr_default_gid0.csv`
 Registros diarios: 32
 Rango de fechas: 2026-03-16 a 2026-04-20
 Meses: 2026-03, 2026-04

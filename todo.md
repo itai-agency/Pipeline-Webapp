@@ -47,7 +47,7 @@
 - [x] Normalizar registros diarios e históricos sin inventar datos.
 - [x] Integrar la data renovada en el frontend conservando filtros y diseño compacto.
 - [x] Validar TypeScript, build y vista previa con los nuevos totales.
-- [ ] Guardar checkpoint final con data refrescada.
+- [x] Guardar checkpoint final con data refrescada.
 
 # Continuación de actualización de data
 
@@ -56,4 +56,13 @@
 - [x] Ejecutar normalización de pipeline principal e histórico SDR con las fuentes accesibles.
 - [x] Comparar metadatos antes/después: registros, rango de fechas, clientes, citas y firmas.
 - [x] Validar build y navegación de vistas diaria e histórica.
-- [ ] Guardar checkpoint con la data refrescada o documentar limitación si no hay fuente nueva válida.
+- [x] Guardar checkpoint con la data refrescada o documentar limitación si no hay fuente nueva válida.
+
+# Nueva corrida de data actualizada
+
+- [x] Revisar si las fuentes Excel/CSV en Descargas fueron actualizadas nuevamente.
+- [x] Respaldar metadatos actuales antes de regenerar para comparar cambios.
+- [x] Reejecutar normalización de pipeline principal e histórico SDR.
+- [x] Comparar totales y rangos de fecha contra la versión b12dc6b6.
+- [x] Validar TypeScript, build y navegación diaria/histórica.
+- [ ] Guardar nuevo checkpoint si hay cambios o documentar que no hubo cambios en la fuente.

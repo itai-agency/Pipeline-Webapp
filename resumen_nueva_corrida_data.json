@@ -1,0 +1,58 @@
+{
+  "pipeline": {
+    "dailyRecords": 24,
+    "dailyDates": [
+      "2026-05-01",
+      "2026-05-02",
+      "2026-05-04",
+      "2026-05-05"
+    ],
+    "dailyClients": [
+      "DOS HOGARES",
+      "GRUPO ELIJO",
+      "HOGARES",
+      "INQ",
+      "INSPIRA",
+      "MANOS AL HOGAR"
+    ],
+    "dailyTotals": {
+      "CONVERSACIONES": 301,
+      "MQL": 32,
+      "SQL": 7,
+      "CITAS": 8,
+      "FIRMAS": 0
+    },
+    "historyRecords": 18,
+    "weeklyRecords": 6,
+    "monthlyRecords": 1
+  },
+  "sdr": {
+    "source": "Dashboard Citas - Firmas SDR",
+    "sheet": "Dashboard Semanal",
+    "extractedFrom": "/home/ubuntu/Downloads/refresh_probe_20260507_183708/sdr_default_gid0.csv",
+    "recordCount": 32,
+    "minDate": "2026-03-16",
+    "maxDate": "2026-04-20",
+    "months": [
+      "2026-03",
+      "2026-04"
+    ],
+    "clients": [
+      "DOS HOGARES",
+      "GRUPO ELIJO",
+      "HOGARES",
+      "INQ",
+      "INSPIRA",
+      "MANOS AL HOGAR"
+    ],
+    "sdrs": [
+      "Bryan",
+      "Caridad",
+      "Joselyn",
+      "Leonimar",
+      "Victoria"
+    ],
+    "totalCitas": 97,
+    "totalFirmas": 9
+  }
+}

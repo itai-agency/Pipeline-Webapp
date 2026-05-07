@@ -453,7 +453,6 @@
   "metadata": {
     "source": "Dashboard Citas - Firmas SDR",
     "sheet": "Dashboard Semanal",
-    "extractedFrom": "/home/ubuntu/Downloads/refresh_probe_20260507_183708/sdr_default_gid0.csv",
     "recordCount": 32,
     "minDate": "2026-03-16",
     "maxDate": "2026-04-20",
