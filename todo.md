@@ -82,3 +82,20 @@
 - [x] Confirmar si la pestaña confirmada contiene registros del 06/05/2026: 6 filas reales en RESPALDO_DIARIO.
 - [x] Adaptar normalización para la descarga autenticada Excel de la pestaña RESPALDO_DIARIO.
 - [x] Actualizar dashboard y validar build con la data accesible del 06/05/2026; queda pendiente registrar checkpoint final.
+
+# Nueva corrida desde Google Sheets actualizado
+
+- [ ] Abrir la URL confirmada del Google Sheet `1K-TdH3tk02Lu2i9zHGfXT7T2j691nANNzpQB8Fx_OxQ` con `gid=135221143`.
+- [x] Descargar o reutilizar una exportación autenticada más reciente que la versión integrada: solo hay archivo local del 07/05/2026 con filas nuevas en cero.
+- [x] Validar hojas, rango de fechas, clientes y totales antes de modificar el frontend: no hay métricas nuevas válidas disponibles localmente.
+- [x] Regenerar `pipelineData.ts` sin alterar diseño, filtros ni vista histórica: corte 07/05/2026 integrado con 62 conversaciones, 4 MQL, 2 SQL, 2 citas y 0 firmas.
+- [x] Validar TypeScript, build y navegación diaria/histórica.
+- [ ] Guardar checkpoint final y reportar el nuevo corte integrado.
+
+# Manejo de sesión expirada y alternativas sin nuevo login
+
+- [x] Verificar si Google Sheets puede exportarse por URL directa sin sesión activa: devuelve HTTP 401 y HTML de login.
+- [x] Inspeccionar Descargas para encontrar exportaciones más recientes del documento confirmado: solo existe la exportación del 07/05/2026 23:02.
+- [x] Comparar fecha de modificación, hojas y último corte contra la versión integrada `7e4ada97`: la exportación local trae filas 07/05/2026, pero todas sus métricas están en cero.
+- [x] Usar la exportación local más reciente si contiene datos nuevos válidos: la primera local estaba en cero, pero la descarga autenticada reactivada contiene métricas reales al 07/05/2026.
+- [x] Pedir intervención del usuario solo si no existe ninguna fuente accesible y Google mantiene la sesión cerrada: se reactivó la sesión sin credenciales por chat.

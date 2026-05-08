@@ -336,6 +336,66 @@ export const pipelineData = {
       "CITAS": 0,
       "FIRMAS": 0,
       "SEMANA": "2026-05-02"
+    },
+    {
+      "FECHA": "2026-05-07",
+      "CLIENTE": "DOS HOGARES",
+      "CONVERSACIONES": 8,
+      "MQL": 0,
+      "SQL": 0,
+      "CITAS": 0,
+      "FIRMAS": 0,
+      "SEMANA": "2026-05-02"
+    },
+    {
+      "FECHA": "2026-05-07",
+      "CLIENTE": "GRUPO ELIJO",
+      "CONVERSACIONES": 18,
+      "MQL": 1,
+      "SQL": 0,
+      "CITAS": 1,
+      "FIRMAS": 0,
+      "SEMANA": "2026-05-02"
+    },
+    {
+      "FECHA": "2026-05-07",
+      "CLIENTE": "HOGARES",
+      "CONVERSACIONES": 12,
+      "MQL": 3,
+      "SQL": 2,
+      "CITAS": 0,
+      "FIRMAS": 0,
+      "SEMANA": "2026-05-02"
+    },
+    {
+      "FECHA": "2026-05-07",
+      "CLIENTE": "INQ",
+      "CONVERSACIONES": 12,
+      "MQL": 0,
+      "SQL": 0,
+      "CITAS": 1,
+      "FIRMAS": 0,
+      "SEMANA": "2026-05-02"
+    },
+    {
+      "FECHA": "2026-05-07",
+      "CLIENTE": "INSPIRA",
+      "CONVERSACIONES": 3,
+      "MQL": 0,
+      "SQL": 0,
+      "CITAS": 0,
+      "FIRMAS": 0,
+      "SEMANA": "2026-05-02"
+    },
+    {
+      "FECHA": "2026-05-07",
+      "CLIENTE": "MANOS AL HOGAR",
+      "CONVERSACIONES": 9,
+      "MQL": 0,
+      "SQL": 0,
+      "CITAS": 0,
+      "FIRMAS": 0,
+      "SEMANA": "2026-05-02"
     }
   ],
   "weekly": [
@@ -396,7 +456,7 @@ export const pipelineData = {
     {
       "SEMANA": "2026-05-02",
       "CLIENTE": "DOS HOGARES",
-      "CONVERSACIONES": 34,
+      "CONVERSACIONES": 42,
       "MQL": 0,
       "SQL": 0,
       "CITAS": 1,
@@ -405,34 +465,34 @@ export const pipelineData = {
     {
       "SEMANA": "2026-05-02",
       "CLIENTE": "GRUPO ELIJO",
-      "CONVERSACIONES": 51,
-      "MQL": 7,
+      "CONVERSACIONES": 69,
+      "MQL": 8,
       "SQL": 1,
-      "CITAS": 2,
+      "CITAS": 3,
       "FIRMAS": 0
     },
     {
       "SEMANA": "2026-05-02",
       "CLIENTE": "HOGARES",
-      "CONVERSACIONES": 41,
-      "MQL": 11,
-      "SQL": 5,
+      "CONVERSACIONES": 53,
+      "MQL": 14,
+      "SQL": 7,
       "CITAS": 3,
       "FIRMAS": 1
     },
     {
       "SEMANA": "2026-05-02",
       "CLIENTE": "INQ",
-      "CONVERSACIONES": 92,
+      "CONVERSACIONES": 104,
       "MQL": 7,
       "SQL": 1,
-      "CITAS": 1,
+      "CITAS": 2,
       "FIRMAS": 2
     },
     {
       "SEMANA": "2026-05-02",
       "CLIENTE": "INSPIRA",
-      "CONVERSACIONES": 16,
+      "CONVERSACIONES": 19,
       "MQL": 2,
       "SQL": 0,
       "CITAS": 0,
@@ -441,7 +501,7 @@ export const pipelineData = {
     {
       "SEMANA": "2026-05-02",
       "CLIENTE": "MANOS AL HOGAR",
-      "CONVERSACIONES": 74,
+      "CONVERSACIONES": 83,
       "MQL": 4,
       "SQL": 1,
       "CITAS": 1,
@@ -452,7 +512,7 @@ export const pipelineData = {
     {
       "MES": "2026-05",
       "CLIENTE": "DOS HOGARES",
-      "CONVERSACIONES": 36,
+      "CONVERSACIONES": 44,
       "MQL": 0,
       "SQL": 0,
       "CITAS": 1,
@@ -461,34 +521,34 @@ export const pipelineData = {
     {
       "MES": "2026-05",
       "CLIENTE": "GRUPO ELIJO",
-      "CONVERSACIONES": 63,
-      "MQL": 11,
+      "CONVERSACIONES": 81,
+      "MQL": 12,
       "SQL": 2,
-      "CITAS": 2,
+      "CITAS": 3,
       "FIRMAS": 0
     },
     {
       "MES": "2026-05",
       "CLIENTE": "HOGARES",
-      "CONVERSACIONES": 46,
-      "MQL": 13,
-      "SQL": 5,
+      "CONVERSACIONES": 58,
+      "MQL": 16,
+      "SQL": 7,
       "CITAS": 4,
       "FIRMAS": 1
     },
     {
       "MES": "2026-05",
       "CLIENTE": "INQ",
-      "CONVERSACIONES": 107,
+      "CONVERSACIONES": 119,
       "MQL": 8,
       "SQL": 2,
-      "CITAS": 2,
+      "CITAS": 3,
       "FIRMAS": 2
     },
     {
       "MES": "2026-05",
       "CLIENTE": "INSPIRA",
-      "CONVERSACIONES": 22,
+      "CONVERSACIONES": 25,
       "MQL": 4,
       "SQL": 0,
       "CITAS": 0,
@@ -497,7 +557,7 @@ export const pipelineData = {
     {
       "MES": "2026-05",
       "CLIENTE": "MANOS AL HOGAR",
-      "CONVERSACIONES": 83,
+      "CONVERSACIONES": 92,
       "MQL": 4,
       "SQL": 1,
       "CITAS": 1,
@@ -705,16 +765,16 @@ export const pipelineData = {
     }
   ],
   "dailyTotals": {
-    "CONVERSACIONES": 357,
-    "MQL": 40,
-    "SQL": 10,
-    "CITAS": 10,
+    "CONVERSACIONES": 419,
+    "MQL": 44,
+    "SQL": 12,
+    "CITAS": 12,
     "FIRMAS": 3
   },
   "weeklyByClient": [
     {
       "key": "DOS HOGARES",
-      "CONVERSACIONES": 36,
+      "CONVERSACIONES": 44,
       "MQL": 0,
       "SQL": 0,
       "CITAS": 1,
@@ -722,31 +782,31 @@ export const pipelineData = {
     },
     {
       "key": "GRUPO ELIJO",
-      "CONVERSACIONES": 63,
-      "MQL": 11,
+      "CONVERSACIONES": 81,
+      "MQL": 12,
       "SQL": 2,
-      "CITAS": 2,
+      "CITAS": 3,
       "FIRMAS": 0
     },
     {
       "key": "HOGARES",
-      "CONVERSACIONES": 46,
-      "MQL": 13,
-      "SQL": 5,
+      "CONVERSACIONES": 58,
+      "MQL": 16,
+      "SQL": 7,
       "CITAS": 4,
       "FIRMAS": 1
     },
     {
       "key": "INQ",
-      "CONVERSACIONES": 107,
+      "CONVERSACIONES": 119,
       "MQL": 8,
       "SQL": 2,
-      "CITAS": 2,
+      "CITAS": 3,
       "FIRMAS": 2
     },
     {
       "key": "INSPIRA",
-      "CONVERSACIONES": 22,
+      "CONVERSACIONES": 25,
       "MQL": 4,
       "SQL": 0,
       "CITAS": 0,
@@ -754,7 +814,7 @@ export const pipelineData = {
     },
     {
       "key": "MANOS AL HOGAR",
-      "CONVERSACIONES": 83,
+      "CONVERSACIONES": 92,
       "MQL": 4,
       "SQL": 1,
       "CITAS": 1,
@@ -801,12 +861,20 @@ export const pipelineData = {
       "SQL": 3,
       "CITAS": 2,
       "FIRMAS": 1
+    },
+    {
+      "key": "2026-05-07",
+      "CONVERSACIONES": 62,
+      "MQL": 4,
+      "SQL": 2,
+      "CITAS": 2,
+      "FIRMAS": 0
     }
   ],
   "dailyByClient": [
     {
       "key": "DOS HOGARES",
-      "CONVERSACIONES": 36,
+      "CONVERSACIONES": 44,
       "MQL": 0,
       "SQL": 0,
       "CITAS": 1,
@@ -814,31 +882,31 @@ export const pipelineData = {
     },
     {
       "key": "GRUPO ELIJO",
-      "CONVERSACIONES": 63,
-      "MQL": 11,
+      "CONVERSACIONES": 81,
+      "MQL": 12,
       "SQL": 2,
-      "CITAS": 2,
+      "CITAS": 3,
       "FIRMAS": 0
     },
     {
       "key": "HOGARES",
-      "CONVERSACIONES": 46,
-      "MQL": 13,
-      "SQL": 5,
+      "CONVERSACIONES": 58,
+      "MQL": 16,
+      "SQL": 7,
       "CITAS": 4,
       "FIRMAS": 1
     },
     {
       "key": "INQ",
-      "CONVERSACIONES": 107,
+      "CONVERSACIONES": 119,
       "MQL": 8,
       "SQL": 2,
-      "CITAS": 2,
+      "CITAS": 3,
       "FIRMAS": 2
     },
     {
       "key": "INSPIRA",
-      "CONVERSACIONES": 22,
+      "CONVERSACIONES": 25,
       "MQL": 4,
       "SQL": 0,
       "CITAS": 0,
@@ -846,7 +914,7 @@ export const pipelineData = {
     },
     {
       "key": "MANOS AL HOGAR",
-      "CONVERSACIONES": 83,
+      "CONVERSACIONES": 92,
       "MQL": 4,
       "SQL": 1,
       "CITAS": 1,
