@@ -106,4 +106,11 @@
 - [x] Revisar dónde se calculan y muestran los KPIs actuales para incorporar comparación contra meta sin alterar los datos base.
 - [x] Implementar una sección o tarjetas KPI con colores de semáforo, valor real, meta y estado.
 - [x] Validar contraste, legibilidad y coherencia visual con el rediseño existente.
-- [ ] Ejecutar `pnpm check`, `pnpm build`, revisar preview y guardar checkpoint final.
+- [x] Ejecutar `pnpm check`, `pnpm build`, revisar preview y guardar checkpoint final.
+
+# Ajuste meta mayo contratos
+
+- [x] Cambiar la meta mensual de contratos firmados de mayo a 15.
+- [x] Ajustar el texto visible del semáforo para mostrar 15/mes en contratos firmados.
+- [x] Validar que el estado y la barra de avance usen 15 como denominador.
+- [x] Ejecutar `pnpm check`, `pnpm build`, revisar preview; queda pendiente guardar checkpoint final.

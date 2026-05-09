@@ -64,8 +64,8 @@ type GoalKpi = {
 };
 
 const monthlyGoals = {
-  firmasMin: 5,
-  firmasStretch: 10,
+  firmasMin: 15,
+  firmasStretch: 15,
   leads: 376,
   mqlRate: 0.2,
   citas: 13,
@@ -136,7 +136,7 @@ function trafficLabel(status: GoalStatus) {
 
 function buildGoalKpis(totals: ReturnType<typeof sumRows>): GoalKpi[] {
   const mqlRate = ratio(totals.MQL, totals.CONVERSACIONES);
-  const firmStatus = totals.FIRMAS >= monthlyGoals.firmasMin ? "green" : totals.FIRMAS >= 3 ? "yellow" : "red";
+  const firmStatus = trafficByProgress(ratio(totals.FIRMAS, monthlyGoals.firmasMin));
   const leadsStatus = trafficByProgress(ratio(totals.CONVERSACIONES, monthlyGoals.leads));
   const mqlStatus: GoalStatus = mqlRate >= monthlyGoals.mqlRate ? "green" : mqlRate >= 0.12 ? "yellow" : "red";
   const citasStatus = trafficByProgress(ratio(totals.CITAS, monthlyGoals.citas));
@@ -146,11 +146,11 @@ function buildGoalKpis(totals: ReturnType<typeof sumRows>): GoalKpi[] {
       key: "firmas",
       label: "Contratos firmados",
       value: fmt.format(totals.FIRMAS),
-      meta: `${monthlyGoals.firmasMin}-${monthlyGoals.firmasStretch}/mes`,
+      meta: `${monthlyGoals.firmasMin}/mes`,
       progress: Math.min(1, ratio(totals.FIRMAS, monthlyGoals.firmasMin)),
       status: firmStatus,
       statusLabel: trafficLabel(firmStatus),
-      detail: `${fmt.format(monthlyGoals.firmasMin - Math.min(totals.FIRMAS, monthlyGoals.firmasMin))} para meta mínima`,
+      detail: `${fmt.format(monthlyGoals.firmasMin - Math.min(totals.FIRMAS, monthlyGoals.firmasMin))} para meta mensual`,
     },
     {
       key: "leads",
@@ -509,7 +509,7 @@ export default function Home() {
                 </div>
                 <Target />
               </div>
-              <p className="traffic-panel__intro">El estado usa las metas de referencia: 5-10 contratos, ~376 leads, 20% Leads→MQL y 13+ citas por mes. Verde indica meta lograda, amarillo avance cercano o en curso, y rojo brecha prioritaria.</p>
+              <p className="traffic-panel__intro">El estado usa las metas de referencia de mayo: 15 contratos, ~376 leads, 20% Leads→MQL y 13+ citas por mes. Verde indica meta lograda, amarillo avance cercano o en curso, y rojo brecha prioritaria.</p>
               <div className="traffic-grid">
                 {goalKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
               </div>
