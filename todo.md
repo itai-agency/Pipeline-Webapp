@@ -85,12 +85,12 @@
 
 # Nueva corrida desde Google Sheets actualizado
 
-- [ ] Abrir la URL confirmada del Google Sheet `1K-TdH3tk02Lu2i9zHGfXT7T2j691nANNzpQB8Fx_OxQ` con `gid=135221143`.
-- [x] Descargar o reutilizar una exportación autenticada más reciente que la versión integrada: solo hay archivo local del 07/05/2026 con filas nuevas en cero.
-- [x] Validar hojas, rango de fechas, clientes y totales antes de modificar el frontend: no hay métricas nuevas válidas disponibles localmente.
+- [x] Abrir la URL confirmada del Google Sheet `1K-TdH3tk02Lu2i9zHGfXT7T2j691nANNzpQB8Fx_OxQ` con `gid=135221143`.
+- [x] Descargar o reutilizar una exportación autenticada más reciente que la versión integrada: descarga autenticada nueva del 08/05/2026 con corte 07/05/2026 real.
+- [x] Validar hojas, rango de fechas, clientes y totales antes de modificar el frontend: 36 registros diarios, rango 01/05/2026–07/05/2026, totales 419 conversaciones, 44 MQL, 12 SQL, 12 citas y 3 firmas.
 - [x] Regenerar `pipelineData.ts` sin alterar diseño, filtros ni vista histórica: corte 07/05/2026 integrado con 62 conversaciones, 4 MQL, 2 SQL, 2 citas y 0 firmas.
 - [x] Validar TypeScript, build y navegación diaria/histórica.
-- [ ] Guardar checkpoint final y reportar el nuevo corte integrado.
+- [x] Guardar checkpoint final y reportar el nuevo corte integrado.
 
 # Manejo de sesión expirada y alternativas sin nuevo login
 
@@ -99,3 +99,11 @@
 - [x] Comparar fecha de modificación, hojas y último corte contra la versión integrada `7e4ada97`: la exportación local trae filas 07/05/2026, pero todas sus métricas están en cero.
 - [x] Usar la exportación local más reciente si contiene datos nuevos válidos: la primera local estaba en cero, pero la descarga autenticada reactivada contiene métricas reales al 07/05/2026.
 - [x] Pedir intervención del usuario solo si no existe ninguna fuente accesible y Google mantiene la sesión cerrada: se reactivó la sesión sin credenciales por chat.
+
+# Sistema semáforo KPI contra metas
+
+- [x] Definir reglas de estado verde, amarillo y rojo para contratos firmados, leads generados, tasa Leads→MQL y citas realizadas.
+- [x] Revisar dónde se calculan y muestran los KPIs actuales para incorporar comparación contra meta sin alterar los datos base.
+- [x] Implementar una sección o tarjetas KPI con colores de semáforo, valor real, meta y estado.
+- [x] Validar contraste, legibilidad y coherencia visual con el rediseño existente.
+- [ ] Ejecutar `pnpm check`, `pnpm build`, revisar preview y guardar checkpoint final.

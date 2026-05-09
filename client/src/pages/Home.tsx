@@ -50,6 +50,26 @@ type ClientRisk = {
 };
 
 type SdrTotals = { CITAS: number; FIRMAS: number };
+type GoalStatus = "green" | "yellow" | "red";
+
+type GoalKpi = {
+  key: string;
+  label: string;
+  value: string;
+  meta: string;
+  progress: number;
+  status: GoalStatus;
+  statusLabel: string;
+  detail: string;
+};
+
+const monthlyGoals = {
+  firmasMin: 5,
+  firmasStretch: 10,
+  leads: 376,
+  mqlRate: 0.2,
+  citas: 13,
+};
 
 const fmt = new Intl.NumberFormat("es-MX");
 const pctFmt = new Intl.NumberFormat("es-MX", { style: "percent", maximumFractionDigits: 1 });
@@ -98,6 +118,71 @@ function sumRows(rows: PipelineRow[]) {
     },
     { CONVERSACIONES: 0, MQL: 0, SQL: 0, CITAS: 0, FIRMAS: 0 },
   );
+}
+
+function monthKey(value?: string | null) {
+  return value ? value.slice(0, 7) : "";
+}
+
+function trafficByProgress(progress: number, yellowFrom = 0.7): GoalStatus {
+  if (progress >= 1) return "green";
+  if (progress >= yellowFrom) return "yellow";
+  return "red";
+}
+
+function trafficLabel(status: GoalStatus) {
+  return status === "green" ? "En línea" : status === "yellow" ? "En curso" : "Bajo";
+}
+
+function buildGoalKpis(totals: ReturnType<typeof sumRows>): GoalKpi[] {
+  const mqlRate = ratio(totals.MQL, totals.CONVERSACIONES);
+  const firmStatus = totals.FIRMAS >= monthlyGoals.firmasMin ? "green" : totals.FIRMAS >= 3 ? "yellow" : "red";
+  const leadsStatus = trafficByProgress(ratio(totals.CONVERSACIONES, monthlyGoals.leads));
+  const mqlStatus: GoalStatus = mqlRate >= monthlyGoals.mqlRate ? "green" : mqlRate >= 0.12 ? "yellow" : "red";
+  const citasStatus = trafficByProgress(ratio(totals.CITAS, monthlyGoals.citas));
+
+  return [
+    {
+      key: "firmas",
+      label: "Contratos firmados",
+      value: fmt.format(totals.FIRMAS),
+      meta: `${monthlyGoals.firmasMin}-${monthlyGoals.firmasStretch}/mes`,
+      progress: Math.min(1, ratio(totals.FIRMAS, monthlyGoals.firmasMin)),
+      status: firmStatus,
+      statusLabel: trafficLabel(firmStatus),
+      detail: `${fmt.format(monthlyGoals.firmasMin - Math.min(totals.FIRMAS, monthlyGoals.firmasMin))} para meta mínima`,
+    },
+    {
+      key: "leads",
+      label: "Leads generados",
+      value: fmt.format(totals.CONVERSACIONES),
+      meta: `~${fmt.format(monthlyGoals.leads)}/mes`,
+      progress: Math.min(1, ratio(totals.CONVERSACIONES, monthlyGoals.leads)),
+      status: leadsStatus,
+      statusLabel: trafficLabel(leadsStatus),
+      detail: `${pctFmt.format(ratio(totals.CONVERSACIONES, monthlyGoals.leads))} de avance`,
+    },
+    {
+      key: "mql",
+      label: "Tasa Leads→MQL",
+      value: pctFmt.format(mqlRate),
+      meta: pctFmt.format(monthlyGoals.mqlRate),
+      progress: Math.min(1, ratio(mqlRate, monthlyGoals.mqlRate)),
+      status: mqlStatus,
+      statusLabel: trafficLabel(mqlStatus),
+      detail: `${fmt.format(totals.MQL)} MQL sobre ${fmt.format(totals.CONVERSACIONES)} leads`,
+    },
+    {
+      key: "citas",
+      label: "Citas realizadas",
+      value: fmt.format(totals.CITAS),
+      meta: `${monthlyGoals.citas}+/mes`,
+      progress: Math.min(1, ratio(totals.CITAS, monthlyGoals.citas)),
+      status: citasStatus,
+      statusLabel: trafficLabel(citasStatus),
+      detail: `${fmt.format(monthlyGoals.citas - Math.min(totals.CITAS, monthlyGoals.citas))} para llegar a meta`,
+    },
+  ];
 }
 
 function sumSdrRows(rows: SdrHistoryRow[]): SdrTotals {
@@ -186,6 +271,30 @@ function Kpi({ label, value, detail, tone = "neutral" }: { label: string; value:
   );
 }
 
+function SemaforoKpi({ item }: { item: GoalKpi }) {
+  const Icon = item.status === "green" ? CheckCircle2 : item.status === "yellow" ? Clock3 : AlertTriangle;
+  return (
+    <article className={`traffic-kpi traffic-kpi--${item.status}`}>
+      <div className="traffic-kpi__main">
+        <span>{item.label}</span>
+        <strong>{item.value}</strong>
+        <small>{item.detail}</small>
+      </div>
+      <div className="traffic-kpi__meta">
+        <span>vs. meta</span>
+        <strong>{item.meta}</strong>
+        <div className="traffic-kpi__status">
+          <Icon size={16} />
+          <b>{item.statusLabel}</b>
+        </div>
+      </div>
+      <div className="traffic-kpi__bar" aria-label={`${item.label}: ${Math.round(item.progress * 100)}% de avance`}>
+        <i style={{ width: `${Math.max(6, item.progress * 100)}%` }} />
+      </div>
+    </article>
+  );
+}
+
 export default function Home() {
   const daily = pipelineData.daily as unknown as PipelineRow[];
   const history = pipelineData.history as unknown as PipelineRow[];
@@ -219,6 +328,16 @@ export default function Home() {
     });
   }, [daily, selectedDate, selectedClient, query]);
 
+  const currentMonthRows = useMemo(() => {
+    const latestMonth = monthKey(latestDate);
+    return daily.filter((row) => {
+      const monthMatch = monthKey(row.FECHA) === latestMonth;
+      const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
+      const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase());
+      return monthMatch && clientMatch && queryMatch;
+    });
+  }, [daily, latestDate, selectedClient, query]);
+
   const filteredSdrRows = useMemo(() => {
     return sdrRows.filter((row) => {
       const monthMatch = selectedMonth === "Todos" || row.MES === selectedMonth;
@@ -232,6 +351,8 @@ export default function Home() {
   }, [sdrRows, selectedMonth, selectedHistoricalDate, selectedClient, selectedSdr, rangeStart, rangeEnd, query]);
 
   const totals = useMemo(() => sumRows(filteredRows), [filteredRows]);
+  const currentMonthTotals = useMemo(() => sumRows(currentMonthRows), [currentMonthRows]);
+  const goalKpis = useMemo(() => buildGoalKpis(currentMonthTotals), [currentMonthTotals]);
   const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
   const todayRows = useMemo(() => daily.filter((row) => row.FECHA === latestDate), [daily, latestDate]);
   const risks = useMemo(() => buildRisks(filteredRows), [filteredRows]);
@@ -278,6 +399,7 @@ export default function Home() {
         <nav className="side-nav" aria-label="Navegación del dashboard">
           <button className={activeTab === "diario" ? "active" : ""} onClick={() => setActiveTab("diario")}><LayoutDashboard size={17} /> Diario</button>
           <button className={activeTab === "historico" ? "active" : ""} onClick={() => setActiveTab("historico")}><CalendarDays size={17} /> Histórico</button>
+          <a href="#metas"><Target size={17} /> Metas</a>
           <a href="#bloqueos"><AlertTriangle size={17} /> Bloqueos</a>
           <a href="#detalle"><ListChecks size={17} /> Detalle</a>
         </nav>
@@ -377,6 +499,20 @@ export default function Home() {
               <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(ratio(totals.SQL, totals.MQL))} de MQL`} tone={ratio(totals.SQL, totals.MQL) < 0.25 ? "warn" : "good"} />
               <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(ratio(totals.CITAS, totals.SQL || totals.MQL))} avance`} />
               <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(ratio(totals.FIRMAS, totals.CITAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
+            </section>
+
+            <section className="app-card traffic-panel" id="metas">
+              <div className="card-head compact">
+                <div>
+                  <span>Semáforo de metas</span>
+                  <h2>Avance mensual contra objetivo</h2>
+                </div>
+                <Target />
+              </div>
+              <p className="traffic-panel__intro">El estado usa las metas de referencia: 5-10 contratos, ~376 leads, 20% Leads→MQL y 13+ citas por mes. Verde indica meta lograda, amarillo avance cercano o en curso, y rojo brecha prioritaria.</p>
+              <div className="traffic-grid">
+                {goalKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
+              </div>
             </section>
 
             <section className="ops-layout">

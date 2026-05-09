@@ -1410,3 +1410,165 @@ body::before {
 .card-head h2 { letter-spacing: -.035em; }
 .priority-card .card-head h2 { letter-spacing: -.04em; }
 .app-kpi strong { letter-spacing: -.045em; }
+
+/*
+ * Extensión semáforo KPI: los estados de meta deben comunicar prioridad operativa sin reemplazar el lenguaje SaaS compacto.
+ * Verde = meta lograda, amarillo = avance en curso/cercano, rojo = brecha crítica que requiere intervención.
+ */
+.traffic-panel {
+  display: grid;
+  gap: 13px;
+  position: relative;
+  overflow: hidden;
+}
+
+.traffic-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, #18a058 0%, #ffd43b 52%, #e03131 100%);
+}
+
+.traffic-panel__intro {
+  margin: -2px 0 0;
+  max-width: 920px;
+  color: var(--inmo-muted);
+  font-size: .78rem;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+.traffic-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.traffic-kpi {
+  --traffic-main: #0f8a5f;
+  --traffic-soft: rgba(15, 138, 95, .10);
+  --traffic-line: rgba(15, 138, 95, .28);
+  min-height: 154px;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(96px, .72fr);
+  align-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #ffffff 0%, #fbfdfb 100%);
+  border: 1px solid var(--traffic-line);
+  box-shadow: 0 18px 42px rgba(23, 61, 51, .065), inset 0 0 0 1px rgba(255,255,255,.82);
+}
+
+.traffic-kpi::after {
+  content: "";
+  position: absolute;
+  width: 104px;
+  height: 104px;
+  right: -46px;
+  top: -48px;
+  border-radius: 999px;
+  background: var(--traffic-soft);
+}
+
+.traffic-kpi--green { --traffic-main: #16a34a; --traffic-soft: rgba(22, 163, 74, .13); --traffic-line: rgba(22, 163, 74, .30); }
+.traffic-kpi--yellow { --traffic-main: #eab308; --traffic-soft: rgba(250, 204, 21, .20); --traffic-line: rgba(234, 179, 8, .34); }
+.traffic-kpi--red { --traffic-main: #dc2626; --traffic-soft: rgba(220, 38, 38, .12); --traffic-line: rgba(220, 38, 38, .28); }
+
+.traffic-kpi__main,
+.traffic-kpi__meta,
+.traffic-kpi__bar { position: relative; z-index: 1; }
+
+.traffic-kpi__main span,
+.traffic-kpi__meta span {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #778880;
+  font-size: .56rem;
+  font-weight: 850;
+}
+
+.traffic-kpi__main strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--inmo-ink);
+  font-family: "Instrument Sans", "DM Sans", system-ui, sans-serif;
+  font-size: clamp(1.65rem, 2.6vw, 2.55rem);
+  font-weight: 800;
+  line-height: .9;
+  letter-spacing: -.045em;
+  font-variant-numeric: tabular-nums;
+}
+
+.traffic-kpi__main small {
+  display: block;
+  margin-top: 8px;
+  color: var(--inmo-muted);
+  font-size: .7rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.traffic-kpi__meta {
+  justify-self: end;
+  text-align: right;
+  display: grid;
+  gap: 7px;
+  align-content: start;
+}
+
+.traffic-kpi__meta > strong {
+  color: var(--inmo-ink);
+  font-size: .98rem;
+  font-weight: 850;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+}
+
+.traffic-kpi__status {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 9px;
+  border-radius: 999px;
+  color: var(--traffic-main);
+  background: var(--traffic-soft);
+  border: 1px solid var(--traffic-line);
+  font-size: .68rem;
+  font-weight: 900;
+}
+
+.traffic-kpi__status svg { filter: drop-shadow(0 4px 8px rgba(0,0,0,.08)); }
+
+.traffic-kpi__bar {
+  grid-column: 1 / -1;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(23, 61, 51, .075);
+}
+
+.traffic-kpi__bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--traffic-main), color-mix(in oklab, var(--traffic-main) 62%, white));
+  box-shadow: 0 8px 18px color-mix(in oklab, var(--traffic-main) 25%, transparent);
+}
+
+@media (max-width: 1180px) {
+  .traffic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 780px) {
+  .traffic-grid { grid-template-columns: 1fr; }
+  .traffic-kpi { grid-template-columns: 1fr; }
+  .traffic-kpi__meta { justify-self: start; text-align: left; }
+  .traffic-kpi__status { justify-self: start; }
+}
