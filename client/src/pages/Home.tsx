@@ -71,6 +71,7 @@ const funnelBenchmarks = {
   mqlToSql: { yellow: 0.65, green: 0.75, label: "Rojo 0–64% · Amarillo 65–74% · Verde 75%+" },
   sqlToAppointment: { yellow: 0.43, green: 0.52, label: "Rojo 0–42% · Amarillo 43–51% · Verde 52%+" },
   appointmentToContract: { yellow: 0.101, green: 0.125, label: "Rojo 0–10% · Amarillo 10.1–12.4% · Verde 12.5%+" },
+  firmasToMeta: { yellow: 0.85, green: 1.0, label: "Rojo ≤84% · Amarillo 85–99% · Verde 100%+" },
   costPerLead: { greenMax: 50, yellowMax: 59, label: "Verde ≤$50 · Amarillo $51–$59 · Rojo $60+" },
 };
 
@@ -152,6 +153,7 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
   const mqlToSql = ratio(totals.SQL, totals.MQL);
   const sqlToAppointment = ratio(totals.CITAS, totals.SQL);
   const appointmentToContract = ratio(totals.FIRMAS, totals.CITAS);
+  const firmasToMeta = ratio(totals.FIRMAS, 15); // Meta de mayo: 15 firmas
   const costPerLead = spend !== null && totals.CONVERSACIONES > 0 ? spend / totals.CONVERSACIONES : null;
 
   return [
@@ -194,6 +196,16 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
       status: trafficByRate(appointmentToContract, funnelBenchmarks.appointmentToContract.yellow, funnelBenchmarks.appointmentToContract.green),
       statusLabel: trafficLabel(trafficByRate(appointmentToContract, funnelBenchmarks.appointmentToContract.yellow, funnelBenchmarks.appointmentToContract.green)),
       detail: `${fmt.format(totals.FIRMAS)} contratos sobre ${fmt.format(totals.CITAS)} citas`,
+    },
+    {
+      key: "firmas-to-meta",
+      label: "Firmas → Meta",
+      value: pctFmt.format(firmasToMeta),
+      benchmark: funnelBenchmarks.firmasToMeta.label,
+      progress: Math.min(1, firmasToMeta),
+      status: trafficByRate(firmasToMeta, funnelBenchmarks.firmasToMeta.yellow, funnelBenchmarks.firmasToMeta.green),
+      statusLabel: trafficLabel(trafficByRate(firmasToMeta, funnelBenchmarks.firmasToMeta.yellow, funnelBenchmarks.firmasToMeta.green)),
+      detail: `${fmt.format(totals.FIRMAS)} firmas sobre 15 de meta`,
     },
     {
       key: "cost-per-lead",
@@ -573,7 +585,7 @@ export default function Home() {
                 </div>
                 <Target />
               </div>
-              <p className="traffic-panel__intro">El color corresponde al semáforo definido para cada paso del embudo: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato y Costo por Lead. La lectura se calcula con el rango Inicio/Fin activo. {metaSpendPeriod.note}</p>
+              <p className="traffic-panel__intro">El color corresponde al semáforo definido para cada paso del embudo: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato, Firmas→Meta y Costo por Lead. La lectura se calcula con el rango Inicio/Fin activo. {metaSpendPeriod.note}</p>
               <div className="traffic-grid">
                 {funnelKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
               </div>
