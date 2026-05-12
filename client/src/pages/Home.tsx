@@ -71,7 +71,6 @@ const funnelBenchmarks = {
   mqlToSql: { yellow: 0.65, green: 0.75, label: "Rojo 0–64% · Amarillo 65–74% · Verde 75%+" },
   sqlToAppointment: { yellow: 0.43, green: 0.52, label: "Rojo 0–42% · Amarillo 43–51% · Verde 52%+" },
   appointmentToContract: { yellow: 0.101, green: 0.125, label: "Rojo 0–10% · Amarillo 10.1–12.4% · Verde 12.5%+" },
-  firmasToMeta: { yellow: 0.85, green: 1.0, label: "Rojo ≤84% · Amarillo 85–99% · Verde 100%+" },
   costPerLead: { greenMax: 50, yellowMax: 59, label: "Verde ≤$50 · Amarillo $51–$59 · Rojo $60+" },
 };
 
@@ -141,6 +140,24 @@ function trafficByCost(value: number | null): GoalStatus {
   return "red";
 }
 
+function getDaysInMonth(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+}
+
+function calculateFirmasRitmo(firmasDelMes: number, metaMensual: number, currentDate: Date): { ritmo: number; pctReal: number; pctEsperado: number; status: GoalStatus } {
+  const diasDelMes = getDaysInMonth(currentDate);
+  const diaActual = currentDate.getDate();
+  const pctEsperado = (diaActual / diasDelMes) * 100;
+  const pctReal = (firmasDelMes / metaMensual) * 100;
+  const ritmo = (pctReal / pctEsperado) * 100;
+  
+  let status: GoalStatus = "red";
+  if (ritmo >= 100) status = "green";
+  else if (ritmo >= 85) status = "yellow";
+  
+  return { ritmo, pctReal, pctEsperado, status };
+}
+
 function trafficLabel(status: GoalStatus) {
   if (status === "green") return "Verde";
   if (status === "yellow") return "Amarillo";
@@ -148,13 +165,14 @@ function trafficLabel(status: GoalStatus) {
   return "Sin dato";
 }
 
-function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | null): FunnelKpi[] {
+function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | null, currentDate: Date = new Date()): FunnelKpi[] {
   const leadToMql = ratio(totals.MQL, totals.CONVERSACIONES);
   const mqlToSql = ratio(totals.SQL, totals.MQL);
   const sqlToAppointment = ratio(totals.CITAS, totals.SQL);
   const appointmentToContract = ratio(totals.FIRMAS, totals.CITAS);
   const firmasToMeta = ratio(totals.FIRMAS, 15); // Meta de mayo: 15 firmas
   const costPerLead = spend !== null && totals.CONVERSACIONES > 0 ? spend / totals.CONVERSACIONES : null;
+  const firmasRitmo = calculateFirmasRitmo(totals.FIRMAS, 15, currentDate);
 
   return [
     {
@@ -201,10 +219,10 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
       key: "firmas-to-meta",
       label: "Firmas → Meta",
       value: pctFmt.format(firmasToMeta),
-      benchmark: funnelBenchmarks.firmasToMeta.label,
+      benchmark: `Rojo ≤84% · Amarillo 85–99% · Verde 100%+ (ritmo: ${Math.round(firmasRitmo.ritmo)}%)`,
       progress: Math.min(1, firmasToMeta),
-      status: trafficByRate(firmasToMeta, funnelBenchmarks.firmasToMeta.yellow, funnelBenchmarks.firmasToMeta.green),
-      statusLabel: trafficLabel(trafficByRate(firmasToMeta, funnelBenchmarks.firmasToMeta.yellow, funnelBenchmarks.firmasToMeta.green)),
+      status: firmasRitmo.status,
+      statusLabel: trafficLabel(firmasRitmo.status),
       detail: `${fmt.format(totals.FIRMAS)} firmas sobre 15 de meta`,
     },
     {
@@ -416,7 +434,7 @@ export default function Home() {
     return grouped;
   }, [filteredSpendRows]);
   const costPerAppointment = totals.CITAS > 0 ? spendTotal / totals.CITAS : null;
-  const funnelKpis = useMemo(() => buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null), [totals, spendTotal]);
+  const funnelKpis = useMemo(() => buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null, new Date()), [totals, spendTotal]);
   const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
   const todayRows = useMemo(() => daily.filter((row) => row.FECHA === latestDate), [daily, latestDate]);
   const risks = useMemo(() => buildRisks(filteredRows, spendByClient), [filteredRows, spendByClient]);
@@ -575,7 +593,7 @@ export default function Home() {
                 </div>
                 <Target />
               </div>
-              <p className="traffic-panel__intro">El color corresponde al semáforo definido para cada paso del embudo: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato, Firmas→Meta y Costo por Lead. La lectura se calcula con el rango Inicio/Fin activo. {metaSpendPeriod.note}</p>
+              <p className="traffic-panel__intro">El color corresponde al semáforo definido para cada paso del embudo: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato, Firmas→Meta y Costo por Lead. La lectura se calcula con el rango Inicio/Fin activo, excepto Firmas→Meta que siempre usa el mes calendario actual. {metaSpendPeriod.note}</p>
               <div className="traffic-grid">
                 {funnelKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
               </div>
