@@ -50,25 +50,25 @@ type ClientRisk = {
 };
 
 type SdrTotals = { CITAS: number; FIRMAS: number };
-type GoalStatus = "green" | "yellow" | "red";
+type GoalStatus = "green" | "yellow" | "red" | "neutral";
 
-type GoalKpi = {
+type FunnelKpi = {
   key: string;
   label: string;
   value: string;
-  meta: string;
+  benchmark: string;
   progress: number;
   status: GoalStatus;
   statusLabel: string;
   detail: string;
 };
 
-const monthlyGoals = {
-  firmasMin: 15,
-  firmasStretch: 15,
-  leads: 376,
-  mqlRate: 0.2,
-  citas: 13,
+const funnelBenchmarks = {
+  leadToMql: { yellow: 0.17, green: 0.2, label: "Rojo 0–16% · Amarillo 17–19% · Verde 20%+" },
+  mqlToSql: { yellow: 0.65, green: 0.75, label: "Rojo 0–64% · Amarillo 65–74% · Verde 75%+" },
+  sqlToAppointment: { yellow: 0.43, green: 0.52, label: "Rojo 0–42% · Amarillo 43–51% · Verde 52%+" },
+  appointmentToContract: { yellow: 0.101, green: 0.125, label: "Rojo 0–10% · Amarillo 10.1–12.4% · Verde 12.5%+" },
+  costPerLead: { greenMax: 50, yellowMax: 59, label: "Verde ≤$50 · Amarillo $51–$59 · Rojo $60+" },
 };
 
 const fmt = new Intl.NumberFormat("es-MX");
@@ -124,63 +124,83 @@ function monthKey(value?: string | null) {
   return value ? value.slice(0, 7) : "";
 }
 
-function trafficByProgress(progress: number, yellowFrom = 0.7): GoalStatus {
-  if (progress >= 1) return "green";
-  if (progress >= yellowFrom) return "yellow";
+function trafficByRate(value: number, yellow: number, green: number): GoalStatus {
+  if (value >= green) return "green";
+  if (value >= yellow) return "yellow";
+  return "red";
+}
+
+function trafficByCost(value: number | null): GoalStatus {
+  if (value === null) return "neutral";
+  if (value <= funnelBenchmarks.costPerLead.greenMax) return "green";
+  if (value <= funnelBenchmarks.costPerLead.yellowMax) return "yellow";
   return "red";
 }
 
 function trafficLabel(status: GoalStatus) {
-  return status === "green" ? "En línea" : status === "yellow" ? "En curso" : "Bajo";
+  if (status === "green") return "Verde";
+  if (status === "yellow") return "Amarillo";
+  if (status === "red") return "Rojo";
+  return "Sin dato";
 }
 
-function buildGoalKpis(totals: ReturnType<typeof sumRows>): GoalKpi[] {
-  const mqlRate = ratio(totals.MQL, totals.CONVERSACIONES);
-  const firmStatus = trafficByProgress(ratio(totals.FIRMAS, monthlyGoals.firmasMin));
-  const leadsStatus = trafficByProgress(ratio(totals.CONVERSACIONES, monthlyGoals.leads));
-  const mqlStatus: GoalStatus = mqlRate >= monthlyGoals.mqlRate ? "green" : mqlRate >= 0.12 ? "yellow" : "red";
-  const citasStatus = trafficByProgress(ratio(totals.CITAS, monthlyGoals.citas));
+function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | null): FunnelKpi[] {
+  const leadToMql = ratio(totals.MQL, totals.CONVERSACIONES);
+  const mqlToSql = ratio(totals.SQL, totals.MQL);
+  const sqlToAppointment = ratio(totals.CITAS, totals.SQL);
+  const appointmentToContract = ratio(totals.FIRMAS, totals.CITAS);
+  const costPerLead = spend !== null && totals.CONVERSACIONES > 0 ? spend / totals.CONVERSACIONES : null;
 
   return [
     {
-      key: "firmas",
-      label: "Contratos firmados",
-      value: fmt.format(totals.FIRMAS),
-      meta: `${monthlyGoals.firmasMin}/mes`,
-      progress: Math.min(1, ratio(totals.FIRMAS, monthlyGoals.firmasMin)),
-      status: firmStatus,
-      statusLabel: trafficLabel(firmStatus),
-      detail: `${fmt.format(monthlyGoals.firmasMin - Math.min(totals.FIRMAS, monthlyGoals.firmasMin))} para meta mensual`,
-    },
-    {
-      key: "leads",
-      label: "Leads generados",
-      value: fmt.format(totals.CONVERSACIONES),
-      meta: `~${fmt.format(monthlyGoals.leads)}/mes`,
-      progress: Math.min(1, ratio(totals.CONVERSACIONES, monthlyGoals.leads)),
-      status: leadsStatus,
-      statusLabel: trafficLabel(leadsStatus),
-      detail: `${pctFmt.format(ratio(totals.CONVERSACIONES, monthlyGoals.leads))} de avance`,
-    },
-    {
-      key: "mql",
-      label: "Tasa Leads→MQL",
-      value: pctFmt.format(mqlRate),
-      meta: pctFmt.format(monthlyGoals.mqlRate),
-      progress: Math.min(1, ratio(mqlRate, monthlyGoals.mqlRate)),
-      status: mqlStatus,
-      statusLabel: trafficLabel(mqlStatus),
+      key: "lead-to-mql",
+      label: "Leads → MQL",
+      value: pctFmt.format(leadToMql),
+      benchmark: funnelBenchmarks.leadToMql.label,
+      progress: Math.min(1, ratio(leadToMql, funnelBenchmarks.leadToMql.green)),
+      status: trafficByRate(leadToMql, funnelBenchmarks.leadToMql.yellow, funnelBenchmarks.leadToMql.green),
+      statusLabel: trafficLabel(trafficByRate(leadToMql, funnelBenchmarks.leadToMql.yellow, funnelBenchmarks.leadToMql.green)),
       detail: `${fmt.format(totals.MQL)} MQL sobre ${fmt.format(totals.CONVERSACIONES)} leads`,
     },
     {
-      key: "citas",
-      label: "Citas realizadas",
-      value: fmt.format(totals.CITAS),
-      meta: `${monthlyGoals.citas}+/mes`,
-      progress: Math.min(1, ratio(totals.CITAS, monthlyGoals.citas)),
-      status: citasStatus,
-      statusLabel: trafficLabel(citasStatus),
-      detail: `${fmt.format(monthlyGoals.citas - Math.min(totals.CITAS, monthlyGoals.citas))} para llegar a meta`,
+      key: "mql-to-sql",
+      label: "MQL → SQL",
+      value: pctFmt.format(mqlToSql),
+      benchmark: funnelBenchmarks.mqlToSql.label,
+      progress: Math.min(1, ratio(mqlToSql, funnelBenchmarks.mqlToSql.green)),
+      status: trafficByRate(mqlToSql, funnelBenchmarks.mqlToSql.yellow, funnelBenchmarks.mqlToSql.green),
+      statusLabel: trafficLabel(trafficByRate(mqlToSql, funnelBenchmarks.mqlToSql.yellow, funnelBenchmarks.mqlToSql.green)),
+      detail: `${fmt.format(totals.SQL)} SQL sobre ${fmt.format(totals.MQL)} MQL`,
+    },
+    {
+      key: "sql-to-appointment",
+      label: "SQL → Cita",
+      value: pctFmt.format(sqlToAppointment),
+      benchmark: funnelBenchmarks.sqlToAppointment.label,
+      progress: Math.min(1, ratio(sqlToAppointment, funnelBenchmarks.sqlToAppointment.green)),
+      status: trafficByRate(sqlToAppointment, funnelBenchmarks.sqlToAppointment.yellow, funnelBenchmarks.sqlToAppointment.green),
+      statusLabel: trafficLabel(trafficByRate(sqlToAppointment, funnelBenchmarks.sqlToAppointment.yellow, funnelBenchmarks.sqlToAppointment.green)),
+      detail: `${fmt.format(totals.CITAS)} citas sobre ${fmt.format(totals.SQL)} SQL`,
+    },
+    {
+      key: "appointment-to-contract",
+      label: "Cita → Contrato",
+      value: pctFmt.format(appointmentToContract),
+      benchmark: funnelBenchmarks.appointmentToContract.label,
+      progress: Math.min(1, ratio(appointmentToContract, funnelBenchmarks.appointmentToContract.green)),
+      status: trafficByRate(appointmentToContract, funnelBenchmarks.appointmentToContract.yellow, funnelBenchmarks.appointmentToContract.green),
+      statusLabel: trafficLabel(trafficByRate(appointmentToContract, funnelBenchmarks.appointmentToContract.yellow, funnelBenchmarks.appointmentToContract.green)),
+      detail: `${fmt.format(totals.FIRMAS)} contratos sobre ${fmt.format(totals.CITAS)} citas`,
+    },
+    {
+      key: "cost-per-lead",
+      label: "Costo por Lead",
+      value: costPerLead === null ? "Sin dato" : moneyFmt.format(costPerLead),
+      benchmark: funnelBenchmarks.costPerLead.label,
+      progress: costPerLead === null ? 0 : Math.max(0.06, Math.min(1, funnelBenchmarks.costPerLead.greenMax / Math.max(costPerLead, 1))),
+      status: trafficByCost(costPerLead),
+      statusLabel: trafficLabel(trafficByCost(costPerLead)),
+      detail: spend === null ? "RESPALDO_DIARIO no trae gasto; pendiente cargar inversión" : `${moneyFmt.format(spend)} de inversión sobre ${fmt.format(totals.CONVERSACIONES)} leads`,
     },
   ];
 }
@@ -271,24 +291,29 @@ function Kpi({ label, value, detail, tone = "neutral" }: { label: string; value:
   );
 }
 
-function SemaforoKpi({ item }: { item: GoalKpi }) {
+function SemaforoKpi({ item }: { item: FunnelKpi }) {
   const Icon = item.status === "green" ? CheckCircle2 : item.status === "yellow" ? Clock3 : AlertTriangle;
   return (
     <article className={`traffic-kpi traffic-kpi--${item.status}`}>
+      <div className="traffic-kpi__signal" aria-hidden="true">
+        <span className={item.status === "red" ? "active" : ""} />
+        <span className={item.status === "yellow" ? "active" : ""} />
+        <span className={item.status === "green" ? "active" : ""} />
+      </div>
       <div className="traffic-kpi__main">
         <span>{item.label}</span>
         <strong>{item.value}</strong>
         <small>{item.detail}</small>
       </div>
       <div className="traffic-kpi__meta">
-        <span>vs. meta</span>
-        <strong>{item.meta}</strong>
+        <span>Regla de color</span>
+        <strong>{item.benchmark}</strong>
         <div className="traffic-kpi__status">
           <Icon size={16} />
           <b>{item.statusLabel}</b>
         </div>
       </div>
-      <div className="traffic-kpi__bar" aria-label={`${item.label}: ${Math.round(item.progress * 100)}% de avance`}>
+      <div className="traffic-kpi__bar" aria-label={`${item.label}: ${Math.round(item.progress * 100)}% contra umbral verde`}>
         <i style={{ width: `${Math.max(6, item.progress * 100)}%` }} />
       </div>
     </article>
@@ -352,7 +377,14 @@ export default function Home() {
 
   const totals = useMemo(() => sumRows(filteredRows), [filteredRows]);
   const currentMonthTotals = useMemo(() => sumRows(currentMonthRows), [currentMonthRows]);
-  const goalKpis = useMemo(() => buildGoalKpis(currentMonthTotals), [currentMonthTotals]);
+  const currentMonthSpend = useMemo(() => {
+    const latestMonth = monthKey(latestDate);
+    const spend = history
+      .filter((row) => row.MES === latestMonth)
+      .reduce((acc, row) => acc + (row["GASTO TOTAL"] || 0), 0);
+    return spend > 0 ? spend : null;
+  }, [history, latestDate]);
+  const funnelKpis = useMemo(() => buildFunnelKpis(currentMonthTotals, currentMonthSpend), [currentMonthTotals, currentMonthSpend]);
   const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
   const todayRows = useMemo(() => daily.filter((row) => row.FECHA === latestDate), [daily, latestDate]);
   const risks = useMemo(() => buildRisks(filteredRows), [filteredRows]);
@@ -399,7 +431,7 @@ export default function Home() {
         <nav className="side-nav" aria-label="Navegación del dashboard">
           <button className={activeTab === "diario" ? "active" : ""} onClick={() => setActiveTab("diario")}><LayoutDashboard size={17} /> Diario</button>
           <button className={activeTab === "historico" ? "active" : ""} onClick={() => setActiveTab("historico")}><CalendarDays size={17} /> Histórico</button>
-          <a href="#metas"><Target size={17} /> Metas</a>
+          <a href="#metas"><Target size={17} /> Semáforo</a>
           <a href="#bloqueos"><AlertTriangle size={17} /> Bloqueos</a>
           <a href="#detalle"><ListChecks size={17} /> Detalle</a>
         </nav>
@@ -504,14 +536,14 @@ export default function Home() {
             <section className="app-card traffic-panel" id="metas">
               <div className="card-head compact">
                 <div>
-                  <span>Semáforo de metas</span>
-                  <h2>Avance mensual contra objetivo</h2>
+                  <span>Semáforo de embudo</span>
+                  <h2>Color por conversión de etapa</h2>
                 </div>
                 <Target />
               </div>
-              <p className="traffic-panel__intro">El estado usa las metas de referencia de mayo: 15 contratos, ~376 leads, 20% Leads→MQL y 13+ citas por mes. Verde indica meta lograda, amarillo avance cercano o en curso, y rojo brecha prioritaria.</p>
+              <p className="traffic-panel__intro">El color corresponde al semáforo definido para cada paso del embudo: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato y Costo por Lead. La lectura se calcula sobre el mes activo más reciente y respeta los rangos de la imagen; si falta gasto, el costo por lead queda marcado como sin dato.</p>
               <div className="traffic-grid">
-                {goalKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
+                {funnelKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
               </div>
             </section>
 

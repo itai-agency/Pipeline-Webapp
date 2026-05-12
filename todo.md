@@ -114,3 +114,15 @@
 - [x] Ajustar el texto visible del semáforo para mostrar 15/mes en contratos firmados.
 - [x] Validar que el estado y la barra de avance usen 15 como denominador.
 - [x] Ejecutar `pnpm check`, `pnpm build`, revisar preview; queda pendiente guardar checkpoint final.
+
+
+## Actualización solicitada: corte 08/05/2026 y semáforo por embudo
+
+- [x] Descargar la exportación autenticada actualizada de Google Sheets para RESPALDO_DIARIO.
+- [x] Inspeccionar la exportación y confirmar que incluye registros reales hasta el 08/05/2026; la descarga también trae registros hasta el 10/05/2026, con totales acumulados de 546 conversaciones, 53 MQL, 16 SQL, 15 citas y 4 firmas.
+- [x] Regenerar `client/src/lib/pipelineData.ts` desde la exportación autenticada, sin captura manual de datos.
+- [x] Reemplazar el semáforo actual por KPIs por etapa: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato y Costo por Lead.
+- [x] Aplicar las reglas de color de la imagen: Leads→MQL rojo 0–16%, amarillo 17–19%, verde 20%+; MQL→SQL rojo 0–64%, amarillo 65–74%, verde 75%+; SQL→Cita rojo 0–42%, amarillo 43–51%, verde 52%+; Cita→Contrato rojo 0–10%, amarillo 10.1–12.4%, verde 12.5%+; Costo por Lead rojo $60+, amarillo $51–$59, verde $50 o menos.
+- [x] Validar `pnpm check`, `pnpm build` y revisar visualmente el dashboard; TypeScript y build pasaron, y la vista previa muestra el semáforo de embudo con corte visible al 10/05/2026.
+- [ ] Guardar checkpoint final y entregar resumen al usuario.
+
