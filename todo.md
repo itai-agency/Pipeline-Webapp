@@ -163,3 +163,48 @@
 - [ ] Validar TypeScript, build y vista previa.
 - [ ] Guardar checkpoint final y entregar resumen.
 
+
+
+## Reporte solicitado: PPTX y PDF hasta el 10/05/2026 por cliente
+
+- [x] Recopilar los datasets de pipeline e inversión usados por la web app.
+- [x] Calcular totales por cliente, porcentajes de conversión, color de semáforo y costo por cita hasta el 10 de mayo.
+- [x] Redactar el contenido de la presentación con resumen ejecutivo y desglose por cliente.
+- [x] Generar la presentación en formato PPTX.
+- [x] Exportar la presentación a PDF.
+- [x] Validar que ambos archivos existan y entregarlos al usuario.
+
+
+## Automatización solicitada: Google Sheet diario, semanal y mensual conectado
+
+- [ ] Abrir y revisar el Google Sheet proporcionado para identificar pestañas, columnas, estructura y permisos de edición.
+- [ ] Definir la estructura objetivo para mantener histórico diario y crear/conectar resúmenes semanales de domingo a sábado.
+- [ ] Definir la estructura objetivo para resúmenes mensuales conectados al histórico diario.
+- [ ] Incorporar fórmulas de porcentajes de conversión por etapa usando las reglas del semáforo ya definidas: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato y Costo por Lead.
+- [ ] Agregar colores de semáforo automáticos en conversiones y costos según los umbrales existentes.
+- [ ] Integrar gasto de Ads por día para cada cuenta publicitaria vinculada a cada cliente.
+- [ ] Calcular inversión semanal y mensual por cliente, correlacionada con leads, citas y firmas de cada periodo.
+- [ ] Calcular costo por cita diario, semanal y mensual como gasto de Ads dividido entre citas totales, con manejo de cero citas.
+- [ ] Validar que al agregar nueva data diaria se actualicen automáticamente las vistas semanal y mensual.
+- [ ] Entregar explicación clara de cambios, uso del archivo y cualquier limitación de permisos o conexión.
+
+
+## Corrección de alcance: editar directamente el Google Sheet
+
+- [ ] Confirmar permisos efectivos de edición en el Google Sheet compartido.
+- [ ] Auditar las pestañas RESPALDO_DIARIO, SEMANAL, MENSUAL e HISTORICO-MENSUAL dentro del Sheet.
+- [ ] Modificar el Google Sheet directamente, no la web app, para que el diario alimente los resúmenes semanales y mensuales.
+- [ ] Crear o ajustar fórmulas en SEMANAL para agrupar de domingo a sábado por cliente.
+- [ ] Crear o ajustar fórmulas en MENSUAL para agrupar por mes y cliente.
+- [ ] Agregar conversiones, semáforo, gasto de Ads y costo por cita en las pestañas correspondientes.
+- [ ] Validar dentro del Sheet que al agregar nuevas filas diarias se actualicen los acumulados semanales y mensuales.
+
+## Corrección visual solicitada: encabezados y semáforos con círculos
+
+- [ ] Homologar encabezados de columnas nuevas en `RESPALDO_DIARIO` con el color, negrita y formato de los encabezados existentes a la izquierda.
+- [ ] Homologar encabezados de columnas nuevas en `SEMANAL` con el color, negrita y formato de los encabezados existentes a la izquierda.
+- [ ] Homologar encabezados de columnas nuevas en `MENSUAL` con el color, negrita y formato de los encabezados existentes a la izquierda.
+- [ ] Reemplazar en todas las pestañas el texto `Rojo` por círculo rojo.
+- [ ] Reemplazar en todas las pestañas el texto `Amarillo` por círculo amarillo.
+- [ ] Reemplazar en todas las pestañas el texto `Verde` por círculo verde.
+- [ ] Validar visualmente que encabezados, moneda, porcentaje y semáforos queden consistentes en todas las pestañas.

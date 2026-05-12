@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0}
+    .slide-container{width:1280px;min-height:720px;box-sizing:border-box;background:#F6F2EA;color:#1C1B19;font-family:'DM Sans',sans-serif}
+    .slide-container *{box-sizing:border-box}
+    .page{min-height:720px;padding-top:40px;padding-left:54px;padding-right:54px}
+    .header{display:grid;grid-template-columns:1fr 230px;gap:26px;border-top:8px solid #262626;padding-top:16px}
+    .eyebrow{font-size:13px;letter-spacing:.11em;text-transform:uppercase;color:#70695F;font-weight:800}
+    .title{font-family:'Space Grotesk',sans-serif;font-size:40px;line-height:1.02;letter-spacing:-.035em;margin-top:9px;max-width:820px;color:#1C1B19}
+    .period{height:78px;background:#262626;color:#F6F2EA;display:flex;align-items:center;justify-content:center;text-align:center;font-size:19px;font-weight:800;line-height:1.12}
+    .thesis{display:grid;grid-template-columns:250px 1fr;gap:24px;margin-top:22px;border-top:6px solid #1F8A4C;padding-top:14px}
+    .thesis-label{font-family:'Space Grotesk',sans-serif;font-size:25px;line-height:1.03;letter-spacing:-.025em;color:#1F8A4C}
+    .thesis-text{font-size:21px;line-height:1.24;color:#1C1B19;max-width:850px}
+    .thesis-text strong{color:#1F8A4C}
+    table{width:100%;border-collapse:collapse;margin-top:24px;background:#fffaf0;font-size:15px;table-layout:fixed}
+    th{background:#262626;color:#F6F2EA;text-align:left;height:42px;padding-top:9px;padding-left:12px;padding-right:10px;text-transform:uppercase;letter-spacing:.045em;font-size:12.5px}
+    td{height:88px;border-bottom:1px solid #D8D0C0;padding-top:11px;padding-left:12px;padding-right:10px;vertical-align:top;line-height:1.22}
+    .client{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.025em;color:#1C1B19}
+    .signal{font-weight:700;color:#1F8A4C}
+    .condition{color:#55504A;font-size:14px}
+    .metric{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;line-height:1;color:#262626;margin-top:2px}
+    .metric-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#70695F;margin-top:6px;font-weight:800}
+    .status{display:inline-flex;align-items:center;justify-content:center;height:28px;min-width:88px;font-size:13px;font-weight:800;color:#fff;margin-top:4px}
+    .green{background:#1F8A4C}.yellow{background:#D9A441;color:#1C1B19}.red{background:#C74332}
+    .rule{display:grid;grid-template-columns:1fr 260px;gap:24px;margin-top:24px;background:#262626;color:#F6F2EA;min-height:92px;padding-top:18px;padding-left:22px;padding-right:22px}
+    .rule h2{font-family:'Space Grotesk',sans-serif;font-size:25px;line-height:1.05;letter-spacing:-.03em;color:#D9A441}
+    .rule p{font-size:17px;line-height:1.28;margin-top:2px;color:#F6F2EA}
+    .rule strong{color:#D9A441}
+    .side-number{font-family:'Space Grotesk',sans-serif;font-size:46px;line-height:1;text-align:right;color:#F6F2EA}
+    .side-caption{text-align:right;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#D8D0C0;margin-top:6px;font-weight:800}
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="page">
+      <div class="header">
+        <div>
+          <div class="eyebrow">Escalamiento controlado por cliente</div>
+          <div class="title">Clientes con señales positivas para escalar</div>
+        </div>
+        <div class="period">01–10<br/>mayo 2026</div>
+      </div>
+
+      <div class="thesis">
+        <div class="thesis-label">Tesis de inversión</div>
+        <div class="thesis-text">El presupuesto adicional debe asignarse a clientes con señales operativas comprobables, pero siempre condicionado a corregir el siguiente bloqueo del embudo. <strong>Escalar sin control puede elevar el costo por cita.</strong></div>
+      </div>
+
+      <table>
+        <tr>
+          <th style="width:16%">Cliente</th>
+          <th style="width:28%">Señal positiva</th>
+          <th style="width:28%">Condición antes de escalar</th>
+          <th style="width:14%">Métrica clave</th>
+          <th style="width:14%">Semáforo</th>
+        </tr>
+        <tr>
+          <td><div class="client">HOGARES</div></td>
+          <td><span class="signal">5 citas, $875 por cita y Leads → MQL en verde.</span></td>
+          <td><span class="condition">Mejorar SQL → Cita para no desperdiciar MQL de alta calidad.</span></td>
+          <td><div class="metric">$875</div><div class="metric-label">costo/cita</div></td>
+          <td><span class="status green">Escalar</span></td>
+        </tr>
+        <tr>
+          <td><div class="client">GRUPO ELIJO</div></td>
+          <td><span class="signal">$997 por cita con 3 citas generadas y CPL verde.</span></td>
+          <td><span class="condition">Resolver cierre a firma antes de aumentar presupuesto.</span></td>
+          <td><div class="metric">$997</div><div class="metric-label">costo/cita</div></td>
+          <td><span class="status yellow">Condicional</span></td>
+        </tr>
+        <tr>
+          <td><div class="client">INQ</div></td>
+          <td><span class="signal">2 firmas sobre 3 citas; buena capacidad de cierre.</span></td>
+          <td><span class="condition">Corregir Leads → MQL para que el cierre reciba mejor entrada.</span></td>
+          <td><div class="metric">66.7%</div><div class="metric-label">cita→firma</div></td>
+          <td><span class="status yellow">Condicional</span></td>
+        </tr>
+      </table>
+
+      <div class="rule">
+        <div>
+          <h2>Regla recomendada para escalar</h2>
+          <p>Subir presupuesto primero en HOGARES y mantener GRUPO ELIJO e INQ bajo prueba semanal; el incremento debe detenerse si el <strong>costo por cita</strong> sube o si el semáforo de adquisición permanece en rojo.</p>
+        </div>
+        <div>
+          <div class="side-number">3</div>
+          <div class="side-caption">clientes con señal positiva</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

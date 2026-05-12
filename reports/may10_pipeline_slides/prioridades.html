@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0}
+    .slide-container{width:1280px;min-height:720px;box-sizing:border-box;background:#F6F2EA;color:#1C1B19;font-family:'DM Sans',sans-serif}
+    .slide-container *{box-sizing:border-box}
+    .page{min-height:720px;padding-top:40px;padding-left:54px;padding-right:54px}
+    .header{display:grid;grid-template-columns:1fr 220px;gap:26px;border-top:8px solid #262626;padding-top:16px}
+    .eyebrow{font-size:13px;letter-spacing:.11em;text-transform:uppercase;color:#70695F;font-weight:800}
+    .title{font-family:'Space Grotesk',sans-serif;font-size:40px;line-height:1.02;letter-spacing:-.038em;margin-top:9px;max-width:820px;color:#1C1B19}
+    .period{height:78px;background:#262626;color:#F6F2EA;display:flex;align-items:center;justify-content:center;text-align:center;font-size:19px;font-weight:800;line-height:1.15}
+    .content{display:grid;grid-template-columns:285px 1fr;gap:24px;margin-top:18px}
+    /* reduced inner padding and min-height to save vertical space */
+    .command{background:#262626;color:#F6F2EA;min-height:360px;padding-top:8px;padding-left:18px;padding-right:18px}
+    .command-label{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#D9A441;font-weight:800}
+    .command h2{font-family:'Space Grotesk',sans-serif;font-size:32px;line-height:1.04;letter-spacing:-.035em;margin-top:18px;color:#F6F2EA}
+    .command p{font-size:16px;line-height:1.32;margin-top:10px;color:#E8E0D1}
+    .score{border-top:1px solid rgba(246,242,234,.28);margin-top:12px;padding-top:10px}
+    .score strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:40px;line-height:1;letter-spacing:-.03em;color:#D9A441}
+    .score span{display:block;margin-top:7px;font-size:13px;line-height:1.24;color:#E8E0D1;text-transform:uppercase;letter-spacing:.06em;font-weight:800}
+    table{width:100%;border-collapse:collapse;background:#fffaf0;font-size:15px;table-layout:fixed}
+    th{height:34px;background:#262626;color:#F6F2EA;text-align:left;padding-top:8px;padding-left:10px;padding-right:8px;text-transform:uppercase;letter-spacing:.04em;font-size:12.5px}
+    td{height:74px;border-bottom:1px solid #D8D0C0;padding-top:8px;padding-left:10px;padding-right:8px;vertical-align:top;line-height:1.22}
+    .priority{font-family:'Space Grotesk',sans-serif;font-size:31px;line-height:1;color:#262626;font-weight:700;letter-spacing:-.03em}
+    .focus{font-weight:800;color:#1C1B19;font-size:16px}
+    .detail{display:block;margin-top:5px;font-size:13.5px;color:#55504A;line-height:1.22}
+    .client{font-weight:700;color:#262626}
+    .outcome{font-weight:700;color:#1F8A4C;font-size:15px}
+    .chip{display:inline-flex;align-items:center;justify-content:center;height:27px;min-width:86px;font-size:12.5px;font-weight:800;color:#fff;margin-top:6px}
+    .red{background:#C74332}.yellow{background:#D9A441;color:#1C1B19}.green{background:#1F8A4C}
+    .footer{display:grid;grid-template-columns:300px 1fr;gap:24px;margin-top:12px;border-top:6px solid #1F8A4C;padding-top:14px}
+    .footer-title{font-family:'Space Grotesk',sans-serif;font-size:25px;line-height:1.05;letter-spacing:-.025em;color:#1F8A4C}
+    .footer-text{font-size:20px;line-height:1.22;color:#1C1B19}
+    .footer-text strong{color:#C74332}
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="page">
+      <div class="header">
+        <div>
+          <div class="eyebrow">Plan operativo semanal</div>
+          <div class="title">Prioridades para la siguiente semana</div>
+        </div>
+        <div class="period">Semana posterior<br/>al 10 mayo</div>
+      </div>
+
+      <div class="content">
+        <aside class="command">
+          <div class="command-label">Principio de decisión</div>
+          <h2>Usar el semáforo para decidir acciones diarias</h2>
+          <p>La prioridad no es aumentar gasto de forma general, sino corregir el bloqueo específico por cliente y proteger el costo por cita.</p>
+          <div class="score">
+            <strong>4</strong>
+            <span>frentes de trabajo</span>
+          </div>
+          <!-- second score removed to reduce height -->
+        </aside>
+
+        <section>
+          <table>
+            <tr>
+              <th style="width:9%">Prioridad</th>
+              <th style="width:32%">Enfoque</th>
+              <th style="width:26%">Clientes clave</th>
+              <th style="width:33%">Resultado esperado</th>
+            </tr>
+            <tr>
+              <td><div class="priority">1</div><span class="chip red">Urgente</span></td>
+              <td><span class="focus">Elevar Leads → MQL en clientes rojos.</span><span class="detail">Revisar clasificación, calidad de conversación y criterios de MQL.</span></td>
+              <td><span class="client">INQ, GRUPO ELIJO, MANOS, DOS HOGARES, INSPIRA</span></td>
+              <td><span class="outcome">Más oportunidades útiles sin aumentar gasto.</span></td>
+            </tr>
+            <tr>
+              <td><div class="priority">2</div><span class="chip red">Urgente</span></td>
+              <td><span class="focus">Auditar MANOS AL HOGAR e INSPIRA.</span><span class="detail">Cortar desperdicio en CPL rojo y costo por cita elevado.</span></td>
+              <td><span class="client">MANOS AL HOGAR · INSPIRA</span></td>
+              <td><span class="outcome">Reducir costo por lead y costo por cita.</span></td>
+            </tr>
+            <tr>
+              <td><div class="priority">3</div><span class="chip yellow">Atención</span></td>
+              <td><span class="focus">Convertir citas de GRUPO ELIJO.</span><span class="detail">Dar seguimiento post-cita, objeciones y próxima acción comercial.</span></td>
+              <td><span class="client">GRUPO ELIJO</span></td>
+              <td><span class="outcome">Recuperar firmas pendientes del pipeline.</span></td>
+            </tr>
+            <tr>
+              <td><div class="priority">4</div><span class="chip green">Escalar</span></td>
+              <td><span class="focus">Escalar HOGARES con control.</span><span class="detail">Aumentar volumen solo si SQL → Cita mejora y el costo por cita se mantiene.</span></td>
+              <td><span class="client">HOGARES</span></td>
+              <td><span class="outcome">Mantener eficiencia mientras sube volumen.</span></td>
+            </tr>
+          </table>
+        </section>
+      </div>
+
+      <div class="footer">
+        <div class="footer-title">Regla de seguimiento</div>
+        <div class="footer-text">Revisar diariamente semáforo, costo por cita y avance por etapa; si un cliente empeora en adquisición, <strong>detener escalamiento</strong> hasta corregir el bloqueo.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

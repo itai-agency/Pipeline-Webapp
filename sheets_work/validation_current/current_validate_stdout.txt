@@ -1,0 +1,206 @@
+{
+  "sheets": [
+    {
+      "name": "RESPALDO_DIARIO",
+      "target": "xl/worksheets/sheet1.xml",
+      "cells": {
+        "A1": {
+          "value": "fecha",
+          "formula": null
+        },
+        "H1": {
+          "value": "SEMANA",
+          "formula": null
+        },
+        "I1": {
+          "value": "MES",
+          "formula": null
+        },
+        "Y1": {
+          "value": "FECHA",
+          "formula": null
+        },
+        "Z1": {
+          "value": "CLIENTE",
+          "formula": null
+        },
+        "AA1": {
+          "value": "GASTO ADS",
+          "formula": null
+        },
+        "Y2": {
+          "value": "46143.0",
+          "formula": null
+        },
+        "Z2": {
+          "value": "DOS HOGARES",
+          "formula": null
+        },
+        "AA2": {
+          "value": "237.8",
+          "formula": null
+        },
+        "A2": {
+          "value": "46143.0",
+          "formula": null
+        },
+        "H2": {
+          "value": "46137",
+          "formula": "IF(A2:A1016=&quot;&quot;,,A2:A1016-MOD(WEEKDAY(A2:A1016,2)-6,7))"
+        },
+        "I2": {
+          "value": "46173",
+          "formula": "IF(A2:A1016=&quot;&quot;,,EOMONTH(A2:A1016,0))"
+        },
+        "J2": {
+          "value": "437.66",
+          "formula": "MAP(A2:A1016,B2:B1016,LAMBDA(fecha,cliente,IF(fecha=&quot;&quot;,,IFERROR(SUMIFS($AA:$AA,$Y:$Y,fecha,$Z:$Z,cliente),0))))"
+        },
+        "K2": {
+          "value": "437.66",
+          "formula": "MAP(J2:J1016,F2:F1016,LAMBDA(g,c,IF(c&gt;0,g/c,0)))"
+        },
+        "L2": {
+          "value": "0.4",
+          "formula": "IF(A2:A1016=&quot;&quot;,,IFERROR(D2:D1016/C2:C1016,0))"
+        }
+      }
+    },
+    {
+      "name": "SEMANAL",
+      "target": "xl/worksheets/sheet2.xml",
+      "cells": {
+        "A1": {
+          "value": "SEMANA",
+          "formula": "IFERROR(__xludf.DUMMYFUNCTION(&quot;QUERY({RESPALDO_DIARIO!H2:H999,RESPALDO_DIARIO!B2:B999,ARRAYFORMULA(IFERROR(VALUE(RESPALDO_DIARIO!C2:C999),0)),ARRAYFORMULA(IFERROR(VALUE(RESPALDO_DIARIO!D2:D999),0)),ARRAYFORMULA(IFERROR(VALUE(RESPALDO_DIARIO!E2:E999),0)),ARRAYFORMULA(IFERROR(VALUE(RESPA&quot;&amp;&quot;LDO_DIARIO!F2:F999),0)),ARRAYFORMULA(IFERROR(VALUE(RESPALDO_DIARIO!G2:G999),0))},&quot;&quot;SELECT Col1, Col2, SUM(Col3), SUM(Col4), SUM(Col5), SUM(Col6), SUM(Col7) WHERE Col1 IS NOT NULL GROUP BY Col1, Col2 ORDER BY Col1 ASC, Col2 ASC LABEL Col1 'SEMANA', Col2 'C&quot;&amp;&quot;LIENTE', SUM(Col3) 'CONVERSACIONES', SUM(Col4) 'MQL', SUM(Col5) 'SQL', SUM(Col6) 'CITAS', SUM(Col7) 'FIRMAS'&quot;&quot;,0)&quot;),&quot;SEMANA&quot;)"
+        },
+        "H1": {
+          "value": "GASTO ADS",
+          "formula": null
+        },
+        "I1": {
+          "value": "COSTO POR CITA",
+          "formula": null
+        },
+        "Y1": null,
+        "Z1": null,
+        "AA1": null,
+        "Y2": null,
+        "Z2": null,
+        "AA2": null,
+        "A2": {
+          "value": "46137",
+          "formula": "IFERROR(__xludf.DUMMYFUNCTION(&quot;&quot;&quot;COMPUTED_VALUE&quot;&quot;&quot;),46137.0)"
+        },
+        "H2": {
+          "value": "237.8",
+          "formula": "MAP(A2:A999,B2:B999,LAMBDA(sem,cliente,IF(sem=&quot;&quot;,,IFERROR(SUMIFS(RESPALDO_DIARIO!$AA:$AA,RESPALDO_DIARIO!$Y:$Y,&quot;&gt;=&quot;&amp;sem,RESPALDO_DIARIO!$Y:$Y,&quot;&lt;=&quot;&amp;sem+6,RESPALDO_DIARIO!$Z:$Z,cliente),0))))"
+        },
+        "I2": {
+          "value": "0",
+          "formula": "MAP(H2:H999,F2:F999,LAMBDA(g,c,IF(c&gt;0,g/c,0)))"
+        },
+        "J2": {
+          "value": "0",
+          "formula": "IF(A2:A999=&quot;&quot;,,IFERROR(D2:D999/C2:C999,0))"
+        },
+        "K2": {
+          "value": "Rojo",
+          "formula": "IF(A2:A999=&quot;&quot;,,IF(J2:J999&gt;=0.2,&quot;Verde&quot;,IF(J2:J999&gt;=0.17,&quot;Amarillo&quot;,&quot;Rojo&quot;)))"
+        },
+        "L2": {
+          "value": "0",
+          "formula": "IF(A2:A999=&quot;&quot;,,IFERROR(E2:E999/D2:D999,0))"
+        }
+      }
+    },
+    {
+      "name": "MENSUAL",
+      "target": "xl/worksheets/sheet3.xml",
+      "cells": {
+        "A1": {
+          "value": "MES",
+          "formula": "IFERROR(__xludf.DUMMYFUNCTION(&quot;QUERY({ARRAYFORMULA(IF(RESPALDO_DIARIO!A2:A983=&quot;&quot;&quot;&quot;,,EOMONTH(IFERROR(FECHA.VALOR(RESPALDO_DIARIO!A2:A983),RESPALDO_DIARIO!A2:A983),-1)+1)),RESPALDO_DIARIO!B2:G983},&quot;&quot;select Col1, Col2, sum(Col3), sum(Col4), sum(Col5), sum(Col6), sum(Col7) where Col1 is no&quot;&amp;&quot;t null group by Col1, Col2 order by Col1, Col2 label Col1 'MES', Col2 'CLIENTE', sum(Col3) 'CONVERSACIONES', sum(Col4) 'MQL', sum(Col5) 'SQL', sum(Col6) 'CITAS', sum(Col7) 'FIRMAS'&quot;&quot;,0)&quot;),&quot;MES&quot;)"
+        },
+        "H1": {
+          "value": "GASTO ADS",
+          "formula": null
+        },
+        "I1": {
+          "value": "COSTO POR CITA",
+          "formula": null
+        },
+        "Y1": null,
+        "Z1": null,
+        "AA1": null,
+        "Y2": null,
+        "Z2": null,
+        "AA2": null,
+        "A2": {
+          "value": "46143",
+          "formula": "IFERROR(__xludf.DUMMYFUNCTION(&quot;&quot;&quot;COMPUTED_VALUE&quot;&quot;&quot;),46143.0)"
+        },
+        "H2": {
+          "value": "2378.06",
+          "formula": "MAP(A2:A983,B2:B983,LAMBDA(mes,cliente,IF(mes=&quot;&quot;,,IFERROR(SUMIFS(RESPALDO_DIARIO!$AA:$AA,RESPALDO_DIARIO!$Y:$Y,&quot;&gt;=&quot;&amp;mes,RESPALDO_DIARIO!$Y:$Y,&quot;&lt;=&quot;&amp;EOMONTH(mes,0),RESPALDO_DIARIO!$Z:$Z,cliente),0))))"
+        },
+        "I2": {
+          "value": "2378.06",
+          "formula": "MAP(H2:H983,F2:F983,LAMBDA(g,c,IF(c&gt;0,g/c,0)))"
+        },
+        "J2": {
+          "value": "0",
+          "formula": "IF(A2:A983=&quot;&quot;,,IFERROR(D2:D983/C2:C983,0))"
+        },
+        "K2": {
+          "value": "Rojo",
+          "formula": "IF(A2:A983=&quot;&quot;,,IF(J2:J983&gt;=0.2,&quot;Verde&quot;,IF(J2:J983&gt;=0.17,&quot;Amarillo&quot;,&quot;Rojo&quot;)))"
+        },
+        "L2": {
+          "value": "0",
+          "formula": "IF(A2:A983=&quot;&quot;,,IFERROR(E2:E983/D2:D983,0))"
+        }
+      }
+    },
+    {
+      "name": "HISTORICO-MENSUAL",
+      "target": "xl/worksheets/sheet4.xml",
+      "cells": {
+        "A1": {
+          "value": "MES",
+          "formula": null
+        },
+        "H1": {
+          "value": "GASTO TOTAL",
+          "formula": null
+        },
+        "I1": {
+          "value": "COSTO POR CITA",
+          "formula": null
+        },
+        "Y1": null,
+        "Z1": null,
+        "AA1": null,
+        "Y2": null,
+        "Z2": null,
+        "AA2": null,
+        "A2": {
+          "value": "ENERO",
+          "formula": null
+        },
+        "H2": {
+          "value": "14723.0",
+          "formula": null
+        },
+        "I2": {
+          "value": "736.15",
+          "formula": "IFERROR(H2/F2, 0)"
+        },
+        "J2": null,
+        "K2": null,
+        "L2": null
+      }
+    }
+  ],
+  "checks": {}
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0}
+    .slide-container{width:1280px;min-height:720px;box-sizing:border-box;background:#F6F2EA;color:#1C1B19;font-family:'DM Sans',sans-serif}
+    .slide-container *{box-sizing:border-box}
+    .page{min-height:720px;padding-top:40px;padding-left:54px;padding-right:54px}
+    .header{display:grid;grid-template-columns:1fr 220px;gap:26px;border-top:8px solid #262626;padding-top:12px}
+    .eyebrow{font-size:13px;letter-spacing:.11em;text-transform:uppercase;color:#70695F;font-weight:700}
+    .title{font-family:'Space Grotesk',sans-serif;font-size:40px;line-height:1.02;letter-spacing:-.035em;margin-top:9px;max-width:850px}
+    .period{height:78px;background:#262626;color:#F6F2EA;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:19px;line-height:1.15}
+    .content{display:grid;grid-template-columns:280px 1fr;gap:24px;margin-top:18px}
+    .insight{background:#262626;color:#F6F2EA;min-height:340px;padding-top:12px;padding-left:18px;padding-right:18px}
+    .insight-label{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#D9A441;font-weight:700}
+    .insight h2{font-family:'Space Grotesk',sans-serif;font-size:31px;line-height:1.04;letter-spacing:-.035em;margin-top:12px;color:#F6F2EA}
+    .insight p{font-size:16px;line-height:1.34;margin-top:12px;color:#E8E0D1}
+    .metric{border-top:1px solid rgba(246,242,234,.28);margin-top:14px;padding-top:10px}
+    .metric strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:34px;line-height:1;color:#71C991;letter-spacing:-.03em}
+    .metric span{display:block;margin-top:7px;font-size:13px;color:#E8E0D1;line-height:1.25}
+    table{width:100%;border-collapse:collapse;background:#fffaf0;font-size:13.6px;table-layout:fixed}
+    th{background:#262626;color:#F6F2EA;text-align:left;height:36px;padding-top:6px;padding-left:8px;padding-right:7px;font-size:11.5px;letter-spacing:.035em;text-transform:uppercase}
+    td{height:48px;border-bottom:1px solid #D8D0C0;padding-top:6px;padding-left:8px;padding-right:7px;vertical-align:middle}
+    .client{font-weight:800;font-size:14.5px;color:#262626}
+    .num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;text-align:right;color:#1C1B19}
+    .rate{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#1C1B19}
+    .chip{display:inline-flex;align-items:center;justify-content:center;height:27px;min-width:74px;font-size:12px;font-weight:800;color:#fff}
+    .green{background:#1F8A4C}.yellow{background:#D9A441;color:#1C1B19}.red{background:#C74332}
+    .reading{font-size:12.7px;line-height:1.2;color:#55504A}
+    .bottom{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:12px;border-top:6px solid #1F8A4C;padding-top:10px}
+    .callout{font-size:20px;line-height:1.18;color:#1C1B19}
+    .callout strong{color:#1F8A4C}
+    .rules{font-size:12px;color:#70695F;line-height:1.35;text-align:right}
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="page">
+      <div class="header">
+        <div>
+          <div class="eyebrow">Semáforo por cliente · agenda y cierre</div>
+          <div class="title">La conversión a contrato mejora cuando la cita llega calificada</div>
+        </div>
+        <div class="period">01–10<br/>mayo 2026</div>
+      </div>
+
+      <div class="content">
+        <aside class="insight">
+          <div class="insight-label">Lectura operativa</div>
+          <h2>Agenda fuerte, cierre selectivo</h2>
+          <p>El tramo SQL → Cita muestra buen desempeño en clientes con SQL registrado, pero el cierre final depende de seguimiento post-cita y calidad previa del lead.</p>
+          <div class="metric"><strong>93.8%</strong><span>Conversión global SQL → Cita.</span></div>
+          <div class="metric"><strong>26.7%</strong><span>Conversión global Cita → Contrato.</span></div>
+        </aside>
+
+        <section>
+          <table>
+            <tr>
+              <th style="width:16%">Cliente</th>
+              <th style="width:7%">SQL</th>
+              <th style="width:7%">Citas</th>
+              <th style="width:7%">Firmas</th>
+              <th style="width:11%">SQL → Cita</th>
+              <th style="width:10%">Color</th>
+              <th style="width:13%">Cita → Contrato</th>
+              <th style="width:10%">Color</th>
+              <th style="width:19%">Lectura</th>
+            </tr>
+            <tr>
+              <td class="client">INQ</td><td class="num">2</td><td class="num">3</td><td class="num">2</td><td class="rate">150.0%</td><td><span class="chip green">Verde</span></td><td class="rate">66.7%</td><td><span class="chip green">Verde</span></td><td class="reading">Convierte citas a firmas con fuerza.</td>
+            </tr>
+            <tr>
+              <td class="client">GRUPO ELIJO</td><td class="num">2</td><td class="num">3</td><td class="num">0</td><td class="rate">150.0%</td><td><span class="chip green">Verde</span></td><td class="rate">0.0%</td><td><span class="chip red">Rojo</span></td><td class="reading">Citas sin firma; urge seguimiento post-cita.</td>
+            </tr>
+            <tr>
+              <td class="client">MANOS AL HOGAR</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="rate">100.0%</td><td><span class="chip green">Verde</span></td><td class="rate">100.0%</td><td><span class="chip green">Verde</span></td><td class="reading">Pocas citas, pero cierre efectivo.</td>
+            </tr>
+            <tr>
+              <td class="client">HOGARES</td><td class="num">11</td><td class="num">5</td><td class="num">1</td><td class="rate">45.5%</td><td><span class="chip yellow">Amarillo</span></td><td class="rate">20.0%</td><td><span class="chip green">Verde</span></td><td class="reading">Buen cierre; agenda puede mejorar.</td>
+            </tr>
+            <tr>
+              <td class="client">DOS HOGARES</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="rate">0.0%</td><td><span class="chip red">Rojo</span></td><td class="rate">0.0%</td><td><span class="chip red">Rojo</span></td><td class="reading">Cita aislada sin soporte de MQL/SQL.</td>
+            </tr>
+            <tr>
+              <td class="client">INSPIRA</td><td class="num">0</td><td class="num">2</td><td class="num">0</td><td class="rate">0.0%</td><td><span class="chip red">Rojo</span></td><td class="rate">0.0%</td><td><span class="chip red">Rojo</span></td><td class="reading">MQL sin SQL; revisar avance antes de agenda.</td>
+            </tr>
+          </table>
+        </section>
+      </div>
+
+      <div class="bottom">
+        <div class="callout">La oportunidad no está solo en generar citas: está en sostener <strong>calidad antes de agenda</strong> y seguimiento después de la visita.</div>
+        <div class="rules">Reglas: SQL→Cita verde 52%+, amarillo 43–51%, rojo 0–42%. Cita→Contrato verde 12.5%+, amarillo 10.1–12.4%, rojo 0–10%.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

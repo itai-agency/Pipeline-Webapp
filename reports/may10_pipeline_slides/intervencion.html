@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0}
+    .slide-container{width:1280px;min-height:720px;box-sizing:border-box;background:#F6F2EA;color:#1C1B19;font-family:'DM Sans',sans-serif}
+    .slide-container *{box-sizing:border-box}
+    .page{min-height:720px;padding-top:40px;padding-left:54px;padding-right:54px}
+    .header{display:grid;grid-template-columns:1fr 220px;gap:26px;border-top:8px solid #262626;padding-top:16px}
+    .eyebrow{font-size:13px;letter-spacing:.11em;text-transform:uppercase;color:#70695F;font-weight:800}
+    .title{font-family:'Space Grotesk',sans-serif;font-size:40px;line-height:1.02;letter-spacing:-.038em;margin-top:9px;max-width:850px}
+    .period{background:#262626;color:#F6F2EA;height:78px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:19px;font-weight:800;line-height:1.15}
+    .diagnosis{display:grid;grid-template-columns:280px 1fr;gap:24px;margin-top:24px;background:#C74332;color:#F6F2EA;min-height:86px}
+    .diagnosis-label{font-family:'Space Grotesk',sans-serif;font-size:28px;line-height:1;padding-top:20px;padding-left:22px;letter-spacing:-.03em}
+    .diagnosis-text{font-size:21px;line-height:1.22;padding-top:18px;padding-right:24px;color:#FFF6EA}
+    table{width:100%;border-collapse:collapse;margin-top:22px;background:#fffaf0;font-size:15px;table-layout:fixed}
+    th{background:#262626;color:#F6F2EA;text-align:left;height:42px;padding-top:9px;padding-left:12px;padding-right:10px;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+    td{height:76px;border-bottom:1px solid #D8D0C0;padding-top:10px;padding-left:12px;padding-right:10px;vertical-align:top;line-height:1.22}
+    .client{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.025em;color:#1C1B19}
+    .signal{font-weight:700;color:#C74332}
+    .action{color:#1C1B19;font-weight:600}
+    .metric{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.02em;color:#262626;display:block;margin-top:2px}
+    .chip{display:inline-flex;align-items:center;justify-content:center;height:28px;min-width:82px;font-size:13px;font-weight:800;color:#F6F2EA;margin-top:7px}
+    .red{background:#C74332}.yellow{background:#D9A441;color:#1C1B19}.green{background:#1F8A4C}
+    .footer{display:grid;grid-template-columns:360px 1fr;gap:24px;margin-top:20px;border-top:6px solid #D9A441;padding-top:14px}
+    .footer-title{font-family:'Space Grotesk',sans-serif;font-size:25px;line-height:1.05;letter-spacing:-.025em;color:#262626}
+    .footer-text{font-size:20px;line-height:1.22;color:#1C1B19}
+    .footer-text strong{color:#C74332}
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="page">
+      <div class="header">
+        <div>
+          <div class="eyebrow">Intervención inmediata</div>
+          <div class="title">Clientes que requieren intervención inmediata</div>
+        </div>
+        <div class="period">Corte<br/>10 mayo 2026</div>
+      </div>
+
+      <div class="diagnosis">
+        <div class="diagnosis-label">4 frentes críticos</div>
+        <div class="diagnosis-text">La pérdida de eficiencia se concentra en costo por cita alto, costo por lead rojo, ausencia de MQL o citas sin firma.</div>
+      </div>
+
+      <table>
+        <tr>
+          <th style="width:18%">Cliente</th>
+          <th style="width:28%">Señal crítica</th>
+          <th style="width:34%">Acción sugerida</th>
+          <th style="width:20%">Métrica guía</th>
+        </tr>
+        <tr>
+          <td><div class="client">MANOS AL HOGAR</div><span class="chip red">Rojo</span></td>
+          <td><span class="signal">Costo por cita de $7,417</span> y costo por lead rojo de $66.</td>
+          <td><span class="action">Auditar campañas, segmentación y criterio de cita antes de subir presupuesto.</span></td>
+          <td><span class="metric">1 cita</span>con $7,417 invertidos</td>
+        </tr>
+        <tr>
+          <td><div class="client">INSPIRA</div><span class="chip red">Rojo</span></td>
+          <td><span class="signal">CPL de $94</span> y cero SQL sobre cuatro MQL acumulados.</td>
+          <td><span class="action">Revisar definición de MQL, velocidad de contacto y avance comercial.</span></td>
+          <td><span class="metric">0 SQL</span>sobre 4 MQL</td>
+        </tr>
+        <tr>
+          <td><div class="client">DOS HOGARES</div><span class="chip red">Rojo</span></td>
+          <td><span class="signal">49 conversaciones y 0 MQL</span>, aunque el costo por lead está verde.</td>
+          <td><span class="action">Revisar calidad de conversación, formularios y clasificación del equipo.</span></td>
+          <td><span class="metric">0.0%</span>Leads → MQL</td>
+        </tr>
+        <tr>
+          <td><div class="client">GRUPO ELIJO</div><span class="chip yellow">Atención</span></td>
+          <td><span class="signal">Tres citas sin firmas</span>; la eficiencia de agenda aún no llega a cierre.</td>
+          <td><span class="action">Implementar seguimiento post-cita, control de objeciones y recuperación de cierres.</span></td>
+          <td><span class="metric">0 firmas</span>sobre 3 citas</td>
+        </tr>
+      </table>
+
+      <div class="footer">
+        <div class="footer-title">Criterio de acción</div>
+        <div class="footer-text">Atender primero los clientes donde el semáforo combina <strong>costo elevado</strong> y <strong>bloqueo de conversión</strong>; después escalar inversión solo donde el proceso ya convierta.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

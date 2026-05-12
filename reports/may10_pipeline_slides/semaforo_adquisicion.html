@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0}
+    .slide-container{width:1280px;min-height:720px;box-sizing:border-box;background:#F6F2EA;color:#1C1B19;font-family:'DM Sans',sans-serif}
+    .slide-container *{box-sizing:border-box}
+    .page{min-height:720px;padding-top:40px;padding-left:54px;padding-right:54px}
+    .header{display:grid;grid-template-columns:1fr 210px;gap:24px;border-top:8px solid #262626;padding-top:16px}
+    .eyebrow{font-size:13px;letter-spacing:.11em;text-transform:uppercase;color:#70695F;font-weight:700}
+    .title{font-family:'Space Grotesk',sans-serif;font-size:40px;line-height:1.02;letter-spacing:-.035em;margin-top:9px;color:#1C1B19}
+    .period{background:#262626;color:#F6F2EA;height:78px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;text-align:center;line-height:1.15}
+    .legend{display:flex;gap:10px;margin-top:18px;align-items:center;font-size:13px;color:#70695F;text-transform:uppercase;letter-spacing:.06em}
+    .legend span{display:inline-flex;align-items:center;justify-content:center;height:26px;min-width:86px;color:#fff;font-weight:700;letter-spacing:0;text-transform:none;font-size:13px}
+    .legend .green{background:#1F8A4C}.legend .yellow{background:#D9A441;color:#1C1B19}.legend .red{background:#C74332}
+    table{width:100%;border-collapse:collapse;margin-top:18px;background:#fffaf0;font-size:15px;table-layout:fixed}
+    th{background:#262626;color:#F6F2EA;text-align:left;height:42px;padding-top:9px;padding-left:10px;padding-right:8px;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+    td{height:58px;border-bottom:1px solid #D8D0C0;padding-top:8px;padding-left:10px;padding-right:8px;vertical-align:middle}
+    td.client{font-weight:800;color:#262626;font-size:16px}
+    td.num{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#1C1B19}
+    .chip{display:inline-flex;align-items:center;justify-content:center;height:28px;min-width:78px;color:#fff;font-weight:800;font-size:13px}
+    .green{background:#1F8A4C}.yellow{background:#D9A441;color:#1C1B19}.red{background:#C74332}
+    .reading{display:grid;grid-template-columns:290px 1fr;gap:22px;margin-top:22px;border-top:6px solid #C74332;padding-top:14px}
+    .reading .label{font-family:'Space Grotesk',sans-serif;font-size:24px;line-height:1.05;color:#C74332;letter-spacing:-.02em}
+    .reading .text{font-size:21px;line-height:1.23;color:#1C1B19;max-width:820px}
+    .reading strong{color:#C74332}
+    .foot{margin-top:12px;font-size:12px;color:#70695F;line-height:1.25}
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="page">
+      <div class="header">
+        <div>
+          <div class="eyebrow">Semáforo por cliente · adquisición</div>
+          <div class="title">La adquisición calificada concentra los focos rojos</div>
+        </div>
+        <div class="period">01–10<br/>mayo 2026</div>
+      </div>
+
+      <div class="legend">
+        Regla visual
+        <span class="green">Verde</span>
+        <span class="yellow">Amarillo</span>
+        <span class="red">Rojo</span>
+      </div>
+
+      <table>
+        <tr>
+          <th style="width:18%">Cliente</th>
+          <th style="width:12%">Leads → MQL</th>
+          <th style="width:12%">Color</th>
+          <th style="width:12%">MQL → SQL</th>
+          <th style="width:12%">Color</th>
+          <th style="width:12%">Costo/Lead</th>
+          <th style="width:12%">Color</th>
+          <th style="width:10%">Leads</th>
+        </tr>
+        <tr>
+          <td class="client">HOGARES</td><td class="num">27.3%</td><td><span class="chip green">Verde</span></td><td class="num">52.4%</td><td><span class="chip red">Rojo</span></td><td class="num">$57</td><td><span class="chip yellow">Amarillo</span></td><td class="num">77</td>
+        </tr>
+        <tr>
+          <td class="client">INSPIRA</td><td class="num">12.9%</td><td><span class="chip red">Rojo</span></td><td class="num">0.0%</td><td><span class="chip red">Rojo</span></td><td class="num">$94</td><td><span class="chip red">Rojo</span></td><td class="num">31</td>
+        </tr>
+        <tr>
+          <td class="client">GRUPO ELIJO</td><td class="num">10.3%</td><td><span class="chip red">Rojo</span></td><td class="num">15.4%</td><td><span class="chip red">Rojo</span></td><td class="num">$24</td><td><span class="chip green">Verde</span></td><td class="num">126</td>
+        </tr>
+        <tr>
+          <td class="client">INQ</td><td class="num">6.0%</td><td><span class="chip red">Rojo</span></td><td class="num">22.2%</td><td><span class="chip red">Rojo</span></td><td class="num">$39</td><td><span class="chip green">Verde</span></td><td class="num">150</td>
+        </tr>
+        <tr>
+          <td class="client">MANOS AL HOGAR</td><td class="num">5.3%</td><td><span class="chip red">Rojo</span></td><td class="num">16.7%</td><td><span class="chip red">Rojo</span></td><td class="num">$66</td><td><span class="chip red">Rojo</span></td><td class="num">113</td>
+        </tr>
+        <tr>
+          <td class="client">DOS HOGARES</td><td class="num">0.0%</td><td><span class="chip red">Rojo</span></td><td class="num">0.0%</td><td><span class="chip red">Rojo</span></td><td class="num">$49</td><td><span class="chip green">Verde</span></td><td class="num">49</td>
+        </tr>
+      </table>
+
+      <div class="reading">
+        <div class="label">Lectura ejecutiva</div>
+        <div class="text">La oportunidad central está en subir la calidad de entrada: <strong>solo HOGARES está verde en Leads → MQL</strong>, mientras MQL → SQL permanece rojo en todos los clientes.</div>
+      </div>
+      <div class="foot">Reglas replicadas desde la web app: Leads→MQL verde 20%+, MQL→SQL verde 75%+, CPL verde ≤$50, amarillo $51–$59 y rojo $60+.</div>
+    </div>
+  </div>
+</body>
+</html>

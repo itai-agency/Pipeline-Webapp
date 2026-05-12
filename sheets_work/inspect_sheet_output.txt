@@ -1,0 +1,225 @@
+
+SHEET RESPALDO_DIARIO max 1016 27
+HEADERS:
+1 A1 'fecha'
+2 B1 'CLIENTE'
+3 C1 'CONVERSACIONES'
+4 D1 'MQL'
+5 E1 'SQL'
+6 F1 'CITAS'
+7 G1 'FIRMAS'
+8 H1 'SEMANA'
+9 I1 'MES'
+10 J1 'GASTO ADS'
+11 K1 'COSTO POR CITA'
+12 L1 '% CONV→MQL'
+13 M1 'SEMÁFORO CONV→MQL'
+14 N1 '% MQL→SQL'
+15 O1 'SEMÁFORO MQL→SQL'
+16 P1 '% SQL→CITA'
+17 Q1 'SEMÁFORO SQL→CITA'
+18 R1 '% CITA→FIRMA'
+19 S1 'SEMÁFORO CITA→FIRMA'
+20 T1 'COSTO POR LEAD'
+21 U1 'SEMÁFORO CPL'
+22 V1 'SEMÁFORO GENERAL'
+23 W1 'LECTURA'
+25 Y1 'FECHA'
+26 Z1 'CLIENTE'
+27 AA1 'GASTO ADS'
+HITS 318
+('M3', 'Rojo')
+('O3', 'Verde')
+('Q3', 'Verde')
+('S3', 'Rojo')
+('U3', 'Verde')
+('V3', 'Rojo')
+('M4', 'Verde')
+('O4', 'Rojo')
+('Q4', 'Rojo')
+('S4', 'Rojo')
+('U4', 'Verde')
+('V4', 'Rojo')
+('M5', 'Verde')
+('O5', 'Rojo')
+('Q5', 'Rojo')
+('S5', 'Rojo')
+('U5', 'Verde')
+('V5', 'Rojo')
+('M6', 'Rojo')
+('O6', 'Rojo')
+('Q6', 'Rojo')
+('S6', 'Rojo')
+('U6', 'Rojo')
+('V6', 'Rojo')
+('M7', 'Rojo')
+('O7', 'Rojo')
+('Q7', 'Rojo')
+('S7', 'Rojo')
+('U7', 'Rojo')
+('V7', 'Rojo')
+('M8', 'Rojo')
+('O8', 'Verde')
+('Q8', 'Rojo')
+('S8', 'Rojo')
+('U8', 'Rojo')
+('V8', 'Rojo')
+('M9', 'Rojo')
+('O9', 'Rojo')
+('Q9', 'Verde')
+('S9', 'Rojo')
+('U9', 'Verde')
+('V9', 'Rojo')
+('M10', 'Rojo')
+('O10', 'Rojo')
+('Q10', 'Rojo')
+('S10', 'Rojo')
+('U10', 'Rojo')
+('V10', 'Rojo')
+('M11', 'Verde')
+('O11', 'Rojo')
+
+SHEET SEMANAL max 999 22
+HEADERS:
+1 A1 '=IFERROR(__xludf.DUMMYFUNCTION("QUERY({RESPALDO_DIARIO!H2:H999,RESPALDO_DIARIO!B2:B999,ARRAYFORMULA(IFERROR(VALUE(RESPALDO_DIARIO!C2:C999),0)),ARRAYFORMULA(IFERROR(VALUE(RESPALDO_DIARIO!D2:D999),0)),ARRAYFORMULA(IFERROR(VALUE(RESPALDO_DIARIO!E2:E999),0)),ARRAYFORMULA(IFERROR(VALUE(RESPA"&"LDO_DIARIO!F2:F999),0)),ARRAYFORMULA(IFERROR(VALUE(RESPALDO_DIARIO!G2:G999),0))},""SELECT Col1, Col2, SUM(Col3), SUM(Col4), SUM(Col5), SUM(Col6), SUM(Col7) WHERE Col1 IS NOT NULL GROUP BY Col1, Col2 ORDER BY Col1 ASC, Col2 ASC LABEL Col1 \'SEMANA\', Col2 \'C"&"LIENTE\', SUM(Col3) \'CONVERSACIONES\', SUM(Col4) \'MQL\', SUM(Col5) \'SQL\', SUM(Col6) \'CITAS\', SUM(Col7) \'FIRMAS\'"",0)"),"SEMANA")'
+2 B1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"CLIENTE")'
+3 C1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"CONVERSACIONES")'
+4 D1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"MQL")'
+5 E1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"SQL")'
+6 F1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"CITAS")'
+7 G1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"FIRMAS")'
+8 H1 'GASTO ADS'
+9 I1 'COSTO POR CITA'
+10 J1 '% CONV→MQL'
+11 K1 'SEMÁFORO CONV→MQL'
+12 L1 '% MQL→SQL'
+13 M1 'SEMÁFORO MQL→SQL'
+14 N1 '% SQL→CITA'
+15 O1 'SEMÁFORO SQL→CITA'
+16 P1 '% CITA→FIRMA'
+17 Q1 'SEMÁFORO CITA→FIRMA'
+18 R1 'COSTO POR LEAD'
+19 S1 'SEMÁFORO CPL'
+20 T1 'SEMÁFORO GENERAL'
+21 U1 'INICIO SEMANA'
+22 V1 'FIN SEMANA'
+HITS 102
+('K3', 'Verde')
+('M3', 'Rojo')
+('O3', 'Rojo')
+('Q3', 'Rojo')
+('S3', 'Verde')
+('T3', 'Rojo')
+('K4', 'Verde')
+('M4', 'Rojo')
+('O4', 'Rojo')
+('Q4', 'Rojo')
+('S4', 'Rojo')
+('T4', 'Rojo')
+('K5', 'Rojo')
+('M5', 'Verde')
+('O5', 'Verde')
+('Q5', 'Rojo')
+('S5', 'Verde')
+('T5', 'Rojo')
+('K6', 'Verde')
+('M6', 'Rojo')
+('O6', 'Rojo')
+('Q6', 'Rojo')
+('S6', 'Verde')
+('T6', 'Rojo')
+('K7', 'Rojo')
+('M7', 'Rojo')
+('O7', 'Rojo')
+('Q7', 'Rojo')
+('S7', 'Rojo')
+('T7', 'Rojo')
+('K8', 'Rojo')
+('M8', 'Rojo')
+('O8', 'Rojo')
+('Q8', 'Rojo')
+('S8', 'Verde')
+('T8', 'Rojo')
+('K9', 'Rojo')
+('M9', 'Rojo')
+('O9', 'Verde')
+('Q9', 'Rojo')
+('S9', 'Verde')
+('T9', 'Rojo')
+('K10', 'Verde')
+('M10', 'Rojo')
+('O10', 'Rojo')
+('Q10', 'Verde')
+('S10', 'Amarillo')
+('T10', 'Rojo')
+('K11', 'Rojo')
+('M11', 'Rojo')
+
+SHEET MENSUAL max 983 23
+HEADERS:
+1 A1 '=IFERROR(__xludf.DUMMYFUNCTION("QUERY({ARRAYFORMULA(IF(RESPALDO_DIARIO!A2:A983="""",,EOMONTH(IFERROR(FECHA.VALOR(RESPALDO_DIARIO!A2:A983),RESPALDO_DIARIO!A2:A983),-1)+1)),RESPALDO_DIARIO!B2:G983},""select Col1, Col2, sum(Col3), sum(Col4), sum(Col5), sum(Col6), sum(Col7) where Col1 is no"&"t null group by Col1, Col2 order by Col1, Col2 label Col1 \'MES\', Col2 \'CLIENTE\', sum(Col3) \'CONVERSACIONES\', sum(Col4) \'MQL\', sum(Col5) \'SQL\', sum(Col6) \'CITAS\', sum(Col7) \'FIRMAS\'"",0)"),"MES")'
+2 B1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"CLIENTE")'
+3 C1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"CONVERSACIONES")'
+4 D1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"MQL")'
+5 E1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"SQL")'
+6 F1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"CITAS")'
+7 G1 '=IFERROR(__xludf.DUMMYFUNCTION("""COMPUTED_VALUE"""),"FIRMAS")'
+9 I1 'GASTO ADS'
+10 J1 'COSTO POR CITA'
+11 K1 '% CONV→MQL'
+12 L1 'SEMÁFORO CONV→MQL'
+13 M1 '% MQL→SQL'
+14 N1 'SEMÁFORO MQL→SQL'
+15 O1 '% SQL→CITA'
+16 P1 'SEMÁFORO SQL→CITA'
+17 Q1 '% CITA→FIRMA'
+18 R1 'SEMÁFORO CITA→FIRMA'
+19 S1 'COSTO POR LEAD'
+20 T1 'SEMÁFORO CPL'
+21 U1 'SEMÁFORO GENERAL'
+22 V1 'INICIO MES'
+23 W1 'FIN MES'
+HITS 30
+('L3', 'Rojo')
+('N3', 'Verde')
+('P3', 'Rojo')
+('R3', 'Rojo')
+('T3', 'Verde')
+('U3', 'Rojo')
+('L4', 'Rojo')
+('N4', 'Rojo')
+('P4', 'Rojo')
+('R4', 'Rojo')
+('T4', 'Amarillo')
+('U4', 'Rojo')
+('L5', 'Rojo')
+('N5', 'Verde')
+('P5', 'Verde')
+('R5', 'Rojo')
+('T5', 'Verde')
+('U5', 'Rojo')
+('L6', 'Rojo')
+('N6', 'Rojo')
+('P6', 'Rojo')
+('R6', 'Rojo')
+('T6', 'Rojo')
+('U6', 'Rojo')
+('L7', 'Rojo')
+('N7', 'Verde')
+('P7', 'Verde')
+('R7', 'Rojo')
+('T7', 'Rojo')
+('U7', 'Rojo')
+
+SHEET HISTORICO-MENSUAL max 1002 9
+HEADERS:
+1 A1 'MES'
+2 B1 'CLIENTE'
+3 C1 'CONVERSACIONES'
+4 D1 'MQL'
+5 E1 'SQL'
+6 F1 'CITAS'
+7 G1 'FIRMAS'
+8 H1 'GASTO TOTAL'
+9 I1 'COSTO POR CITA'
+HITS 0

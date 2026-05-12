@@ -1,0 +1,297 @@
+{
+  "period": {
+    "start": "2026-05-01",
+    "end": "2026-05-10",
+    "sourceLabel": "Meta Ads · Importe gastado confirmado · prorrateo diario para filtros",
+    "note": "La suma del periodo completo coincide con Meta Ads; los cortes parciales usan prorrateo diario porque el dashboard es estático."
+  },
+  "benchmarks": {
+    "leadToMql": {
+      "yellow": 0.17,
+      "green": 0.2,
+      "label": "Rojo 0–16% · Amarillo 17–19% · Verde 20%+"
+    },
+    "mqlToSql": {
+      "yellow": 0.65,
+      "green": 0.75,
+      "label": "Rojo 0–64% · Amarillo 65–74% · Verde 75%+"
+    },
+    "sqlToAppointment": {
+      "yellow": 0.43,
+      "green": 0.52,
+      "label": "Rojo 0–42% · Amarillo 43–51% · Verde 52%+"
+    },
+    "appointmentToContract": {
+      "yellow": 0.101,
+      "green": 0.125,
+      "label": "Rojo 0–10% · Amarillo 10.1–12.4% · Verde 12.5%+"
+    },
+    "costPerLead": {
+      "greenMax": 50,
+      "yellowMax": 59,
+      "label": "Verde ≤$50 · Amarillo $51–$59 · Rojo $60+"
+    }
+  },
+  "total": {
+    "CONVERSACIONES": 546,
+    "MQL": 53,
+    "SQL": 16,
+    "CITAS": 15,
+    "FIRMAS": 4,
+    "spend": 25970.280000000002,
+    "costPerAppointment": 1731.352,
+    "costPerLead": 47.56461538461539,
+    "conversions": {
+      "leadToMql": 0.09706959706959707,
+      "mqlToSql": 0.3018867924528302,
+      "sqlToAppointment": 0.9375,
+      "appointmentToContract": 0.26666666666666666
+    },
+    "semaphore": {
+      "leadToMql": "Rojo",
+      "mqlToSql": "Rojo",
+      "sqlToAppointment": "Verde",
+      "appointmentToContract": "Verde",
+      "costPerLead": "Verde"
+    }
+  },
+  "clients": [
+    {
+      "client": "INQ",
+      "CONVERSACIONES": 150,
+      "MQL": 9,
+      "SQL": 2,
+      "CITAS": 3,
+      "FIRMAS": 2,
+      "accountName": "inq inmobiliaria cp",
+      "accountId": "act_1584938395981836",
+      "spend": 5906.62,
+      "costPerAppointment": 1968.8733333333332,
+      "costPerLead": 39.37746666666666,
+      "conversions": {
+        "leadToMql": 0.06,
+        "mqlToSql": 0.2222222222222222,
+        "sqlToAppointment": 1.5,
+        "appointmentToContract": 0.6666666666666666
+      },
+      "semaphore": {
+        "leadToMql": "Rojo",
+        "mqlToSql": "Rojo",
+        "sqlToAppointment": "Verde",
+        "appointmentToContract": "Verde",
+        "costPerLead": "Verde"
+      },
+      "note": "Flujo sin bloqueo principal detectado; mantener seguimiento."
+    },
+    {
+      "client": "GRUPO ELIJO",
+      "CONVERSACIONES": 126,
+      "MQL": 13,
+      "SQL": 2,
+      "CITAS": 3,
+      "FIRMAS": 0,
+      "accountName": "GRUPO ELIJO CP",
+      "accountId": "act_864948876563125",
+      "spend": 2991.03,
+      "costPerAppointment": 997.0100000000001,
+      "costPerLead": 23.738333333333333,
+      "conversions": {
+        "leadToMql": 0.10317460317460317,
+        "mqlToSql": 0.15384615384615385,
+        "sqlToAppointment": 1.5,
+        "appointmentToContract": 0
+      },
+      "semaphore": {
+        "leadToMql": "Rojo",
+        "mqlToSql": "Rojo",
+        "sqlToAppointment": "Verde",
+        "appointmentToContract": "Rojo",
+        "costPerLead": "Verde"
+      },
+      "note": "Citas sin firma todavía; dar seguimiento post-cita."
+    },
+    {
+      "client": "MANOS AL HOGAR",
+      "CONVERSACIONES": 113,
+      "MQL": 6,
+      "SQL": 1,
+      "CITAS": 1,
+      "FIRMAS": 1,
+      "accountName": "Manos al hogar Publicidad",
+      "accountId": "act_1581946449839805",
+      "spend": 7417.15,
+      "costPerAppointment": 7417.15,
+      "costPerLead": 65.63849557522124,
+      "conversions": {
+        "leadToMql": 0.05309734513274336,
+        "mqlToSql": 0.16666666666666666,
+        "sqlToAppointment": 1,
+        "appointmentToContract": 1
+      },
+      "semaphore": {
+        "leadToMql": "Rojo",
+        "mqlToSql": "Rojo",
+        "sqlToAppointment": "Verde",
+        "appointmentToContract": "Verde",
+        "costPerLead": "Rojo"
+      },
+      "note": "Flujo sin bloqueo principal detectado; mantener seguimiento."
+    },
+    {
+      "client": "HOGARES",
+      "CONVERSACIONES": 77,
+      "MQL": 21,
+      "SQL": 11,
+      "CITAS": 5,
+      "FIRMAS": 1,
+      "accountName": "CInmubles Bajio",
+      "accountId": "act_349294690945338",
+      "spend": 4376.63,
+      "costPerAppointment": 875.326,
+      "costPerLead": 56.83935064935065,
+      "conversions": {
+        "leadToMql": 0.2727272727272727,
+        "mqlToSql": 0.5238095238095238,
+        "sqlToAppointment": 0.45454545454545453,
+        "appointmentToContract": 0.2
+      },
+      "semaphore": {
+        "leadToMql": "Verde",
+        "mqlToSql": "Rojo",
+        "sqlToAppointment": "Amarillo",
+        "appointmentToContract": "Verde",
+        "costPerLead": "Amarillo"
+      },
+      "note": "Flujo sin bloqueo principal detectado; mantener seguimiento."
+    },
+    {
+      "client": "DOS HOGARES",
+      "CONVERSACIONES": 49,
+      "MQL": 0,
+      "SQL": 0,
+      "CITAS": 1,
+      "FIRMAS": 0,
+      "accountName": "IIHogares GDL CP",
+      "accountId": "act_2175146543225091",
+      "spend": 2378.06,
+      "costPerAppointment": 2378.06,
+      "costPerLead": 48.531836734693876,
+      "conversions": {
+        "leadToMql": 0,
+        "mqlToSql": 0,
+        "sqlToAppointment": 0,
+        "appointmentToContract": 0
+      },
+      "semaphore": {
+        "leadToMql": "Rojo",
+        "mqlToSql": "Rojo",
+        "sqlToAppointment": "Rojo",
+        "appointmentToContract": "Rojo",
+        "costPerLead": "Verde"
+      },
+      "note": "Alto volumen con baja calificación MQL; revisar calidad de conversación y criterios MQL."
+    },
+    {
+      "client": "INSPIRA",
+      "CONVERSACIONES": 31,
+      "MQL": 4,
+      "SQL": 0,
+      "CITAS": 2,
+      "FIRMAS": 0,
+      "accountName": "Inspira Bienes Raices CP",
+      "accountId": "act_949679304398951",
+      "spend": 2900.79,
+      "costPerAppointment": 1450.395,
+      "costPerLead": 93.57387096774194,
+      "conversions": {
+        "leadToMql": 0.12903225806451613,
+        "mqlToSql": 0,
+        "sqlToAppointment": 0,
+        "appointmentToContract": 0
+      },
+      "semaphore": {
+        "leadToMql": "Rojo",
+        "mqlToSql": "Rojo",
+        "sqlToAppointment": "Rojo",
+        "appointmentToContract": "Rojo",
+        "costPerLead": "Rojo"
+      },
+      "note": "MQL acumulado sin avance a SQL; revisar criterio de calificación y seguimiento comercial."
+    }
+  ],
+  "byDate": [
+    {
+      "FECHA": "2026-05-01",
+      "CONVERSACIONES": 49,
+      "MQL": 9,
+      "SQL": 2,
+      "CITAS": 2,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-05-02",
+      "CONVERSACIONES": 56,
+      "MQL": 7,
+      "SQL": 2,
+      "CITAS": 3,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-05-04",
+      "CONVERSACIONES": 117,
+      "MQL": 7,
+      "SQL": 1,
+      "CITAS": 2,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-05-05",
+      "CONVERSACIONES": 79,
+      "MQL": 9,
+      "SQL": 2,
+      "CITAS": 1,
+      "FIRMAS": 2
+    },
+    {
+      "FECHA": "2026-05-06",
+      "CONVERSACIONES": 56,
+      "MQL": 8,
+      "SQL": 3,
+      "CITAS": 2,
+      "FIRMAS": 1
+    },
+    {
+      "FECHA": "2026-05-07",
+      "CONVERSACIONES": 62,
+      "MQL": 4,
+      "SQL": 2,
+      "CITAS": 2,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-05-08",
+      "CONVERSACIONES": 37,
+      "MQL": 0,
+      "SQL": 0,
+      "CITAS": 2,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-05-09",
+      "CONVERSACIONES": 45,
+      "MQL": 3,
+      "SQL": 2,
+      "CITAS": 1,
+      "FIRMAS": 0
+    },
+    {
+      "FECHA": "2026-05-10",
+      "CONVERSACIONES": 45,
+      "MQL": 6,
+      "SQL": 2,
+      "CITAS": 0,
+      "FIRMAS": 1
+    }
+  ],
+  "formatted": {}
+}

@@ -1,0 +1,156 @@
+{
+  "project_info": {
+    "title": "Reporte de Pipeline e Inversión",
+    "created": 1778563324.848838,
+    "last_updated": 1778563983.848409,
+    "total_slides": 12
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "resumen_ejecutivo",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "semaforo_global",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "desglose_cliente",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "eficiencia_inversion",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "semaforo_adquisicion",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "semaforo_cierre",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "intervencion",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "escalar",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "tendencia_diaria",
+      "state": "edited",
+      "pageNum": 10
+    },
+    {
+      "id": "prioridades",
+      "state": "edited",
+      "pageNum": 11
+    },
+    {
+      "id": "metodologia",
+      "state": "edited",
+      "pageNum": 12
+    }
+  ],
+  "outline": [
+    {
+      "id": "cover",
+      "title": "Reporte de Pipeline e Inversión",
+      "summary": "Portada del reporte con periodo, alcance y autoría.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "resumen_ejecutivo",
+      "title": "El pipeline acumuló 15 citas con $25,970 invertidos",
+      "summary": "Resumen ejecutivo con métricas globales de conversaciones, MQL, SQL, citas, firmas, inversión y costo por cita.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "semaforo_global",
+      "title": "El semáforo global divide adquisición y cierre",
+      "summary": "Lectura de conversiones globales por etapa y reglas de semáforo usadas en la web app.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "desglose_cliente",
+      "title": "HOGARES concentra la mejor conversión inicial",
+      "summary": "Tabla general por cliente con volumen, inversión y costo por cita.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "eficiencia_inversion",
+      "title": "La inversión más alta no garantiza eficiencia",
+      "summary": "Comparación de inversión, citas y costo por cita por cliente con lectura ejecutiva.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "semaforo_adquisicion",
+      "title": "Semáforo por cliente: adquisición",
+      "summary": "Conversión Leads a MQL, MQL a SQL y costo por lead por cliente con colores de semáforo.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "semaforo_cierre",
+      "title": "Semáforo por cliente: agenda y cierre",
+      "summary": "Conversión SQL a cita y cita a contrato por cliente con lectura de cierre.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "intervencion",
+      "title": "Clientes que requieren intervención inmediata",
+      "summary": "Clientes con señales críticas y acciones sugeridas para corregir eficiencia.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "escalar",
+      "title": "Clientes con señales positivas para escalar",
+      "summary": "Clientes con señales favorables y condiciones operativas antes de escalar presupuesto.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "tendencia_diaria",
+      "title": "La tendencia diaria muestra picos de volumen",
+      "summary": "Evolución diaria de conversaciones, MQL, SQL, citas y firmas entre el 1 y 10 de mayo.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "prioridades",
+      "title": "Prioridades para la siguiente semana",
+      "summary": "Acciones prioritarias con enfoque y resultado esperado.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    },
+    {
+      "id": "metodologia",
+      "title": "Metodología y alcance del reporte",
+      "summary": "Fuentes, periodo, fórmula de costo por cita y reglas del semáforo replicadas desde la web app.",
+      "image_plan": "Use a suitable image if needed",
+      "slide_template_key": ""
+    }
+  ]
+}

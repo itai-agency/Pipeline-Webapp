@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0}
+    .slide-container { width:1280px; min-height:720px; box-sizing:border-box; background:#F6F2EA; color:#1C1B19; font-family:'DM Sans', sans-serif; }
+    .slide-container * { box-sizing:border-box; }
+    .wrap { min-height:720px; display:grid; grid-template-columns: 330px 1fr; }
+    .rail { background:#262626; color:#F6F2EA; min-height:720px; display:flex; flex-direction:column; justify-content:space-between; padding-top:54px; padding-left:42px; padding-right:38px; }
+    .mark { font-family:'Space Grotesk', sans-serif; font-size:20px; letter-spacing:.08em; text-transform:uppercase; color:#D9A441; }
+    .rail-line { width:190px; height:8px; background:linear-gradient(90deg,#1F8A4C 0 33%,#D9A441 33% 66%,#C74332 66%); margin-top:24px; }
+    .rail-foot { padding-bottom:50px; font-size:18px; line-height:1.35; color:#E8E0D1; }
+    .main { min-height:720px; padding-top:86px; padding-left:74px; padding-right:80px; display:flex; flex-direction:column; justify-content:space-between; }
+    h1 { font-family:'Space Grotesk', sans-serif; font-size:70px; line-height:.94; letter-spacing:-.05em; max-width:760px; margin:0; }
+    .subtitle { margin-top:26px; font-size:25px; line-height:1.35; max-width:760px; color:#55504A; }
+    .stamp { display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; padding-top:26px; padding-bottom:40px; border-top:2px solid #262626; }
+    .stamp div { font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:#70695F; }
+    .stamp strong { display:block; margin-top:8px; font-size:22px; letter-spacing:0; text-transform:none; color:#1C1B19; }
+    .corner { width:160px; height:160px; background:repeating-linear-gradient(135deg,#262626 0 10px,transparent 10px 22px); opacity:.12; align-self:flex-end; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="wrap">
+      <aside class="rail">
+        <div>
+          <div class="mark">Pipeline Clientes</div>
+          <div class="rail-line"></div>
+        </div>
+        <div class="rail-foot">Reporte operativo<br/>con inversión, conversión,<br/>semáforo y costo por cita.</div>
+      </aside>
+      <main class="main">
+        <section>
+          <div class="corner"></div>
+          <h1>Reporte de Pipeline e Inversión</h1>
+          <p class="subtitle">Corte acumulado del 1 al 10 de mayo de 2026 · Dashboard Pipeline Clientes</p>
+        </section>
+        <section class="stamp">
+          <div>Periodo<strong>01–10 mayo 2026</strong></div>
+          <div>Formato<strong>PPTX + PDF</strong></div>
+          <div>Preparado por<strong>Manus AI</strong></div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+Cliente,Cuenta Meta,Conversaciones,MQL,SQL,Citas,Firmas,Inversión,Costo por cita,Leads→MQL,Semáforo Leads→MQL,MQL→SQL,Semáforo MQL→SQL,SQL→Cita,Semáforo SQL→Cita,Cita→Contrato,Semáforo Cita→Contrato,Costo por lead,Semáforo CPL,Lectura
+"INQ","inq inmobiliaria cp","150","9","2","3","2","5906.62","1968.87","6%","Rojo","22.2%","Rojo","150%","Verde","66.7%","Verde","39.38","Verde","Flujo sin bloqueo principal detectado; mantener seguimiento."
+"GRUPO ELIJO","GRUPO ELIJO CP","126","13","2","3","0","2991.03","997.01","10.3%","Rojo","15.4%","Rojo","150%","Verde","0%","Rojo","23.74","Verde","Citas sin firma todavía; dar seguimiento post-cita."
+"MANOS AL HOGAR","Manos al hogar Publicidad","113","6","1","1","1","7417.15","7417.15","5.3%","Rojo","16.7%","Rojo","100%","Verde","100%","Verde","65.64","Rojo","Flujo sin bloqueo principal detectado; mantener seguimiento."
+"HOGARES","CInmubles Bajio","77","21","11","5","1","4376.63","875.33","27.3%","Verde","52.4%","Rojo","45.5%","Amarillo","20%","Verde","56.84","Amarillo","Flujo sin bloqueo principal detectado; mantener seguimiento."
+"DOS HOGARES","IIHogares GDL CP","49","0","0","1","0","2378.06","2378.06","0%","Rojo","0%","Rojo","0%","Rojo","0%","Rojo","48.53","Verde","Alto volumen con baja calificación MQL; revisar calidad de conversación y criterios MQL."
+"INSPIRA","Inspira Bienes Raices CP","31","4","0","2","0","2900.79","1450.39","12.9%","Rojo","0%","Rojo","0%","Rojo","0%","Rojo","93.57","Rojo","MQL acumulado sin avance a SQL; revisar criterio de calificación y seguimiento comercial."
