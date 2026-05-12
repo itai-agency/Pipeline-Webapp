@@ -350,7 +350,7 @@ function SemaforoKpi({ item }: { item: FunnelKpi }) {
 
 export default function Home() {
   const daily = pipelineData.daily as unknown as PipelineRow[];
-  const history = (pipelineData.history ?? pipelineData.daily) as unknown as PipelineRow[];
+  const history = pipelineData.daily as unknown as PipelineRow[];
   const sdrRows = sdrHistoryData.records as unknown as SdrHistoryRow[];
 
   const availableDates = useMemo(() => Array.from(new Set(daily.map((row) => row.FECHA).filter((date): date is string => Boolean(date)))).sort(), [daily]);
@@ -567,16 +567,6 @@ export default function Home() {
 
         {activeTab === "diario" ? (
           <>
-            <section id="resumen" className="app-grid app-grid--kpis">
-              <Kpi label="Conversaciones" value={fmt.format(totals.CONVERSACIONES)} detail="volumen capturado" />
-              <Kpi label="MQL" value={fmt.format(totals.MQL)} detail={`${pctFmt.format(ratio(totals.MQL, totals.CONVERSACIONES))} de conversión`} tone="good" />
-              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(ratio(totals.SQL, totals.MQL))} de MQL`} tone={ratio(totals.SQL, totals.MQL) < 0.25 ? "warn" : "good"} />
-              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(ratio(totals.CITAS, totals.SQL || totals.MQL))} avance`} />
-              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(ratio(totals.FIRMAS, totals.CITAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
-              <Kpi label="Inversión" value={moneyFmt.format(spendTotal)} detail={metaSpendPeriod.sourceLabel} tone="good" />
-              <Kpi label="Costo por cita" value={costPerAppointment === null ? "Sin cita" : moneyFmt.format(costPerAppointment)} detail={`${fmt.format(totals.CITAS)} citas filtradas`} tone={costPerAppointment === null || costPerAppointment > 1800 ? "warn" : "good"} />
-            </section>
-
             <section className="app-card traffic-panel" id="metas">
               <div className="card-head compact">
                 <div>
@@ -589,6 +579,16 @@ export default function Home() {
               <div className="traffic-grid">
                 {funnelKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
               </div>
+            </section>
+
+            <section id="resumen" className="app-grid app-grid--kpis">
+              <Kpi label="Conversaciones" value={fmt.format(totals.CONVERSACIONES)} detail="volumen capturado" />
+              <Kpi label="MQL" value={fmt.format(totals.MQL)} detail={`${pctFmt.format(ratio(totals.MQL, totals.CONVERSACIONES))} de conversión`} tone="good" />
+              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(ratio(totals.SQL, totals.MQL))} de MQL`} tone={ratio(totals.SQL, totals.MQL) < 0.25 ? "warn" : "good"} />
+              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(ratio(totals.CITAS, totals.SQL || totals.MQL))} avance`} />
+              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(ratio(totals.FIRMAS, totals.CITAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
+              <Kpi label="Inversión" value={moneyFmt.format(spendTotal)} detail={metaSpendPeriod.sourceLabel} tone="good" />
+              <Kpi label="Costo por cita" value={costPerAppointment === null ? "Sin cita" : moneyFmt.format(costPerAppointment)} detail={`${fmt.format(totals.CITAS)} citas filtradas`} tone={costPerAppointment === null || costPerAppointment > 1800 ? "warn" : "good"} />
             </section>
 
             <section className="ops-layout">

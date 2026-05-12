@@ -3,7 +3,7 @@
  * Este archivo alimenta un tablero operativo: jerarquía numérica extrema, lectura asimétrica y alertas accionables.
  * Cuando se agreguen datos, preguntarse: ¿esto refuerza o diluye la capacidad de destrabar el pipeline hoy?
  * 
- * Datos actualizados desde: 2026-05-12 14:16:31
+ * Datos actualizados desde: 2026-05-12 18:40:16
  * Fuente: Google Sheet ID 1K-TdH3tk02Lu2i9zHGfXT7T2j691nANNzpQB8Fx_OxQ
  */
 
@@ -48,7 +48,6 @@ export const assetUrls = {
 } as const;
 
 export const pipelineData = {
-  "history": [] as PipelineRow[],
   "daily": [
     {
         "FECHA": "2026-05-01",
