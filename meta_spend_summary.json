@@ -1,0 +1,123 @@
+{
+  "periodo": "2026-05-01 a 2026-05-10",
+  "metric_name": "Importe gastado",
+  "rows": [
+    {
+      "cliente": "MANOS AL HOGAR",
+      "cuenta_publicitaria": "Manos al hogar Publicidad",
+      "id_cuenta": "act_1581946449839805",
+      "estado": "ACTIVE",
+      "moneda": "MXN",
+      "importe_gastado": 7417.15
+    },
+    {
+      "cliente": "INSPIRA",
+      "cuenta_publicitaria": "Inspira Bienes Raices CP",
+      "id_cuenta": "act_949679304398951",
+      "estado": "ACTIVE",
+      "moneda": "MXN",
+      "importe_gastado": 2900.79
+    },
+    {
+      "cliente": "INQ",
+      "cuenta_publicitaria": "inq inmobiliaria cp",
+      "id_cuenta": "act_1584938395981836",
+      "estado": "ACTIVE",
+      "moneda": "MXN",
+      "importe_gastado": 5906.62
+    },
+    {
+      "cliente": "DOS HOGARES / HOGARES",
+      "cuenta_publicitaria": "IIHogares GDL CP",
+      "id_cuenta": "act_2175146543225091",
+      "estado": "ACTIVE",
+      "moneda": "MXN",
+      "importe_gastado": 2378.06,
+      "nota": "Mapeo confirmado por el usuario: DOS HOGARES usa esta cuenta publicitaria. No duplicar este gasto si HOGARES y DOS HOGARES se reportan juntos."
+    },
+    {
+      "cliente": "GRUPO ELIJO",
+      "cuenta_publicitaria": "GRUPO ELIJO CP",
+      "id_cuenta": "act_864948876563125",
+      "estado": "ACTIVE",
+      "moneda": "MXN",
+      "importe_gastado": 2991.03
+    },
+    {
+      "cliente": "DOS HOGARES",
+      "cuenta_publicitaria": "IIHogares GDL CP",
+      "id_cuenta": "act_2175146543225091",
+      "estado": "ACTIVE",
+      "moneda": "MXN",
+      "importe_gastado": 2378.06,
+      "nota": "Fila de referencia si se requiere mostrar DOS HOGARES por separado; representa el mismo gasto de la cuenta IIHogares GDL CP."
+    }
+  ],
+  "relevant_accounts_found": [
+    {
+      "id": "act_1581946449839805",
+      "name": "Manos al hogar Publicidad",
+      "business_name": "",
+      "account_status": 1,
+      "currency": "MXN",
+      "timezone_name": "America/Mexico_City",
+      "created_time": "2025-10-07T14:07:24-0600",
+      "age": 210.24476851852,
+      "spend_cap": "0.00",
+      "balance": "1682.52",
+      "amount_spent": "97791.32"
+    },
+    {
+      "id": "act_949679304398951",
+      "name": "Inspira Bienes Raices CP",
+      "business_name": "",
+      "account_status": 1,
+      "currency": "MXN",
+      "timezone_name": "America/Mexico_City",
+      "created_time": "2026-02-19T15:39:25-0600",
+      "age": 81.272314814815,
+      "spend_cap": "0.00",
+      "balance": "846.91",
+      "amount_spent": "21850.90"
+    },
+    {
+      "id": "act_1584938395981836",
+      "name": "inq inmobiliaria cp",
+      "business_name": "",
+      "account_status": 1,
+      "currency": "MXN",
+      "timezone_name": "America/Mexico_City",
+      "created_time": "2026-01-29T11:27:09-0600",
+      "age": 100.50196759259,
+      "spend_cap": "0.00",
+      "balance": "1182.46",
+      "amount_spent": "59476.31"
+    },
+    {
+      "id": "act_2175146543225091",
+      "name": "IIHogares GDL CP",
+      "business_name": "",
+      "account_status": 1,
+      "currency": "MXN",
+      "timezone_name": "America/Mexico_City",
+      "created_time": "2026-03-24T11:30:38-0600",
+      "age": 42.302453703704,
+      "spend_cap": "0.00",
+      "balance": "242.04",
+      "amount_spent": "6931.30"
+    },
+    {
+      "id": "act_864948876563125",
+      "name": "GRUPO ELIJO CP",
+      "business_name": "GRUPO ELIJO",
+      "account_status": 1,
+      "currency": "MXN",
+      "timezone_name": "America/Mexico_City",
+      "created_time": "2026-02-27T12:54:44-0600",
+      "age": 67.48837962963,
+      "spend_cap": "0.00",
+      "balance": "297.25",
+      "amount_spent": "17888.77"
+    }
+  ]
+}

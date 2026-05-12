@@ -124,5 +124,42 @@
 - [x] Reemplazar el semáforo actual por KPIs por etapa: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato y Costo por Lead.
 - [x] Aplicar las reglas de color de la imagen: Leads→MQL rojo 0–16%, amarillo 17–19%, verde 20%+; MQL→SQL rojo 0–64%, amarillo 65–74%, verde 75%+; SQL→Cita rojo 0–42%, amarillo 43–51%, verde 52%+; Cita→Contrato rojo 0–10%, amarillo 10.1–12.4%, verde 12.5%+; Costo por Lead rojo $60+, amarillo $51–$59, verde $50 o menos.
 - [x] Validar `pnpm check`, `pnpm build` y revisar visualmente el dashboard; TypeScript y build pasaron, y la vista previa muestra el semáforo de embudo con corte visible al 10/05/2026.
-- [ ] Guardar checkpoint final y entregar resumen al usuario.
+- [x] Guardar checkpoint final y entregar resumen al usuario. Checkpoint: f36c9866.
+
+
+
+## Consulta solicitada: gasto por cuenta publicitaria
+
+- [x] Revisar lineamientos del análisis de Meta Ads antes de usar el conector.
+- [x] Confirmar acceso a cuentas publicitarias visibles en el administrador de anuncios; se detectaron 5 cuentas activas visibles para los clientes consultados.
+- [x] Consultar gasto por cuenta publicitaria para el periodo 01/05/2026 al 10/05/2026, alineado con el corte de ayer usado en el dashboard.
+- [x] Cruzar las cuentas con los clientes del dashboard: DOS HOGARES, GRUPO ELIJO, HOGARES, INQ, INSPIRA y MANOS AL HOGAR; DOS HOGARES no aparece como cuenta separada visible en Meta Ads, por lo que quedó señalado como pendiente de mapeo.
+- [x] Entregar la lista final con cliente, cuenta publicitaria, ID si está disponible, gasto y moneda.
+
+
+
+## Corrección de mapeo Meta Ads
+
+- [x] Actualizar el mapeo confirmado por el usuario: DOS HOGARES = IIHogares GDL CP.
+- [x] Entregar listado corregido de gasto por cliente usando esa asignación.
+
+
+
+## Corrección de mapeo Meta Ads: HOGARES
+
+- [x] Buscar en cuentas visibles una cuenta publicitaria para HOGARES con nombre similar a Cinmuebles Bajío; se identificó `CInmubles Bajio` (`act_349294690945338`).
+- [x] Consultar el gasto de la cuenta identificada para el periodo 01/05/2026 al 10/05/2026; Importe gastado: $4,376.63 MXN.
+- [x] Entregar listado corregido separando DOS HOGARES = IIHogares GDL CP y HOGARES = CInmubles Bajio.
+
+
+
+## Actualización solicitada: gasto, costo por cita y temporalidad dinámica
+
+- [ ] Consultar o consolidar Importe gastado diario por cuenta publicitaria para los clientes: MANOS AL HOGAR, INQ, HOGARES, GRUPO ELIJO, INSPIRA y DOS HOGARES.
+- [ ] Crear una estructura de datos de gasto por cliente y fecha, usando los mapeos confirmados: HOGARES = CInmubles Bajio y DOS HOGARES = IIHogares GDL CP.
+- [ ] Agregar dos calendarios en el dashboard: fecha de inicio y fecha de fin.
+- [ ] Recalcular citas totales, Importe gastado y Costo por cita conforme cambie la temporalidad seleccionada.
+- [ ] Mostrar Costo por cita como Importe gastado dividido entre citas totales por cliente, con manejo de cero citas como N/A.
+- [ ] Validar TypeScript, build y vista previa.
+- [ ] Guardar checkpoint final y entregar resumen.
 

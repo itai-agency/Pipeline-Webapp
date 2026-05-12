@@ -34,6 +34,7 @@ import {
   YAxis,
 } from "recharts";
 import { pipelineData, stageLabels, type PipelineRow } from "@/lib/pipelineData";
+import { metaSpendData, metaSpendPeriod } from "@/lib/metaSpendData";
 import { sdrHistoryData, type SdrHistoryRow } from "@/lib/sdrHistoryData";
 
 type ClientRisk = {
@@ -47,6 +48,8 @@ type ClientRisk = {
   level: "Crítico" | "Atención" | "Estable";
   reason: string;
   action: string;
+  spend: number;
+  costPerAppointment: number | null;
 };
 
 type SdrTotals = { CITAS: number; FIRMAS: number };
@@ -222,6 +225,14 @@ function groupByClient(rows: PipelineRow[]) {
   return Array.from(grouped.entries()).map(([client, clientRows]) => ({ client, ...sumRows(clientRows) }));
 }
 
+function sumSpend(rows: readonly { spend: number }[]) {
+  return rows.reduce((acc, row) => acc + (row.spend || 0), 0);
+}
+
+function spendKey(date?: string | null, client?: string | null) {
+  return `${date ?? ""}::${client ?? ""}`;
+}
+
 function groupSdr(rows: SdrHistoryRow[], key: "CLIENTE" | "SDR" | "MES" | "FECHA") {
   const grouped = new Map<string, SdrTotals>();
   rows.forEach((row) => {
@@ -233,7 +244,7 @@ function groupSdr(rows: SdrHistoryRow[], key: "CLIENTE" | "SDR" | "MES" | "FECHA
   return Array.from(grouped.entries()).map(([name, totals]) => ({ name, ...totals }));
 }
 
-function buildRisks(rows: PipelineRow[]): ClientRisk[] {
+function buildRisks(rows: PipelineRow[], spendByClient = new Map<string, number>()): ClientRisk[] {
   return groupByClient(rows)
     .map((row) => {
       const mqlRate = ratio(row.MQL, row.CONVERSACIONES);
@@ -265,6 +276,9 @@ function buildRisks(rows: PipelineRow[]): ClientRisk[] {
 
       const level: ClientRisk["level"] = score >= 55 ? "Crítico" : score >= 25 ? "Atención" : "Estable";
 
+      const spend = spendByClient.get(row.client) ?? 0;
+      const costPerAppointment = row.CITAS > 0 ? spend / row.CITAS : null;
+
       return {
         client: row.client,
         conversations: row.CONVERSACIONES,
@@ -276,6 +290,8 @@ function buildRisks(rows: PipelineRow[]): ClientRisk[] {
         level,
         reason,
         action,
+        spend,
+        costPerAppointment,
       };
     })
     .sort((a, b) => b.score - a.score || b.conversations - a.conversations);
@@ -335,7 +351,8 @@ export default function Home() {
   const historicalSdrs = useMemo(() => Array.from(new Set(sdrRows.map((row) => row.SDR))).sort(), [sdrRows]);
 
   const [activeTab, setActiveTab] = useState<"diario" | "historico">("diario");
-  const [selectedDate, setSelectedDate] = useState<string>(latestDate);
+  const [dailyRangeStart, setDailyRangeStart] = useState<string>(availableDates[0] ?? "");
+  const [dailyRangeEnd, setDailyRangeEnd] = useState<string>(latestDate);
   const [selectedClient, setSelectedClient] = useState<string>("Todos");
   const [query, setQuery] = useState<string>("");
   const [selectedMonth, setSelectedMonth] = useState<string>("Todos");
@@ -346,22 +363,21 @@ export default function Home() {
 
   const filteredRows = useMemo(() => {
     return daily.filter((row) => {
-      const dateMatch = selectedDate === "Todas" || row.FECHA === selectedDate;
+      const dateMatch = (!dailyRangeStart || String(row.FECHA) >= dailyRangeStart) && (!dailyRangeEnd || String(row.FECHA) <= dailyRangeEnd);
       const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
       const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase());
       return dateMatch && clientMatch && queryMatch;
     });
-  }, [daily, selectedDate, selectedClient, query]);
+  }, [daily, dailyRangeStart, dailyRangeEnd, selectedClient, query]);
 
-  const currentMonthRows = useMemo(() => {
-    const latestMonth = monthKey(latestDate);
-    return daily.filter((row) => {
-      const monthMatch = monthKey(row.FECHA) === latestMonth;
-      const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
-      const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase());
-      return monthMatch && clientMatch && queryMatch;
+  const filteredSpendRows = useMemo(() => {
+    return metaSpendData.filter((row) => {
+      const dateMatch = (!dailyRangeStart || row.date >= dailyRangeStart) && (!dailyRangeEnd || row.date <= dailyRangeEnd);
+      const clientMatch = selectedClient === "Todos" || row.client === selectedClient;
+      const queryMatch = !query || row.client.toLowerCase().includes(query.toLowerCase());
+      return dateMatch && clientMatch && queryMatch;
     });
-  }, [daily, latestDate, selectedClient, query]);
+  }, [dailyRangeStart, dailyRangeEnd, selectedClient, query]);
 
   const filteredSdrRows = useMemo(() => {
     return sdrRows.filter((row) => {
@@ -376,27 +392,40 @@ export default function Home() {
   }, [sdrRows, selectedMonth, selectedHistoricalDate, selectedClient, selectedSdr, rangeStart, rangeEnd, query]);
 
   const totals = useMemo(() => sumRows(filteredRows), [filteredRows]);
-  const currentMonthTotals = useMemo(() => sumRows(currentMonthRows), [currentMonthRows]);
-  const currentMonthSpend = useMemo(() => {
-    const latestMonth = monthKey(latestDate);
-    const spend = history
-      .filter((row) => row.MES === latestMonth)
-      .reduce((acc, row) => acc + (row["GASTO TOTAL"] || 0), 0);
-    return spend > 0 ? spend : null;
-  }, [history, latestDate]);
-  const funnelKpis = useMemo(() => buildFunnelKpis(currentMonthTotals, currentMonthSpend), [currentMonthTotals, currentMonthSpend]);
+  const spendTotal = useMemo(() => sumSpend(filteredSpendRows), [filteredSpendRows]);
+  const spendByClient = useMemo(() => {
+    const grouped = new Map<string, number>();
+    filteredSpendRows.forEach((row) => grouped.set(row.client, (grouped.get(row.client) ?? 0) + row.spend));
+    return grouped;
+  }, [filteredSpendRows]);
+  const spendByDateClient = useMemo(() => {
+    const grouped = new Map<string, number>();
+    filteredSpendRows.forEach((row) => grouped.set(spendKey(row.date, row.client), (grouped.get(spendKey(row.date, row.client)) ?? 0) + row.spend));
+    return grouped;
+  }, [filteredSpendRows]);
+  const costPerAppointment = totals.CITAS > 0 ? spendTotal / totals.CITAS : null;
+  const funnelKpis = useMemo(() => buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null), [totals, spendTotal]);
   const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
   const todayRows = useMemo(() => daily.filter((row) => row.FECHA === latestDate), [daily, latestDate]);
-  const risks = useMemo(() => buildRisks(filteredRows), [filteredRows]);
+  const risks = useMemo(() => buildRisks(filteredRows, spendByClient), [filteredRows, spendByClient]);
   const criticalCount = risks.filter((risk) => risk.level !== "Estable").length;
-  const clientRows = useMemo(() => groupByClient(filteredRows).sort((a, b) => b.CONVERSACIONES - a.CONVERSACIONES), [filteredRows]);
+  const clientRows = useMemo(() => groupByClient(filteredRows).map((row) => {
+    const spend = spendByClient.get(row.client) ?? 0;
+    return { ...row, spend, costPerAppointment: row.CITAS > 0 ? spend / row.CITAS : null };
+  }).sort((a, b) => b.CONVERSACIONES - a.CONVERSACIONES), [filteredRows, spendByClient]);
 
   const dailyTrend = useMemo(() => {
-    return availableDates.map((date) => {
-      const rows = daily.filter((row) => row.FECHA === date);
-      return { fecha: shortDate(date), ...sumRows(rows) };
-    });
-  }, [availableDates, daily]);
+    return availableDates
+      .filter((date) => (!dailyRangeStart || date >= dailyRangeStart) && (!dailyRangeEnd || date <= dailyRangeEnd))
+      .map((date) => {
+        const rows = daily.filter((row) => {
+          const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
+          const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase());
+          return row.FECHA === date && clientMatch && queryMatch;
+        });
+        return { fecha: shortDate(date), ...sumRows(rows) };
+      });
+  }, [availableDates, daily, dailyRangeStart, dailyRangeEnd, selectedClient, query]);
 
   const historicalByMonth = useMemo(() => {
     const months = Array.from(new Set(history.map((row) => row.MES).filter(Boolean)));
@@ -467,11 +496,12 @@ export default function Home() {
           {activeTab === "diario" ? (
             <>
               <label>
-                Fecha
-                <select value={selectedDate} onChange={(event) => setSelectedDate(event.target.value)}>
-                  <option value="Todas">Todas</option>
-                  {availableDates.map((date) => <option key={date} value={date}>{formatDate(date)}</option>)}
-                </select>
+                Inicio
+                <input type="date" min={availableDates[0]} max={latestDate} value={dailyRangeStart} onChange={(event) => setDailyRangeStart(event.target.value)} onInput={(event) => setDailyRangeStart(event.currentTarget.value)} />
+              </label>
+              <label>
+                Fin
+                <input type="date" min={availableDates[0]} max={latestDate} value={dailyRangeEnd} onChange={(event) => setDailyRangeEnd(event.target.value)} onInput={(event) => setDailyRangeEnd(event.currentTarget.value)} />
               </label>
               <label>
                 Cliente
@@ -531,6 +561,8 @@ export default function Home() {
               <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(ratio(totals.SQL, totals.MQL))} de MQL`} tone={ratio(totals.SQL, totals.MQL) < 0.25 ? "warn" : "good"} />
               <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(ratio(totals.CITAS, totals.SQL || totals.MQL))} avance`} />
               <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(ratio(totals.FIRMAS, totals.CITAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
+              <Kpi label="Inversión" value={moneyFmt.format(spendTotal)} detail={metaSpendPeriod.sourceLabel} tone="good" />
+              <Kpi label="Costo por cita" value={costPerAppointment === null ? "Sin cita" : moneyFmt.format(costPerAppointment)} detail={`${fmt.format(totals.CITAS)} citas filtradas`} tone={costPerAppointment === null || costPerAppointment > 1800 ? "warn" : "good"} />
             </section>
 
             <section className="app-card traffic-panel" id="metas">
@@ -541,7 +573,7 @@ export default function Home() {
                 </div>
                 <Target />
               </div>
-              <p className="traffic-panel__intro">El color corresponde al semáforo definido para cada paso del embudo: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato y Costo por Lead. La lectura se calcula sobre el mes activo más reciente y respeta los rangos de la imagen; si falta gasto, el costo por lead queda marcado como sin dato.</p>
+              <p className="traffic-panel__intro">El color corresponde al semáforo definido para cada paso del embudo: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato y Costo por Lead. La lectura se calcula con el rango Inicio/Fin activo. {metaSpendPeriod.note}</p>
               <div className="traffic-grid">
                 {funnelKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
               </div>
@@ -626,7 +658,7 @@ export default function Home() {
                         <span>{risk.reason}</span>
                       </div>
                       <div className={`risk-pill risk-pill--${risk.level.toLowerCase().replace("í", "i")}`}>{risk.level}</div>
-                      <small>{fmt.format(risk.conversations)} conv · {fmt.format(risk.citas)} citas</small>
+                      <small>{fmt.format(risk.conversations)} conv · {fmt.format(risk.citas)} citas · {moneyFmt.format(risk.spend)} · {risk.costPerAppointment === null ? "sin costo/cita" : `${moneyFmt.format(risk.costPerAppointment)}/cita`}</small>
                     </div>
                   ))}
                 </div>
@@ -691,6 +723,8 @@ export default function Home() {
                       <th>SQL</th>
                       <th>Citas</th>
                       <th>Firmas</th>
+                      <th>Inversión</th>
+                      <th>Costo/cita</th>
                       <th>Acción sugerida</th>
                     </tr>
                   </thead>
@@ -703,6 +737,8 @@ export default function Home() {
                         const stuck = row.MQL > 0 && row.SQL === 0;
                         const noAppointment = row.SQL > 0 && row.CITAS === 0;
                         const note = weak ? "Revisar calificación" : noAppointment ? "Agendar cita" : stuck ? "Mover MQL a SQL" : row.CITAS > 0 ? "Seguimiento post-cita" : "Monitorear";
+                        const rowSpend = spendByDateClient.get(spendKey(row.FECHA, row.CLIENTE)) ?? 0;
+                        const rowCostPerAppointment = row.CITAS > 0 ? rowSpend / row.CITAS : null;
                         return (
                           <tr key={`${row.FECHA}-${row.CLIENTE}-${index}`}>
                             <td>{formatDate(row.FECHA)}</td>
@@ -712,6 +748,8 @@ export default function Home() {
                             <td>{fmt.format(row.SQL)}</td>
                             <td>{fmt.format(row.CITAS)}</td>
                             <td>{fmt.format(row.FIRMAS)}</td>
+                            <td>{moneyFmt.format(rowSpend)}</td>
+                            <td>{rowCostPerAppointment === null ? "—" : moneyFmt.format(rowCostPerAppointment)}</td>
                             <td><span className={weak || stuck || noAppointment ? "table-note table-note--warn" : "table-note"}>{note}</span></td>
                           </tr>
                         );
