@@ -338,7 +338,7 @@ function SemaforoKpi({ item }: { item: FunnelKpi }) {
 
 export default function Home() {
   const daily = pipelineData.daily as unknown as PipelineRow[];
-  const history = pipelineData.history as unknown as PipelineRow[];
+  const history = (pipelineData.history ?? pipelineData.daily) as unknown as PipelineRow[];
   const sdrRows = sdrHistoryData.records as unknown as SdrHistoryRow[];
 
   const availableDates = useMemo(() => Array.from(new Set(daily.map((row) => row.FECHA).filter((date): date is string => Boolean(date)))).sort(), [daily]);
@@ -443,7 +443,7 @@ export default function Home() {
   const sdrRanking = useMemo(() => groupSdr(filteredSdrRows, "SDR").sort((a, b) => b.CITAS - a.CITAS), [filteredSdrRows]);
   const closureRate = ratio(sdrTotals.FIRMAS, sdrTotals.CITAS);
 
-  const funnelValues = stageLabels.map((stage) => ({ label: stage, value: totals[stage] ?? 0 }));
+  const funnelValues = Object.entries(stageLabels).map(([key, label]) => ({ label, value: totals[key as keyof typeof totals] ?? 0 }));
   const maxFunnel = Math.max(...funnelValues.map((stage) => stage.value), 1);
   const latestRisk = risks[0];
 
