@@ -3,7 +3,7 @@
  * Este archivo alimenta un tablero operativo: jerarquía numérica extrema, lectura asimétrica y alertas accionables.
  * Cuando se agreguen datos, preguntarse: ¿esto refuerza o diluye la capacidad de destrabar el pipeline hoy?
  * 
- * Datos actualizados desde: 2026-05-12 18:40:16
+ * Datos actualizados desde: 2026-05-13 16:33:00
  * Fuente: Google Sheet ID 1K-TdH3tk02Lu2i9zHGfXT7T2j691nANNzpQB8Fx_OxQ
  */
 
@@ -641,6 +641,72 @@ export const pipelineData = {
         "CITAS": 0,
         "FIRMAS": 1,
         "GASTO TOTAL": null,
+        "SEMANA": "2026-05-09"
+    },
+    {
+        "FECHA": "2026-05-12",
+        "CLIENTE": "HOGARES",
+        "CONVERSACIONES": 3,
+        "MQL": 0,
+        "SQL": 0,
+        "CITAS": 2,
+        "FIRMAS": 0,
+        "GASTO TOTAL": 386.28,
+        "SEMANA": "2026-05-09"
+    },
+    {
+        "FECHA": "2026-05-12",
+        "CLIENTE": "INQ",
+        "CONVERSACIONES": 19,
+        "MQL": 1,
+        "SQL": 0,
+        "CITAS": 0,
+        "FIRMAS": 0,
+        "GASTO TOTAL": 610.44,
+        "SEMANA": "2026-05-09"
+    },
+    {
+        "FECHA": "2026-05-12",
+        "CLIENTE": "INSPIRA",
+        "CONVERSACIONES": 5,
+        "MQL": 1,
+        "SQL": 0,
+        "CITAS": 0,
+        "FIRMAS": 0,
+        "GASTO TOTAL": 300.47,
+        "SEMANA": "2026-05-09"
+    },
+    {
+        "FECHA": "2026-05-12",
+        "CLIENTE": "GRUPO ELIJO",
+        "CONVERSACIONES": 12,
+        "MQL": 1,
+        "SQL": 0,
+        "CITAS": 1,
+        "FIRMAS": 0,
+        "GASTO TOTAL": 174.48,
+        "SEMANA": "2026-05-09"
+    },
+    {
+        "FECHA": "2026-05-12",
+        "CLIENTE": "DOS HOGARES",
+        "CONVERSACIONES": 0,
+        "MQL": 0,
+        "SQL": 0,
+        "CITAS": 0,
+        "FIRMAS": 0,
+        "GASTO TOTAL": 0,
+        "SEMANA": "2026-05-09"
+    },
+    {
+        "FECHA": "2026-05-12",
+        "CLIENTE": "MANOS AL HOGAR",
+        "CONVERSACIONES": 10,
+        "MQL": 0,
+        "SQL": 0,
+        "CITAS": 1,
+        "FIRMAS": 1,
+        "GASTO TOTAL": 518.29,
         "SEMANA": "2026-05-09"
     }
 ],

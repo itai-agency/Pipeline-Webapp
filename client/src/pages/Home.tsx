@@ -144,18 +144,17 @@ function getDaysInMonth(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }
 
-function calculateFirmasRitmo(firmasDelMes: number, metaMensual: number, currentDate: Date): { ritmo: number; pctReal: number; pctEsperado: number; status: GoalStatus } {
-  const diasDelMes = getDaysInMonth(currentDate);
-  const diaActual = currentDate.getDate();
-  const pctEsperado = (diaActual / diasDelMes) * 100;
-  const pctReal = (firmasDelMes / metaMensual) * 100;
-  const ritmo = (pctReal / pctEsperado) * 100;
+function calculateFirmasRitmo(firmasDelMes: number, metaMensual: number, endDate: Date): { cumplimiento: number; firmasEsperadas: number; status: GoalStatus } {
+  const diasDelMes = getDaysInMonth(endDate);
+  const diaSeleccionado = endDate.getDate();
+  const firmasEsperadas = (diaSeleccionado / diasDelMes) * metaMensual;
+  const cumplimiento = (firmasDelMes / firmasEsperadas) * 100;
   
   let status: GoalStatus = "red";
-  if (ritmo >= 100) status = "green";
-  else if (ritmo >= 85) status = "yellow";
+  if (cumplimiento >= 100) status = "green";
+  else if (cumplimiento >= 85) status = "yellow";
   
-  return { ritmo, pctReal, pctEsperado, status };
+  return { cumplimiento, firmasEsperadas, status };
 }
 
 function trafficLabel(status: GoalStatus) {
@@ -218,12 +217,12 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
     {
       key: "firmas-to-meta",
       label: "Firmas → Meta",
-      value: pctFmt.format(firmasToMeta),
-      benchmark: `Rojo ≤84% · Amarillo 85–99% · Verde 100%+ (ritmo: ${Math.round(firmasRitmo.ritmo)}%)`,
-      progress: Math.min(1, firmasToMeta),
+      value: pctFmt.format(firmasRitmo.cumplimiento / 100),
+      benchmark: `Rojo ≤84% · Amarillo 85–99% · Verde 100%+ (${Math.round(firmasRitmo.firmasEsperadas)} esperadas al día ${currentDate.getDate()})`,
+      progress: Math.min(1, firmasRitmo.cumplimiento / 100),
       status: firmasRitmo.status,
       statusLabel: trafficLabel(firmasRitmo.status),
-      detail: `${fmt.format(totals.FIRMAS)} firmas sobre 15 de meta`,
+      detail: `${fmt.format(totals.FIRMAS)} firmas sobre ${Math.round(firmasRitmo.firmasEsperadas)} esperadas = ${Math.round(firmasRitmo.cumplimiento)}% cumplimiento`,
     },
     {
       key: "cost-per-lead",
@@ -434,7 +433,9 @@ export default function Home() {
     return grouped;
   }, [filteredSpendRows]);
   const costPerAppointment = totals.CITAS > 0 ? spendTotal / totals.CITAS : null;
-  const funnelKpis = useMemo(() => buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null, new Date()), [totals, spendTotal]);
+  const endDate = dailyRangeEnd ? new Date(dailyRangeEnd + 'T00:00:00') : new Date();
+  console.log('DEBUG: dailyRangeEnd =', dailyRangeEnd, 'endDate =', endDate, 'endDate.getDate() =', endDate.getDate());
+  const funnelKpis = useMemo(() => buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null, endDate), [totals, spendTotal, endDate]);
   const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
   const todayRows = useMemo(() => daily.filter((row) => row.FECHA === latestDate), [daily, latestDate]);
   const risks = useMemo(() => buildRisks(filteredRows, spendByClient), [filteredRows, spendByClient]);

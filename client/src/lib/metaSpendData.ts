@@ -17,7 +17,7 @@ export type MetaSpendRow = {
 
 export const metaSpendPeriod = {
   start: "2026-05-01",
-  end: "2026-05-10",
+  end: "2026-05-12",
   sourceLabel: "Meta Ads · Importe gastado confirmado · prorrateo diario para filtros",
   note: "La suma del periodo completo coincide con Meta Ads; los cortes parciales usan prorrateo diario porque el dashboard es estático.",
 } as const;
@@ -33,15 +33,17 @@ const dailyDates = [
   "2026-05-08",
   "2026-05-09",
   "2026-05-10",
+  "2026-05-11",
+  "2026-05-12",
 ] as const;
 
 const confirmedTotals = [
   { client: "DOS HOGARES", accountName: "IIHogares GDL CP", accountId: "act_2175146543225091", totalSpend: 2378.06 },
-  { client: "GRUPO ELIJO", accountName: "GRUPO ELIJO CP", accountId: "act_864948876563125", totalSpend: 2991.03 },
-  { client: "HOGARES", accountName: "CInmubles Bajio", accountId: "act_349294690945338", totalSpend: 4376.63 },
-  { client: "INQ", accountName: "inq inmobiliaria cp", accountId: "act_1584938395981836", totalSpend: 5906.62 },
-  { client: "INSPIRA", accountName: "Inspira Bienes Raices CP", accountId: "act_949679304398951", totalSpend: 2900.79 },
-  { client: "MANOS AL HOGAR", accountName: "Manos al hogar Publicidad", accountId: "act_1581946449839805", totalSpend: 7417.15 },
+  { client: "GRUPO ELIJO", accountName: "GRUPO ELIJO CP", accountId: "act_864948876563125", totalSpend: 3165.51 },
+  { client: "HOGARES", accountName: "CInmubles Bajio", accountId: "act_349294690945338", totalSpend: 12745.23 },
+  { client: "INQ", accountName: "inq inmobiliaria cp", accountId: "act_1584938395981836", totalSpend: 6517.06 },
+  { client: "INSPIRA", accountName: "Inspira Bienes Raices CP", accountId: "act_949679304398951", totalSpend: 0 },
+  { client: "MANOS AL HOGAR", accountName: "Manos al hogar Publicidad", accountId: "act_1581946449839805", totalSpend: 7935.44 },
 ] as const;
 
 function allocateDaily(total: number, index: number) {
