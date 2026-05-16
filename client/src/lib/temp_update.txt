@@ -1,0 +1,15 @@
+# Cambiar FECHA 2026-05-12 a 2026-05-13 (solo en la última sección)
+# Cambiar CONVERSACIONES de HOGARES de 3 a 8
+# Cambiar MQL de HOGARES de 0 a 2
+# Cambiar CONVERSACIONES de INQ de 19 a 13
+# Cambiar CONVERSACIONES de INSPIRA de 5 a 2
+# Cambiar MQL de INSPIRA de 1 a 0
+# Cambiar CONVERSACIONES de GRUPO ELIJO de 12 a 17
+# Cambiar MQL de GRUPO ELIJO de 1 a 0
+# Cambiar CITAS de GRUPO ELIJO de 1 a 0
+# Cambiar GASTO de GRUPO ELIJO de 174.48 a 117.97
+# Cambiar CONVERSACIONES de MANOS AL HOGAR de 10 a 12
+# Cambiar MQL de MANOS AL HOGAR de 0 a 3
+# Cambiar CITAS de MANOS AL HOGAR de 1 a 0
+# Cambiar FIRMAS de MANOS AL HOGAR de 1 a 0
+# Cambiar GASTO de MANOS AL HOGAR de 518.29 a 507.76

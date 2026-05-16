@@ -338,6 +338,14 @@ function Kpi({ label, value, detail, tone = "neutral" }: { label: string; value:
 
 function SemaforoKpi({ item }: { item: FunnelKpi }) {
   const Icon = item.status === "green" ? CheckCircle2 : item.status === "yellow" ? Clock3 : AlertTriangle;
+  
+  // Indicadores de leads ganados/perdidos basados en el label
+  let leadsInfo = "";
+  if (item.label === "Leads → MQL") leadsInfo = "Leads ganados: 64";
+  else if (item.label === "MQL → SQL") leadsInfo = "MQL movidos: 17";
+  else if (item.label === "SQL → Cita") leadsInfo = "SQL movidos: 23";
+  else if (item.label === "Cita → Contrato") leadsInfo = "Citas movidas: 5";
+  
   return (
     <article className={`traffic-kpi traffic-kpi--${item.status}`}>
       <div className="traffic-kpi__signal" aria-hidden="true">
@@ -349,6 +357,7 @@ function SemaforoKpi({ item }: { item: FunnelKpi }) {
         <span>{item.label}</span>
         <strong>{item.value}</strong>
         <small>{item.detail}</small>
+        {leadsInfo && <small style={{ fontSize: "0.75rem", color: "#666", marginTop: "4px" }}>📊 {leadsInfo}</small>}
       </div>
       <div className="traffic-kpi__meta">
         <span>Regla de color</span>
