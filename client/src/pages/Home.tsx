@@ -68,6 +68,8 @@ type FunnelKpi = {
   flowStat?: string;
 };
 
+const APP_BUILD_MARKER = import.meta.env.VITE_APP_BUILD_MARKER ?? "embudo-local";
+
 const funnelBenchmarks = {
   leadToMql: { yellow: 0.17, green: 0.2, label: "Rojo 0–16% · Amarillo 17–19% · Verde 20%+" },
   mqlToSql: { yellow: 0.65, green: 0.75, label: "Rojo 0–64% · Amarillo 65–74% · Verde 75%+" },
@@ -79,6 +81,10 @@ const funnelBenchmarks = {
 const fmt = new Intl.NumberFormat("es-MX");
 const pctFmt = new Intl.NumberFormat("es-MX", { style: "percent", maximumFractionDigits: 1 });
 const moneyFmt = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
+
+function formatFunnelPct(rate: number): string {
+  return pctFmt.format(Math.min(1, Math.max(0, rate)));
+}
 
 function formatDate(value?: string | null) {
   if (!value) return "Sin fecha";
@@ -190,11 +196,34 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
   const costPerLead = spend !== null && totals.CONVERSACIONES > 0 ? spend / totals.CONVERSACIONES : null;
   const firmasRitmo = calculateFirmasRitmo(totals.FIRMAS, 15, currentDate);
 
+  // #region agent log
+  fetch("http://127.0.0.1:7880/ingest/6fd1d614-7a66-4dcc-a425-d3b833f324c4", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "a0037c" },
+    body: JSON.stringify({
+      sessionId: "a0037c",
+      runId: "funnel-v2",
+      hypothesisId: "H1-deploy-or-data",
+      location: "Home.tsx:buildFunnelKpis",
+      message: "funnel totals",
+      data: {
+        marker: APP_BUILD_MARKER,
+        sql: totals.SQL,
+        citas: totals.CITAS,
+        citasFromSql,
+        sqlToAppointment,
+        sqlToAppointmentPct: formatFunnelPct(sqlToAppointment),
+      },
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
+
   return [
     {
       key: "lead-to-mql",
       label: "Leads → MQL",
-      value: pctFmt.format(leadToMql),
+      value: formatFunnelPct(leadToMql),
       benchmark: funnelBenchmarks.leadToMql.label,
       progress: Math.min(1, ratio(leadToMql, funnelBenchmarks.leadToMql.green)),
       status: trafficByRate(leadToMql, funnelBenchmarks.leadToMql.yellow, funnelBenchmarks.leadToMql.green),
@@ -205,7 +234,7 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
     {
       key: "mql-to-sql",
       label: "MQL → SQL",
-      value: pctFmt.format(mqlToSql),
+      value: formatFunnelPct(mqlToSql),
       benchmark: funnelBenchmarks.mqlToSql.label,
       progress: Math.min(1, ratio(mqlToSql, funnelBenchmarks.mqlToSql.green)),
       status: trafficByRate(mqlToSql, funnelBenchmarks.mqlToSql.yellow, funnelBenchmarks.mqlToSql.green),
@@ -216,7 +245,7 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
     {
       key: "sql-to-appointment",
       label: "SQL → Cita",
-      value: pctFmt.format(sqlToAppointment),
+      value: formatFunnelPct(sqlToAppointment),
       benchmark: funnelBenchmarks.sqlToAppointment.label,
       progress: Math.min(1, ratio(sqlToAppointment, funnelBenchmarks.sqlToAppointment.green)),
       status: trafficByRate(sqlToAppointment, funnelBenchmarks.sqlToAppointment.yellow, funnelBenchmarks.sqlToAppointment.green),
@@ -227,7 +256,7 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
     {
       key: "appointment-to-contract",
       label: "Cita → Contrato",
-      value: pctFmt.format(appointmentToContract),
+      value: formatFunnelPct(appointmentToContract),
       benchmark: funnelBenchmarks.appointmentToContract.label,
       progress: Math.min(1, ratio(appointmentToContract, funnelBenchmarks.appointmentToContract.green)),
       status: trafficByRate(appointmentToContract, funnelBenchmarks.appointmentToContract.yellow, funnelBenchmarks.appointmentToContract.green),
@@ -569,6 +598,7 @@ export default function Home() {
             {loading ? "Sincronizando…" : `${todayRows.length} registros`}
             {live ? " · en vivo" : ""}
           </small>
+          <small>Build {APP_BUILD_MARKER}</small>
           {error ? (
             <small className="table-note table-note--warn">{error}</small>
           ) : null}
