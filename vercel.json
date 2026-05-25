@@ -4,9 +4,10 @@
   "outputDirectory": "dist/public",
   "framework": null,
   "installCommand": "npm install --legacy-peer-deps",
-  "build": {
-    "env": {
-      "VITE_APP_BUILD_MARKER": "embudo-v2"
+  "git": {
+    "deploymentEnabled": {
+      "Desarrollo": true,
+      "main": true
     }
   }
 }

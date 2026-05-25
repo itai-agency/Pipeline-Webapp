@@ -68,6 +68,40 @@ El scheduler sincroniza Meta/Kommo cada **5 minutos** en producción.
 
 4. Deploy → abrir la URL y probar login + dashboard con datos live.
 
+### Vercel no hace redeploy automático (Render sí)
+
+Render y Vercel son **proyectos distintos**. Que Render redeploye no implica que Vercel reciba los webhooks de GitHub.
+
+**Checklist (en orden):**
+
+1. **Mismo repositorio**  
+   Vercel → **Settings → Git** → debe decir `itai-agency/Pipeline-Webapp` (no otro repo de Manus).
+
+2. **Rama de producción vs preview**  
+   - Si **Production Branch** = `main`, los pushes a `Desarrollo` solo crean **Preview** (otra URL).  
+   - Ve a **Deployments** y busca el deploy de la rama `Desarrollo`, o cambia **Production Branch** a `Desarrollo`.
+
+3. **Autor del commit en el equipo Vercel**  
+   Si el email de git no coincide con tu cuenta Vercel, el deploy se bloquea (`Git author must have access`).  
+   - Vercel → **Settings → Git** → reconectar GitHub.  
+   - O invita tu usuario al Team de Vercel.
+
+4. **Deploy manual (siempre funciona)**  
+   **Deployments** → último deploy → **⋯** → **Redeploy** → activar **Clear build cache**.
+
+5. **Variables de build en el panel** (no solo en `vercel.json`):
+
+| Variable | Entornos | Valor |
+|----------|----------|--------|
+| `VITE_API_BASE_URL` | Production + Preview | URL del API Render |
+| `VITE_APP_BUILD_MARKER` | Production + Preview | `embudo-v2` (para verificar build nuevo) |
+
+6. **Root Directory** en Vercel debe estar **vacío** (raíz del repo, donde está `vercel.json`).
+
+7. Tras push a `Desarrollo`, en GitHub → **Settings → Integrations → Vercel** debe aparecer un check en el commit.
+
+**Marcador en la app:** en el sidebar debe verse `Build embudo-v2`. Si no aparece, sigues en un deploy viejo o en la URL de `main`.
+
 ---
 
 ## 3. Desarrollo local contra API remoto
