@@ -980,6 +980,23 @@ body::before {
   font-weight: 600;
 }
 
+.sidebar-refresh {
+  margin-top: 10px;
+  width: 100%;
+  border: 1px solid rgba(23, 61, 51, .14);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: .72rem;
+  font-weight: 700;
+  background: #fff;
+  color: var(--inmo-ink);
+  cursor: pointer;
+}
+
+.sidebar-refresh:hover {
+  background: var(--inmo-mist);
+}
+
 .app-workspace {
   padding: 16px clamp(14px, 1.8vw, 24px) 28px;
   gap: 12px;

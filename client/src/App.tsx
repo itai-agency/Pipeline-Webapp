@@ -33,6 +33,31 @@ function Router() {
 //   to keep consistent foreground/background color across components
 // - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
+function DevAuthBypassBanner() {
+  const { isDevBypass } = useAuth();
+  if (!isDevBypass) return null;
+  return (
+    <div
+      role="status"
+      style={{
+        position: "fixed",
+        bottom: 12,
+        right: 12,
+        zIndex: 9999,
+        padding: "8px 12px",
+        borderRadius: 8,
+        background: "#fff3cd",
+        border: "1px solid #ffc107",
+        fontSize: 12,
+        fontWeight: 600,
+        color: "#664d03",
+      }}
+    >
+      DEV: login bypass activo — quitar VITE_DEV_BYPASS_AUTH antes de prod
+    </div>
+  );
+}
+
 function App() {
   return (
     <ErrorBoundary>
@@ -44,6 +69,7 @@ function App() {
           <TooltipProvider>
             <Toaster />
             <Router />
+            <DevAuthBypassBanner />
           </TooltipProvider>
         </ThemeProvider>
       </AuthProvider>

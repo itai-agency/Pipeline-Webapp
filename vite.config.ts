@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+import type { IncomingMessage, ServerResponse } from "node:http";
 
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
@@ -203,7 +204,61 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+function vitePluginApiMiddleware(): Plugin {
+  return {
+    name: "pipeline-api-middleware",
+    async configureServer(server: ViteDevServer) {
+      // #region agent log
+      const wrongPath = path.resolve(PROJECT_ROOT, "../server/app.ts");
+      const correctPath = path.resolve(PROJECT_ROOT, "server/app.ts");
+      fetch("http://127.0.0.1:7880/ingest/6fd1d614-7a66-4dcc-a425-d3b833f324c4", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "a0037c" },
+        body: JSON.stringify({
+          sessionId: "a0037c",
+          runId: "pre-fix",
+          hypothesisId: "H1",
+          location: "vite.config.ts:configureServer",
+          message: "server import path probe",
+          data: {
+            PROJECT_ROOT,
+            wrongPath,
+            correctPath,
+            wrongExists: fs.existsSync(wrongPath),
+            correctExists: fs.existsSync(correctPath),
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      // #endregion
+
+      const { createApp } = await import("./server/app.ts");
+      const { errorHandler } = await import("./server/middleware/errorHandler.ts");
+      const apiApp = createApp();
+      apiApp.use(errorHandler);
+
+      server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: () => void) => {
+        if (!req.url?.startsWith("/api")) {
+          next();
+          return;
+        }
+        apiApp(req as never, res as never, next);
+      });
+    },
+  };
+}
+
+const isViteDev = process.env.NODE_ENV !== "production" && !process.env.VERCEL;
+
+const plugins = [
+  react(),
+  tailwindcss(),
+  jsxLocPlugin(),
+  vitePluginManusRuntime(),
+  ...(isViteDev
+    ? [vitePluginManusDebugCollector(), vitePluginStorageProxy(), vitePluginApiMiddleware()]
+    : []),
+];
 
 export default defineConfig({
   plugins,
@@ -213,6 +268,7 @@ export default defineConfig({
       "@shared": path.resolve(import.meta.dirname, "shared"),
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
+    dedupe: ["react", "react-dom"],
   },
   envDir: path.resolve(import.meta.dirname),
   root: path.resolve(import.meta.dirname, "client"),

@@ -3,7 +3,7 @@
  * La pantalla debe sentirse como herramienta operativa diaria: tipografía pequeña, tarjetas claras, filtros densos y lectura rápida por cliente/SDR.
  * Pregunta guía: ¿esta interacción ayuda a Sinahi a elegir el siguiente cliente a desbloquear sin convertir la interfaz en presentación?
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   ArrowDownRight,
@@ -33,9 +33,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { pipelineData, stageLabels, type PipelineRow } from "@/lib/pipelineData";
-import { metaSpendData, metaSpendPeriod } from "@/lib/metaSpendData";
-import { sdrHistoryData, type SdrHistoryRow } from "@/lib/sdrHistoryData";
+import { getCurrentMonthRange, toLocalDateIso } from "@/lib/dateRanges";
+import { stageLabels, type PipelineRow } from "@/lib/pipelineData";
+import type { SdrHistoryRow } from "@/lib/sdrHistoryData";
+import { useDashboardData } from "@/hooks/useDashboardData";
 
 type ClientRisk = {
   client: string;
@@ -375,13 +376,34 @@ function SemaforoKpi({ item }: { item: FunnelKpi }) {
 }
 
 export default function Home() {
-  const daily = pipelineData.daily as unknown as PipelineRow[];
-  const history = pipelineData.daily as unknown as PipelineRow[];
-  const sdrRows = sdrHistoryData.records as unknown as SdrHistoryRow[];
+  const { snapshot, loading, error, live, refresh } = useDashboardData();
+  const daily = snapshot.daily as unknown as PipelineRow[];
+  const history = snapshot.daily as unknown as PipelineRow[];
+  const sdrRows = snapshot.sdrHistory as unknown as SdrHistoryRow[];
+  const metaSpendData = snapshot.metaSpend;
+  const metaSpendPeriod = snapshot.metaSpendPeriod;
 
-  const availableDates = useMemo(() => Array.from(new Set(daily.map((row) => row.FECHA).filter((date): date is string => Boolean(date)))).sort(), [daily]);
-  const clients = useMemo(() => Array.from(new Set(daily.map((row) => row.CLIENTE))).sort(), [daily]);
-  const latestDate = availableDates.at(-1) ?? "";
+  const availableDates = useMemo(() => {
+    if (snapshot.availableDates?.length) return snapshot.availableDates;
+    return Array.from(new Set(daily.map((row) => row.FECHA).filter((date): date is string => Boolean(date)))).sort();
+  }, [snapshot.availableDates, daily]);
+
+  const todayIso = toLocalDateIso();
+  const defaultMonthRange = getCurrentMonthRange();
+
+  const dataPeriodMin = metaSpendPeriod.start ?? availableDates[0] ?? defaultMonthRange.start;
+  const dataPeriodMax = metaSpendPeriod.end ?? availableDates.at(-1) ?? defaultMonthRange.end;
+  const pickerMin = availableDates[0] ?? dataPeriodMin;
+  const pickerMax = [todayIso, availableDates.at(-1), dataPeriodMax].filter(Boolean).sort().at(-1) ?? todayIso;
+
+  const clients = useMemo(() => {
+    const names = new Set<string>();
+    daily.forEach((row) => names.add(row.CLIENTE));
+    metaSpendData.forEach((row) => names.add(row.client));
+    return Array.from(names).sort();
+  }, [daily, metaSpendData]);
+
+  const latestDate = todayIso;
 
   const historicalDates = useMemo(() => Array.from(new Set(sdrRows.map((row) => row.FECHA))).sort(), [sdrRows]);
   const historicalMonths = useMemo(() => Array.from(new Set(sdrRows.map((row) => row.MES))).sort(), [sdrRows]);
@@ -389,15 +411,26 @@ export default function Home() {
   const historicalSdrs = useMemo(() => Array.from(new Set(sdrRows.map((row) => row.SDR))).sort(), [sdrRows]);
 
   const [activeTab, setActiveTab] = useState<"diario" | "historico">("diario");
-  const [dailyRangeStart, setDailyRangeStart] = useState<string>(availableDates[0] ?? "");
-  const [dailyRangeEnd, setDailyRangeEnd] = useState<string>(latestDate);
+  const [dailyRangeStart, setDailyRangeStart] = useState(() => getCurrentMonthRange().start);
+  const [dailyRangeEnd, setDailyRangeEnd] = useState(() => getCurrentMonthRange().end);
   const [selectedClient, setSelectedClient] = useState<string>("Todos");
   const [query, setQuery] = useState<string>("");
   const [selectedMonth, setSelectedMonth] = useState<string>("Todos");
   const [selectedHistoricalDate, setSelectedHistoricalDate] = useState<string>("Todas");
   const [selectedSdr, setSelectedSdr] = useState<string>("Todos");
-  const [rangeStart, setRangeStart] = useState<string>(historicalDates[0] ?? "");
-  const [rangeEnd, setRangeEnd] = useState<string>(historicalDates.at(-1) ?? "");
+  const [rangeStart, setRangeStart] = useState(() => getCurrentMonthRange().start);
+  const [rangeEnd, setRangeEnd] = useState(() => getCurrentMonthRange().end);
+  const lastSyncedAt = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (lastSyncedAt.current === snapshot.syncedAt) return;
+    lastSyncedAt.current = snapshot.syncedAt;
+    const { start, end } = getCurrentMonthRange();
+    setDailyRangeStart(start);
+    setDailyRangeEnd(end);
+    setRangeStart(start);
+    setRangeEnd(end);
+  }, [snapshot.syncedAt]);
 
   const filteredRows = useMemo(() => {
     return daily.filter((row) => {
@@ -431,6 +464,17 @@ export default function Home() {
 
   const totals = useMemo(() => sumRows(filteredRows), [filteredRows]);
   const spendTotal = useMemo(() => sumSpend(filteredSpendRows), [filteredSpendRows]);
+  const metaSpendCoversFilter = useMemo(() => {
+    if (!metaSpendPeriod.start || !metaSpendPeriod.end || !dailyRangeStart || !dailyRangeEnd) return true;
+    return metaSpendPeriod.start <= dailyRangeStart && metaSpendPeriod.end >= dailyRangeEnd;
+  }, [metaSpendPeriod, dailyRangeStart, dailyRangeEnd]);
+  const inversionDetail = useMemo(() => {
+    const rangeLabel = `${formatDate(metaSpendPeriod.start)}–${formatDate(metaSpendPeriod.end)}`;
+    if (!metaSpendCoversFilter && dailyRangeStart && dailyRangeEnd) {
+      return `${rangeLabel} · datos Meta incompletos para el filtro activo — ejecuta sync del mes`;
+    }
+    return `${rangeLabel} · ${metaSpendPeriod.sourceLabel}`;
+  }, [metaSpendPeriod, metaSpendCoversFilter, dailyRangeStart, dailyRangeEnd]);
   const spendByClient = useMemo(() => {
     const grouped = new Map<string, number>();
     filteredSpendRows.forEach((row) => grouped.set(row.client, (grouped.get(row.client) ?? 0) + row.spend));
@@ -442,8 +486,7 @@ export default function Home() {
     return grouped;
   }, [filteredSpendRows]);
   const costPerAppointment = totals.CITAS > 0 ? spendTotal / totals.CITAS : null;
-  const endDate = dailyRangeEnd ? new Date(dailyRangeEnd + 'T00:00:00') : new Date();
-  console.log('DEBUG: dailyRangeEnd =', dailyRangeEnd, 'endDate =', endDate, 'endDate.getDate() =', endDate.getDate());
+  const endDate = dailyRangeEnd ? new Date(dailyRangeEnd + "T00:00:00") : new Date();
   const funnelKpis = useMemo(() => buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null, endDate), [totals, spendTotal, endDate]);
   const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
   const todayRows = useMemo(() => daily.filter((row) => row.FECHA === latestDate), [daily, latestDate]);
@@ -506,8 +549,17 @@ export default function Home() {
         </nav>
         <div className="sidebar-status">
           <span>Último corte</span>
-          <strong>{formatDate(latestDate)}</strong>
-          <small>{todayRows.length} registros cargados</small>
+          <strong>{formatDate(todayIso)}</strong>
+          <small>
+            {loading ? "Sincronizando…" : `${todayRows.length} registros`}
+            {live ? " · en vivo" : ""}
+          </small>
+          {error ? (
+            <small className="table-note table-note--warn">{error}</small>
+          ) : null}
+          <button type="button" className="sidebar-refresh" onClick={() => void refresh()}>
+            Actualizar
+          </button>
         </div>
       </aside>
 
@@ -537,11 +589,11 @@ export default function Home() {
             <>
               <label>
                 Inicio
-                <input type="date" min={availableDates[0]} max={latestDate} value={dailyRangeStart} onChange={(event) => setDailyRangeStart(event.target.value)} onInput={(event) => setDailyRangeStart(event.currentTarget.value)} />
+                <input type="date" min={pickerMin} max={pickerMax} value={dailyRangeStart} onChange={(event) => setDailyRangeStart(event.target.value)} onInput={(event) => setDailyRangeStart(event.currentTarget.value)} />
               </label>
               <label>
                 Fin
-                <input type="date" min={availableDates[0]} max={latestDate} value={dailyRangeEnd} onChange={(event) => setDailyRangeEnd(event.target.value)} onInput={(event) => setDailyRangeEnd(event.currentTarget.value)} />
+                <input type="date" min={pickerMin} max={pickerMax} value={dailyRangeEnd} onChange={(event) => setDailyRangeEnd(event.target.value)} onInput={(event) => setDailyRangeEnd(event.currentTarget.value)} />
               </label>
               <label>
                 Cliente
@@ -583,11 +635,11 @@ export default function Home() {
               </label>
               <label>
                 Desde
-                <input type="date" value={rangeStart} onChange={(event) => setRangeStart(event.target.value)} />
+                <input type="date" min={pickerMin} max={pickerMax} value={rangeStart} onChange={(event) => setRangeStart(event.target.value)} />
               </label>
               <label>
                 Hasta
-                <input type="date" value={rangeEnd} onChange={(event) => setRangeEnd(event.target.value)} />
+                <input type="date" min={pickerMin} max={pickerMax} value={rangeEnd} onChange={(event) => setRangeEnd(event.target.value)} />
               </label>
             </>
           )}
@@ -603,7 +655,9 @@ export default function Home() {
                 </div>
                 <Target />
               </div>
-              <p className="traffic-panel__intro">El color corresponde al semáforo definido para cada paso del embudo: Leads→MQL, MQL→SQL, SQL→Cita, Cita→Contrato, Firmas→Meta y Costo por Lead. La lectura se calcula con el rango Inicio/Fin activo, excepto Firmas→Meta que siempre usa el mes calendario actual. {metaSpendPeriod.note}</p>
+              <p className="traffic-panel__intro">
+                El color corresponde al semáforo definido para cada paso del embudo. Filtro por defecto: mes en curso ({formatDate(defaultMonthRange.start)}–{formatDate(defaultMonthRange.end)}). Datos sincronizados: {formatDate(dataPeriodMin)}–{formatDate(dataPeriodMax)}. {metaSpendPeriod.note}
+              </p>
               <div className="traffic-grid">
                 {funnelKpis.map((item) => <SemaforoKpi key={item.key} item={item} />)}
               </div>
@@ -615,7 +669,12 @@ export default function Home() {
               <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(ratio(totals.SQL, totals.MQL))} de MQL`} tone={ratio(totals.SQL, totals.MQL) < 0.25 ? "warn" : "good"} />
               <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(ratio(totals.CITAS, totals.SQL || totals.MQL))} avance`} />
               <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(ratio(totals.FIRMAS, totals.CITAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
-              <Kpi label="Inversión" value={moneyFmt.format(spendTotal)} detail={metaSpendPeriod.sourceLabel} tone="good" />
+              <Kpi
+                label="Inversión"
+                value={moneyFmt.format(spendTotal)}
+                detail={inversionDetail}
+                tone={metaSpendCoversFilter ? "good" : "warn"}
+              />
               <Kpi label="Costo por cita" value={costPerAppointment === null ? "Sin cita" : moneyFmt.format(costPerAppointment)} detail={`${fmt.format(totals.CITAS)} citas filtradas`} tone={costPerAppointment === null || costPerAppointment > 1800 ? "warn" : "good"} />
             </section>
 

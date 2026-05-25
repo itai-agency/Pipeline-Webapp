@@ -1,0 +1,22 @@
+import { Router } from "express";
+import { z } from "zod";
+import { syncMetaSpend } from "../services/meta.service.js";
+import { refreshAndBroadcast } from "../services/metrics.service.js";
+
+const syncBodySchema = z.object({
+  since: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+});
+
+export const metaRouter = Router();
+
+metaRouter.post("/sync", async (req, res, next) => {
+  try {
+    const body = syncBodySchema.parse(req.body ?? {});
+    const recordsProcessed = await syncMetaSpend(body);
+    await refreshAndBroadcast();
+    res.json({ source: "meta", status: "success", recordsProcessed });
+  } catch (err) {
+    next(err);
+  }
+});
