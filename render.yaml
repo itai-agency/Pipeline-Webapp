@@ -5,12 +5,10 @@ services:
     name: pipeline-api
     runtime: node
     plan: free
-    buildCommand: npm install --legacy-peer-deps && npm run build
-    startCommand: node dist/index.js
+    buildCommand: npm install --legacy-peer-deps --include=dev && npm run build:api
+    startCommand: NODE_ENV=production node dist/index.js
     healthCheckPath: /api/health
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: CORS_ALLOW_VERCEL_PREVIEWS
         value: "true"
       - key: SUPABASE_URL

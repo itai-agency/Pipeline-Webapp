@@ -15,8 +15,8 @@ Arquitectura de producción:
 
 | Campo | Valor |
 |-------|--------|
-| Build | `npm install --legacy-peer-deps && npm run build` |
-| Start | `node dist/index.js` |
+| Build | `npm install --legacy-peer-deps --include=dev && npm run build:api` |
+| Start | `NODE_ENV=production node dist/index.js` |
 | Health check | `/api/health` |
 
 ### Variables de entorno (API)
@@ -106,6 +106,8 @@ Si ves errores de CORS en la consola, añade la URL exacta del front a `CORS_ALL
 - [ ] Vercel: `VITE_API_BASE_URL` apuntando al API
 - [ ] Vercel: sin `VITE_DEV_BYPASS_AUTH`
 - [ ] Dashboard muestra gasto Meta y embudo Kommo (no solo datos estáticos)
+
+Si el build falla con **`vite: not found`** o **`esbuild: not found`**: Render omite `devDependencies` cuando `NODE_ENV=production`. Usa `--include=dev` en el install y `build:api` (solo backend; el front va en Vercel).
 
 ---
 
