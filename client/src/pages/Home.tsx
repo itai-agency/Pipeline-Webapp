@@ -65,6 +65,7 @@ type FunnelKpi = {
   status: GoalStatus;
   statusLabel: string;
   detail: string;
+  flowStat?: string;
 };
 
 const funnelBenchmarks = {
@@ -108,6 +109,16 @@ function monthLabel(value: string) {
 
 function ratio(numerator: number, denominator: number) {
   return denominator ? numerator / denominator : 0;
+}
+
+/** Conversión entre etapas del embudo: la etapa destino no puede superar la origen (máx. 100%). */
+function funnelConversionRate(fromStage: number, toStage: number): number {
+  if (fromStage <= 0) return 0;
+  return Math.min(1, toStage / fromStage);
+}
+
+function funnelConvertedCount(fromStage: number, toStage: number): number {
+  return Math.min(toStage, fromStage);
 }
 
 function sumRows(rows: PipelineRow[]) {
@@ -166,10 +177,15 @@ function trafficLabel(status: GoalStatus) {
 }
 
 function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | null, currentDate: Date = new Date()): FunnelKpi[] {
-  const leadToMql = ratio(totals.MQL, totals.CONVERSACIONES);
-  const mqlToSql = ratio(totals.SQL, totals.MQL);
-  const sqlToAppointment = ratio(totals.CITAS, totals.SQL);
-  const appointmentToContract = ratio(totals.FIRMAS, totals.CITAS);
+  const mqlFromLeads = funnelConvertedCount(totals.CONVERSACIONES, totals.MQL);
+  const sqlFromMql = funnelConvertedCount(totals.MQL, totals.SQL);
+  const citasFromSql = funnelConvertedCount(totals.SQL, totals.CITAS);
+  const firmasFromCitas = funnelConvertedCount(totals.CITAS, totals.FIRMAS);
+
+  const leadToMql = funnelConversionRate(totals.CONVERSACIONES, totals.MQL);
+  const mqlToSql = funnelConversionRate(totals.MQL, totals.SQL);
+  const sqlToAppointment = funnelConversionRate(totals.SQL, totals.CITAS);
+  const appointmentToContract = funnelConversionRate(totals.CITAS, totals.FIRMAS);
   const firmasToMeta = ratio(totals.FIRMAS, 15); // Meta de mayo: 15 firmas
   const costPerLead = spend !== null && totals.CONVERSACIONES > 0 ? spend / totals.CONVERSACIONES : null;
   const firmasRitmo = calculateFirmasRitmo(totals.FIRMAS, 15, currentDate);
@@ -183,7 +199,8 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
       progress: Math.min(1, ratio(leadToMql, funnelBenchmarks.leadToMql.green)),
       status: trafficByRate(leadToMql, funnelBenchmarks.leadToMql.yellow, funnelBenchmarks.leadToMql.green),
       statusLabel: trafficLabel(trafficByRate(leadToMql, funnelBenchmarks.leadToMql.yellow, funnelBenchmarks.leadToMql.green)),
-      detail: `${fmt.format(totals.MQL)} MQL sobre ${fmt.format(totals.CONVERSACIONES)} leads`,
+      detail: `${fmt.format(mqlFromLeads)} MQL sobre ${fmt.format(totals.CONVERSACIONES)} leads`,
+      flowStat: `MQL atribuidos: ${fmt.format(mqlFromLeads)}`,
     },
     {
       key: "mql-to-sql",
@@ -193,7 +210,8 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
       progress: Math.min(1, ratio(mqlToSql, funnelBenchmarks.mqlToSql.green)),
       status: trafficByRate(mqlToSql, funnelBenchmarks.mqlToSql.yellow, funnelBenchmarks.mqlToSql.green),
       statusLabel: trafficLabel(trafficByRate(mqlToSql, funnelBenchmarks.mqlToSql.yellow, funnelBenchmarks.mqlToSql.green)),
-      detail: `${fmt.format(totals.SQL)} SQL sobre ${fmt.format(totals.MQL)} MQL`,
+      detail: `${fmt.format(sqlFromMql)} SQL sobre ${fmt.format(totals.MQL)} MQL`,
+      flowStat: `SQL atribuidos: ${fmt.format(sqlFromMql)}`,
     },
     {
       key: "sql-to-appointment",
@@ -203,7 +221,8 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
       progress: Math.min(1, ratio(sqlToAppointment, funnelBenchmarks.sqlToAppointment.green)),
       status: trafficByRate(sqlToAppointment, funnelBenchmarks.sqlToAppointment.yellow, funnelBenchmarks.sqlToAppointment.green),
       statusLabel: trafficLabel(trafficByRate(sqlToAppointment, funnelBenchmarks.sqlToAppointment.yellow, funnelBenchmarks.sqlToAppointment.green)),
-      detail: `${fmt.format(totals.CITAS)} citas sobre ${fmt.format(totals.SQL)} SQL`,
+      detail: `${fmt.format(citasFromSql)} citas sobre ${fmt.format(totals.SQL)} SQL`,
+      flowStat: `Citas atribuidas: ${fmt.format(citasFromSql)}`,
     },
     {
       key: "appointment-to-contract",
@@ -213,7 +232,8 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
       progress: Math.min(1, ratio(appointmentToContract, funnelBenchmarks.appointmentToContract.green)),
       status: trafficByRate(appointmentToContract, funnelBenchmarks.appointmentToContract.yellow, funnelBenchmarks.appointmentToContract.green),
       statusLabel: trafficLabel(trafficByRate(appointmentToContract, funnelBenchmarks.appointmentToContract.yellow, funnelBenchmarks.appointmentToContract.green)),
-      detail: `${fmt.format(totals.FIRMAS)} contratos sobre ${fmt.format(totals.CITAS)} citas`,
+      detail: `${fmt.format(firmasFromCitas)} contratos sobre ${fmt.format(totals.CITAS)} citas`,
+      flowStat: `Firmas atribuidas: ${fmt.format(firmasFromCitas)}`,
     },
     {
       key: "firmas-to-meta",
@@ -339,14 +359,7 @@ function Kpi({ label, value, detail, tone = "neutral" }: { label: string; value:
 
 function SemaforoKpi({ item }: { item: FunnelKpi }) {
   const Icon = item.status === "green" ? CheckCircle2 : item.status === "yellow" ? Clock3 : AlertTriangle;
-  
-  // Indicadores de leads ganados/perdidos basados en el label
-  let leadsInfo = "";
-  if (item.label === "Leads → MQL") leadsInfo = "Leads ganados: 64";
-  else if (item.label === "MQL → SQL") leadsInfo = "MQL movidos: 17";
-  else if (item.label === "SQL → Cita") leadsInfo = "SQL movidos: 23";
-  else if (item.label === "Cita → Contrato") leadsInfo = "Citas movidas: 5";
-  
+
   return (
     <article className={`traffic-kpi traffic-kpi--${item.status}`}>
       <div className="traffic-kpi__signal" aria-hidden="true">
@@ -358,7 +371,9 @@ function SemaforoKpi({ item }: { item: FunnelKpi }) {
         <span>{item.label}</span>
         <strong>{item.value}</strong>
         <small>{item.detail}</small>
-        {leadsInfo && <small style={{ fontSize: "0.75rem", color: "#666", marginTop: "4px" }}>📊 {leadsInfo}</small>}
+        {item.flowStat ? (
+          <small style={{ fontSize: "0.75rem", color: "#666", marginTop: "4px" }}>📊 {item.flowStat}</small>
+        ) : null}
       </div>
       <div className="traffic-kpi__meta">
         <span>Regla de color</span>
@@ -665,10 +680,10 @@ export default function Home() {
 
             <section id="resumen" className="app-grid app-grid--kpis">
               <Kpi label="Conversaciones" value={fmt.format(totals.CONVERSACIONES)} detail="volumen capturado" />
-              <Kpi label="MQL" value={fmt.format(totals.MQL)} detail={`${pctFmt.format(ratio(totals.MQL, totals.CONVERSACIONES))} de conversión`} tone="good" />
-              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(ratio(totals.SQL, totals.MQL))} de MQL`} tone={ratio(totals.SQL, totals.MQL) < 0.25 ? "warn" : "good"} />
-              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(ratio(totals.CITAS, totals.SQL || totals.MQL))} avance`} />
-              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(ratio(totals.FIRMAS, totals.CITAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
+              <Kpi label="MQL" value={fmt.format(totals.MQL)} detail={`${pctFmt.format(funnelConversionRate(totals.CONVERSACIONES, totals.MQL))} de conversión`} tone="good" />
+              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(funnelConversionRate(totals.MQL, totals.SQL))} de MQL`} tone={funnelConversionRate(totals.MQL, totals.SQL) < 0.25 ? "warn" : "good"} />
+              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(funnelConversionRate(totals.SQL || totals.MQL, totals.CITAS))} avance`} />
+              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(funnelConversionRate(totals.CITAS, totals.FIRMAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
               <Kpi
                 label="Inversión"
                 value={moneyFmt.format(spendTotal)}
