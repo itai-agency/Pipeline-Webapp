@@ -59,7 +59,9 @@ El scheduler sincroniza Meta/Kommo cada **5 minutos** en producción.
 
 | Variable | Valor |
 |----------|--------|
-| `VITE_API_BASE_URL` | `https://TU-API.onrender.com` (sin `/` final) |
+| `VITE_API_BASE_URL` | `https://TU-API.onrender.com` (sin `/` final) — **obligatoria** |
+
+Sin `VITE_API_BASE_URL`, el dashboard llama a `/api` en el mismo dominio de Vercel (no hay API ahí).
 
 **No** definir en producción:
 
@@ -101,6 +103,10 @@ Render y Vercel son **proyectos distintos**. Que Render redeploye no implica que
 7. Tras push a `Desarrollo`, en GitHub → **Settings → Integrations → Vercel** debe aparecer un check en el commit.
 
 **Marcador en la app:** en el sidebar debe verse `Build embudo-v2`. Si no aparece, sigues en un deploy viejo o en la URL de `main`.
+
+### Chrome pide “acceso al dispositivo” o red local
+
+Era la instrumentación de debug que llamaba a `http://127.0.0.1:7880` desde HTTPS (Vercel). Ya está quitada en builds de producción. Tras redeploy no debería aparecer.
 
 ---
 

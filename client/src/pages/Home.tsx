@@ -196,29 +196,6 @@ function buildFunnelKpis(totals: ReturnType<typeof sumRows>, spend: number | nul
   const costPerLead = spend !== null && totals.CONVERSACIONES > 0 ? spend / totals.CONVERSACIONES : null;
   const firmasRitmo = calculateFirmasRitmo(totals.FIRMAS, 15, currentDate);
 
-  // #region agent log
-  fetch("http://127.0.0.1:7880/ingest/6fd1d614-7a66-4dcc-a425-d3b833f324c4", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "a0037c" },
-    body: JSON.stringify({
-      sessionId: "a0037c",
-      runId: "funnel-v2",
-      hypothesisId: "H1-deploy-or-data",
-      location: "Home.tsx:buildFunnelKpis",
-      message: "funnel totals",
-      data: {
-        marker: APP_BUILD_MARKER,
-        sql: totals.SQL,
-        citas: totals.CITAS,
-        citasFromSql,
-        sqlToAppointment,
-        sqlToAppointmentPct: formatFunnelPct(sqlToAppointment),
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-
   return [
     {
       key: "lead-to-mql",
