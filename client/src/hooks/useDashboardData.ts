@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import type { DashboardSnapshotDto } from "@shared/types/dashboard";
-import { fetchDashboardSnapshot, subscribeDashboardSse } from "@/lib/api/dashboard";
+import {
+  fetchDashboardSnapshot,
+  SessionExpiredError,
+  subscribeDashboardSse,
+} from "@/lib/api/dashboard";
+import { useAuth } from "@/contexts/AuthContext";
 import { getCurrentMonthRange } from "@/lib/dateRanges";
 import { pipelineData } from "@/lib/pipelineData";
 import { metaSpendData, metaSpendPeriod } from "@/lib/metaSpendData";
@@ -54,6 +59,7 @@ export type DashboardDataState = {
 };
 
 export function useDashboardData(): DashboardDataState {
+  const { isAuthenticated, isDevBypass, logout } = useAuth();
   const [snapshot, setSnapshot] = useState<DashboardSnapshotDto>(staticFallbackSnapshot);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,25 +70,46 @@ export function useDashboardData(): DashboardDataState {
     setError(null);
   }, []);
 
+  const handleUnauthorized = useCallback(async () => {
+    setLive(false);
+    setError("Sesión expirada. Vuelve a iniciar sesión.");
+    await logout();
+  }, [logout]);
+
   const refresh = useCallback(async () => {
+    if (!isAuthenticated && !isDevBypass) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const data = await fetchDashboardSnapshot();
       applySnapshot(data);
     } catch (err) {
+      if (err instanceof SessionExpiredError) {
+        await handleUnauthorized();
+        return;
+      }
       const message = err instanceof Error ? err.message : "Error al cargar dashboard";
       setError(message);
       applySnapshot(staticFallbackSnapshot());
     } finally {
       setLoading(false);
     }
-  }, [applySnapshot]);
+  }, [applySnapshot, handleUnauthorized, isAuthenticated, isDevBypass]);
 
   useEffect(() => {
+    if (!isAuthenticated && !isDevBypass) {
+      setLoading(false);
+      setLive(false);
+      return;
+    }
     void refresh();
-  }, [refresh]);
+  }, [refresh, isAuthenticated, isDevBypass]);
 
   useEffect(() => {
+    if (!isAuthenticated && !isDevBypass) return;
+
     const unsubscribe = subscribeDashboardSse({
       onConnected: (data) => {
         setLive(true);
@@ -96,10 +123,15 @@ export function useDashboardData(): DashboardDataState {
       onKommoUpdated: () => {
         void refresh();
       },
-      onError: () => setLive(false),
+      onError: (err) => {
+        setLive(false);
+        if (err instanceof SessionExpiredError) {
+          void handleUnauthorized();
+        }
+      },
     });
     return unsubscribe;
-  }, [applySnapshot, refresh]);
+  }, [applySnapshot, refresh, handleUnauthorized, isAuthenticated, isDevBypass]);
 
   return { snapshot, loading, error, live, refresh };
 }

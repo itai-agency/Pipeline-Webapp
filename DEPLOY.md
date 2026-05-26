@@ -27,7 +27,9 @@ Copiar desde `.env.local` (nunca commitear):
 |----------|-------------|
 | `NODE_ENV` | `production` |
 | `SUPABASE_URL` | URL del proyecto |
-| `SUPABASE_SERVICE_ROLE_KEY` | Solo backend |
+| `SUPABASE_SERVICE_ROLE_KEY` | Solo backend (escrituras sync) |
+| `SUPABASE_ANON_KEY` | Valida JWT del dashboard en `/api/dashboard` y `/api/realtime` |
+| `AUTH_REQUIRED` | Opcional; default `true` en production |
 | `META_ACCESS_TOKEN` | Token Meta Ads |
 | `META_API_VERSION` | `v21.0` |
 | `KOMMO_SUBDOMAIN` | Subdominio Kommo |
@@ -60,6 +62,8 @@ El scheduler sincroniza Meta/Kommo cada **5 minutos** en producción.
 | Variable | Valor |
 |----------|--------|
 | `VITE_API_BASE_URL` | `https://TU-API.onrender.com` (sin `/` final) — **obligatoria** |
+| `VITE_SUPABASE_URL` | Misma URL que en Render |
+| `VITE_SUPABASE_ANON_KEY` | Anon key (Settings → API en Supabase) |
 
 Sin `VITE_API_BASE_URL`, el dashboard llama a `/api` en el mismo dominio de Vercel (no hay API ahí).
 
@@ -67,6 +71,15 @@ Sin `VITE_API_BASE_URL`, el dashboard llama a `/api` en el mismo dominio de Verc
 
 - `VITE_DEV_BYPASS_AUTH`
 - `SUPABASE_SERVICE_ROLE_KEY` ni tokens Meta/Kommo
+
+### Supabase Auth (antes del primer login en prod)
+
+1. Authentication → Providers: Email activo.
+2. Desactivar registro público (solo invitación/admin).
+3. URL configuration: Site URL = tu dominio Vercel; Redirect URLs = `http://localhost:5173/**` y previews.
+4. Authentication → Users: invitar o crear usuarios del equipo.
+
+Orden de deploy recomendado: **Render (API con auth)** → **Vercel (login Supabase)** → smoke test.
 
 4. Deploy → abrir la URL y probar login + dashboard con datos live.
 

@@ -4,15 +4,41 @@
 
 1. Proyecto Supabase con migración aplicada: [`supabase/migrations/001_initial_schema.sql`](supabase/migrations/001_initial_schema.sql)
 2. Variables en `.env` (ver [`.env.example`](.env.example))
+3. Usuarios del dashboard creados en Supabase Auth (invitación; registro público desactivado)
+
+## Autenticación (Supabase)
+
+| Capa | Comportamiento |
+|------|----------------|
+| **Login** | Email + contraseña vía `signInWithPassword` en el SPA |
+| **API lectura** | `GET /api/dashboard/snapshot` y `GET /api/realtime/dashboard` requieren `Authorization: Bearer <access_token>` en production |
+| **API sync** | `POST /api/meta/sync` y `POST /api/kommo/sync` usan `SYNC_API_SECRET` (no el JWT de usuario) |
+| **Datos** | El API sigue escribiendo con **service role**; el JWT solo autoriza acceso al snapshot/SSE |
+
+Variables:
+
+| Variable | Dónde |
+|----------|--------|
+| `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` | Vercel + `.env.local` |
+| `SUPABASE_ANON_KEY` | Render (validación JWT) |
+| `AUTH_REQUIRED` | Render; default `true` en `NODE_ENV=production` |
+| `VITE_DEV_BYPASS_AUTH=true` | Solo desarrollo local (sin JWT en API si `AUTH_REQUIRED` es false) |
+
+Configuración en Supabase Dashboard:
+
+1. Authentication → Providers: Email.
+2. Desactivar signups públicos.
+3. URL configuration (Site URL + Redirect URLs para Vercel y localhost).
+4. Invitar usuarios en Authentication → Users.
 
 ## Endpoints API
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | GET | `/api/health` | Health check |
-| GET | `/api/dashboard/snapshot` | Snapshot completo para el dashboard |
-| POST | `/api/dashboard/refresh` | Reconstruye métricas y emite SSE |
-| GET | `/api/realtime/dashboard` | Stream SSE (connected, meta_updated, kommo_updated, heartbeat) |
+| GET | `/api/dashboard/snapshot` | Snapshot completo (JWT en production) |
+| POST | `/api/dashboard/refresh` | Reconstruye métricas y emite SSE (JWT en production) |
+| GET | `/api/realtime/dashboard` | Stream SSE con header `Authorization` (JWT en production) |
 | POST | `/api/meta/sync` | Sincroniza gasto Meta (requiere `SYNC_API_SECRET` si está definido) |
 | POST | `/api/kommo/sync` | Sincroniza leads Kommo |
 

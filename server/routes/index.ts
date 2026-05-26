@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { requireAuthMiddleware } from "../middleware/requireAuth.js";
 import { syncAuthMiddleware } from "../middleware/syncAuth.js";
 import { dashboardRouter } from "./dashboard.routes.js";
 import { kommoRouter } from "./kommo.routes.js";
@@ -7,8 +8,8 @@ import { realtimeRouter } from "./realtime.routes.js";
 
 export const apiRouter = Router();
 
-apiRouter.use("/dashboard", dashboardRouter);
-apiRouter.use("/realtime", realtimeRouter);
+apiRouter.use("/dashboard", requireAuthMiddleware, dashboardRouter);
+apiRouter.use("/realtime", requireAuthMiddleware, realtimeRouter);
 apiRouter.use("/meta", syncAuthMiddleware, metaRouter);
 apiRouter.use("/kommo", syncAuthMiddleware, kommoRouter);
 

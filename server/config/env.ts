@@ -13,6 +13,16 @@ const envSchema = z.object({
   SYNC_API_SECRET: z.string().optional(),
   SUPABASE_URL: z.string().url().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
+  /** Anon key — validación JWT de usuarios del dashboard (no usar service role aquí). */
+  SUPABASE_ANON_KEY: z.string().min(1).optional(),
+  /** Si no se define: true en production, false en development/test. */
+  AUTH_REQUIRED: z
+    .string()
+    .optional()
+    .transform((v) => {
+      if (v === undefined) return undefined;
+      return v === "true" || v === "1";
+    }),
   META_ACCESS_TOKEN: z.string().min(1).optional(),
   META_API_VERSION: z.string().default("v21.0"),
   KOMMO_SUBDOMAIN: z.string().optional(),
@@ -45,6 +55,16 @@ export const env = loadEnv();
 
 export function isSupabaseConfigured(): boolean {
   return Boolean(env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
+export function isSupabaseAuthConfigured(): boolean {
+  return Boolean(env.SUPABASE_URL && env.SUPABASE_ANON_KEY);
+}
+
+/** JWT obligatorio en rutas dashboard/realtime (default: sí en production). */
+export function isAuthRequired(): boolean {
+  if (typeof env.AUTH_REQUIRED === "boolean") return env.AUTH_REQUIRED;
+  return env.NODE_ENV === "production";
 }
 
 export function isMetaConfigured(): boolean {

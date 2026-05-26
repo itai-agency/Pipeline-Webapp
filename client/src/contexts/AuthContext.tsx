@@ -1,47 +1,111 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
+import type { Session, User } from "@supabase/supabase-js";
 import { isDevAuthBypassEnabled } from "@/const";
+import { isSupabaseBrowserConfigured, supabaseBrowser } from "@/lib/supabase/browserClient";
+
+export type LoginResult = { ok: true } | { ok: false; message: string };
 
 interface AuthContextType {
   isAuthenticated: boolean;
   isDevBypass: boolean;
-  login: (username: string, password: string) => boolean;
-  logout: () => void;
+  isLoading: boolean;
+  user: User | null;
+  login: (email: string, password: string) => Promise<LoginResult>;
+  logout: () => Promise<void>;
+  getAccessToken: () => Promise<string | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function mapAuthError(message: string): string {
+  const lower = message.toLowerCase();
+  if (lower.includes("invalid login credentials")) {
+    return "Email o contraseña incorrectos";
+  }
+  if (lower.includes("email not confirmed")) {
+    return "Confirma tu email antes de ingresar";
+  }
+  return message;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const devBypass = isDevAuthBypassEnabled();
-  const [isAuthenticated, setIsAuthenticated] = useState(devBypass);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(!devBypass);
 
   useEffect(() => {
     if (devBypass) {
-      setIsAuthenticated(true);
+      setIsLoading(false);
       return;
     }
-    const stored = localStorage.getItem("auth_token");
-    if (stored === "authenticated") {
-      setIsAuthenticated(true);
+    if (!supabaseBrowser) {
+      setIsLoading(false);
+      return;
     }
+
+    let mounted = true;
+
+    void supabaseBrowser.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
+      setSession(data.session);
+      setIsLoading(false);
+    });
+
+    const { data: subscription } = supabaseBrowser.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+      setIsLoading(false);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.subscription.unsubscribe();
+    };
   }, [devBypass]);
 
-  const login = (username: string, password: string): boolean => {
-    if (username === "edone" && password === "TJ2026") {
-      localStorage.setItem("auth_token", "authenticated");
-      setIsAuthenticated(true);
-      return true;
+  const login = useCallback(async (email: string, password: string): Promise<LoginResult> => {
+    if (devBypass) return { ok: true };
+    if (!supabaseBrowser || !isSupabaseBrowserConfigured()) {
+      return { ok: false, message: "Supabase no está configurado en el frontend" };
     }
-    return false;
-  };
+    const { error } = await supabaseBrowser.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    if (error) {
+      return { ok: false, message: mapAuthError(error.message) };
+    }
+    return { ok: true };
+  }, [devBypass]);
 
-  const logout = () => {
+  const logout = useCallback(async () => {
     if (devBypass) return;
-    localStorage.removeItem("auth_token");
-    setIsAuthenticated(false);
-  };
+    if (supabaseBrowser) {
+      await supabaseBrowser.auth.signOut();
+    }
+    setSession(null);
+  }, [devBypass]);
+
+  const getAccessToken = useCallback(async (): Promise<string | null> => {
+    if (devBypass) return null;
+    if (!supabaseBrowser) return null;
+    const { data } = await supabaseBrowser.auth.getSession();
+    return data.session?.access_token ?? null;
+  }, [devBypass]);
+
+  const isAuthenticated = devBypass || !!session;
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isDevBypass: devBypass, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        isDevBypass: devBypass,
+        isLoading,
+        user: session?.user ?? null,
+        login,
+        logout,
+        getAccessToken,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
