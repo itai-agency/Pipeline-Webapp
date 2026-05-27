@@ -30,6 +30,16 @@ Configuración en Supabase Dashboard:
 2. Desactivar signups públicos.
 3. URL configuration (Site URL + Redirect URLs para Vercel y localhost).
 4. Invitar usuarios en Authentication → Users.
+5. Redirect URLs deben incluir `https://TU-APP.vercel.app/auth/set-password` (ver [`supabase/AUTH_SETUP.md`](supabase/AUTH_SETUP.md)).
+
+### Invitación y recuperación de contraseña
+
+| Acción | UI |
+|--------|-----|
+| Admin invita usuario | Correo Supabase → `/auth/set-password` (definir contraseña) |
+| Usuario olvida contraseña | Login → “¿Olvidaste tu contraseña?” → correo → `/auth/set-password` |
+
+Hasta guardar la contraseña, la app redirige a `/auth/set-password` y **no** muestra el dashboard.
 
 ## Endpoints API
 
