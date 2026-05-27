@@ -30,6 +30,11 @@ const envSchema = z.object({
   KOMMO_PIPELINE_ID: z.string().optional(),
   KOMMO_CLIENT_MAP: z.string().default("{}"),
   KOMMO_STATUS_MAP: z.string().optional(),
+  /** Si true (default), embudo Kommo usa kommoControlReference.ts (HTML de control). */
+  KOMMO_USE_CONTROL_REFERENCE: z
+    .string()
+    .optional()
+    .transform((v) => v !== "false" && v !== "0"),
   META_ACCOUNTS: z.string().optional(),
   /** Orígenes del front (Vercel), separados por coma. Ej: https://app.vercel.app */
   CORS_ALLOWED_ORIGINS: z.string().optional(),

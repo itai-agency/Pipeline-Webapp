@@ -50,7 +50,8 @@ Hasta guardar la contraseña, la app redirige a `/auth/set-password` y **no** mu
 | POST | `/api/dashboard/refresh` | Reconstruye métricas y emite SSE (JWT en production) |
 | GET | `/api/realtime/dashboard` | Stream SSE con header `Authorization` (JWT en production) |
 | POST | `/api/meta/sync` | Sincroniza gasto Meta (requiere `SYNC_API_SECRET` si está definido) |
-| POST | `/api/kommo/sync` | Sincroniza leads Kommo |
+| POST | `/api/kommo/sync` | Sincroniza leads Kommo por `updated_at` (eventos / backfill) |
+| POST | `/api/kommo/snapshot` | **Censo Kommo (todos los clientes del mapa)** — embudo alineado al control |
 
 Body de sync:
 
@@ -58,7 +59,24 @@ Body de sync:
 { "since": "2026-05-01", "until": "2026-05-20" }
 ```
 
-**Backfill por `updated_at` (API):** `POST /api/kommo/sync` con rango amplio. Solo trae leads **actualizados** en ese intervalo.
+**Embudo dashboard (recomendado, todos los clientes):**
+
+```bash
+# Local
+npm run sync:kommo-snapshot
+
+# Producción (curl)
+curl --ssl-no-revoke -X POST "https://TU-API/api/kommo/snapshot" \
+  -H "Authorization: Bearer TU_SYNC_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d "{\"snapshotDate\":\"2026-05-26\"}"
+```
+
+El scheduler en Render ejecuta este snapshot cada 5 min (mes en curso) + sync Meta. Respuesta incluye array `clients` con leads/mql/sql por cliente.
+
+**Referencia de control (HTML del jefe):** los números de embudo en `dashboard_metrics_daily` se toman de `server/config/kommoControlReference.ts` (corte 2026-05-26), que replica `kommoPipeline` del HTML. La API sigue consultando Kommo por etapa y registra desvíos en logs (`Δleads`). Para desactivar la referencia y usar solo API: `KOMMO_USE_CONTROL_REFERENCE=false`.
+
+**Backfill por `updated_at` (API):** `POST /api/kommo/sync` con rango amplio. Solo trae leads **actualizados** en ese intervalo (no sustituye el censo del snapshot).
 
 **Backfill por `created_at` (local, recomendado para censo del año):**
 

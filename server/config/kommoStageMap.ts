@@ -28,6 +28,8 @@ export type KommoStatusInfo = {
   id: number;
   name: string;
   pipeline_id?: number;
+  /** 0 = en curso, 1 = ganado (excluir del censo), 2 = perdido */
+  type?: number;
 };
 
 /** Etapa única por lead (snapshot Kommo — alineado al HTML de control). */

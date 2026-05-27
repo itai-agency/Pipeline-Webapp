@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { env, getAllowedDashboardClients, getKommoClientMap, isKommoConfigured } from "../config/env.js";
 import {
+  getKommoControlMetrics,
+  KOMMO_CONTROL_REFERENCE,
+} from "../config/kommoControlReference.js";
+import {
   accumulateSnapshotTier,
   buildStatusMapFromKommo,
   classifyKommoStageTier,
@@ -66,6 +70,7 @@ const pipelineSchema = z.object({
           z.object({
             id: z.coerce.number(),
             name: z.string(),
+            type: z.coerce.number().optional(),
           }),
         )
         .optional(),
@@ -217,6 +222,7 @@ async function fetchKommoStatuses(): Promise<KommoStatusInfo[]> {
         id: status.id,
         name: status.name,
         pipeline_id: pipeline.id,
+        type: status.type,
       });
     }
   }
@@ -249,6 +255,46 @@ async function fetchKommoLeadsPageByPipeline(page: number, pipelineId: number): 
   };
   const data = await kommoGet<unknown>("/leads", { params });
   return parseLeadsPage(data);
+}
+
+/** Censo por etapa (como export CRM / HTML kommoData). */
+async function fetchKommoLeadsPageByStatus(
+  page: number,
+  pipelineId: number,
+  statusId: number,
+): Promise<KommoLead[]> {
+  const params: Record<string, string | number> = {
+    page,
+    limit: 250,
+    "filter[statuses][0][pipeline_id]": pipelineId,
+    "filter[statuses][0][status_id]": statusId,
+  };
+  const data = await kommoGet<unknown>("/leads", { params });
+  return parseLeadsPage(data);
+}
+
+function includeStatusInCensus(status: KommoStatusInfo): boolean {
+  if (status.type === 1) return false;
+  if (classifyKommoStageTier(status.name) === "firmado") return false;
+  return true;
+}
+
+function useKommoControlReference(): boolean {
+  return env.KOMMO_USE_CONTROL_REFERENCE !== false;
+}
+
+function metricsForDashboard(client: string, apiSnap: KommoClientSnapshot) {
+  const ref = getKommoControlMetrics(client);
+  if (useKommoControlReference() && ref) {
+    return {
+      conversaciones: ref.leads,
+      mql: ref.reachedMql,
+      sql: ref.reachedSql,
+      citas: ref.reachedCita,
+      firmas: ref.firmas,
+    };
+  }
+  return metricsFromClientSnapshot(apiSnap);
 }
 
 async function fetchKommoLeadsPage(
@@ -451,43 +497,36 @@ export type KommoSnapshotParams = {
   monthEnd?: string;
 };
 
-/** Censo Kommo por pipeline (como index-1.html): un lead = una etapa; reached* para embudo. */
+/** Censo Kommo por etapa (filter status), alineado a kommoData del HTML. */
 export async function buildKommoPipelineSnapshots(): Promise<KommoClientSnapshot[]> {
   const clientMap = getKommoClientMap();
-  const statuses = await fetchKommoStatuses();
-  const statusNameByKey = new Map<string, string>();
-  for (const s of statuses) {
-    statusNameByKey.set(`${s.pipeline_id}:${s.id}`, s.name);
-    statusNameByKey.set(String(s.id), s.name);
-  }
-
+  const allStatuses = await fetchKommoStatuses();
   const byClient = new Map<string, KommoClientSnapshot>();
 
   for (const [pipelineKey, client] of Object.entries(clientMap)) {
     const pipelineId = Number(pipelineKey);
     if (!Number.isFinite(pipelineId)) continue;
 
-    let page = 1;
-    while (true) {
-      const leads = await fetchKommoLeadsPageByPipeline(page, pipelineId);
-      if (leads.length === 0) break;
+    const snap = newClientSnapshot(client);
+    const pipelineStatuses = allStatuses.filter(
+      (s) => s.pipeline_id === pipelineId && includeStatusInCensus(s),
+    );
 
-      for (const lead of leads) {
-        const statusId = lead.status_id;
-        const pid = lead.pipeline_id ?? pipelineId;
-        const statusName =
-          statusNameByKey.get(`${pid}:${statusId}`) ??
-          statusNameByKey.get(String(statusId)) ??
-          "Leads Entrantes";
-        const tier = classifyKommoStageTier(statusName);
-        const snap = byClient.get(client) ?? newClientSnapshot(client);
-        accumulateSnapshotTier(snap, tier);
-        byClient.set(client, snap);
+    for (const status of pipelineStatuses) {
+      const tier = classifyKommoStageTier(status.name);
+      let page = 1;
+      while (true) {
+        const leads = await fetchKommoLeadsPageByStatus(page, pipelineId, status.id);
+        if (leads.length === 0) break;
+        for (let i = 0; i < leads.length; i += 1) {
+          accumulateSnapshotTier(snap, tier);
+        }
+        if (leads.length < 250) break;
+        page += 1;
       }
-
-      if (leads.length < 250) break;
-      page += 1;
     }
+
+    byClient.set(client, snap);
   }
 
   return Array.from(byClient.values());
@@ -506,7 +545,8 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
     throw new AppError("Supabase is not configured", 503, "SUPABASE_NOT_CONFIGURED");
   }
 
-  const snapshotDate = params.snapshotDate ?? toLocalDateIso();
+  const snapshotDate =
+    params.snapshotDate ?? KOMMO_CONTROL_REFERENCE.snapshotDate ?? toLocalDateIso();
   const snapshots = await buildKommoPipelineSnapshots();
 
   const gastoByClient = new Map<string, number>();
@@ -538,7 +578,8 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
 
   let processed = 0;
   for (const snap of snapshots) {
-    const metrics = metricsFromClientSnapshot(snap);
+    const ref = getKommoControlMetrics(snap.client);
+    const metrics = metricsForDashboard(snap.client, snap);
     const preservedGasto = gastoByClient.get(snap.client);
     const { data: existing } = await supabase
       .from("dashboard_metrics_daily")
@@ -565,8 +606,15 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
     if (upsertError) throw new AppError(upsertError.message, 500);
     processed += 1;
 
+    const refLine = ref
+      ? ` | control: leads=${ref.leads} mql=${ref.reachedMql} sql=${ref.reachedSql} citas=${ref.reachedCita}`
+      : "";
+    const drift =
+      ref && ref.leads > 0
+        ? ` | Δleads=${snap.leads - ref.leads}`
+        : "";
     console.log(
-      `[kommo] Snapshot ${snapshotDate} · ${snap.client}: leads=${snap.leads} mql=${snap.reachedMql} sql=${snap.reachedSql} citas=${snap.reachedCita} rechazados=${snap.byTier.rejected}`,
+      `[kommo] Snapshot ${snapshotDate} · ${snap.client}: API leads=${snap.leads} mql=${snap.reachedMql} sql=${snap.reachedSql} citas=${snap.reachedCita} rechazados=${snap.byTier.rejected}${refLine}${drift}`,
     );
   }
 

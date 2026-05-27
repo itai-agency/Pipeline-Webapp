@@ -80,13 +80,12 @@ function collectAvailableDates(metaSpend: MetaSpendRowDto[], daily: PipelineRowD
   return Array.from(dates).sort();
 }
 
-export async function rebuildMetricsFromSources(since?: string, until?: string): Promise<number> {
-  const range = since && until ? { since, until } : currentMonthRange();
-  const kommoRows = await aggregateKommoToDailyMetrics(range.since, range.until);
+/** Aplica gasto Meta sobre filas existentes (no toca embudo Kommo). */
+export async function mergeMetaSpendIntoDaily(since: string, until: string): Promise<number> {
   const supabase = getSupabaseAdmin();
-  if (!supabase) return kommoRows;
+  if (!supabase) return 0;
 
-  const metaSpend = await getMetaSpendFromDb(range.since, range.until);
+  const metaSpend = await getMetaSpendFromDb(since, until);
   for (const row of metaSpend) {
     const { data: existing } = await supabase
       .from("dashboard_metrics_daily")
@@ -112,7 +111,14 @@ export async function rebuildMetricsFromSources(since?: string, until?: string):
     );
   }
 
-  return kommoRows + metaSpend.length;
+  return metaSpend.length;
+}
+
+export async function rebuildMetricsFromSources(since?: string, until?: string): Promise<number> {
+  const range = since && until ? { since, until } : currentMonthRange();
+  const kommoRows = await aggregateKommoToDailyMetrics(range.since, range.until);
+  const metaRows = await mergeMetaSpendIntoDaily(range.since, range.until);
+  return kommoRows + metaRows;
 }
 
 async function loadMetricsDaily(): Promise<PipelineRowDto[]> {
@@ -219,12 +225,19 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
   };
 }
 
+export type RefreshMetricsMode = "full" | "meta_only";
+
 /** Si no pasas rango, reconstruye solo el mes en curso (comportamiento del scheduler). */
 export async function refreshAndBroadcast(
   metricRange?: { since: string; until: string },
+  options?: { kommoMode?: RefreshMetricsMode },
 ): Promise<DashboardSnapshotDto> {
   const range = metricRange ?? currentMonthRange();
-  await rebuildMetricsFromSources(range.since, range.until);
+  if (options?.kommoMode === "meta_only") {
+    await mergeMetaSpendIntoDaily(range.since, range.until);
+  } else {
+    await rebuildMetricsFromSources(range.since, range.until);
+  }
   const snapshot = await getDashboardSnapshot();
   sseHub.broadcast("snapshot_refreshed", snapshot);
   return snapshot;

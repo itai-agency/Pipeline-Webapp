@@ -1,5 +1,5 @@
 /**
- * Snapshot Kommo alineado al HTML de control (censo por pipeline, corte al día indicado).
+ * Snapshot Kommo para TODOS los clientes del mapa (censo por pipeline).
  *
  * Uso:
  *   npm run sync:kommo-snapshot
@@ -9,17 +9,19 @@ import { currentMonthRange, toLocalDateIso } from "../server/lib/dateRanges.js";
 import { syncKommoSnapshotMetrics } from "../server/services/kommo.service.js";
 import { refreshAndBroadcast } from "../server/services/metrics.service.js";
 import { isKommoConfigured, isSupabaseConfigured } from "../server/config/env.js";
+import { getKommoControlMetrics } from "../server/config/kommoControlReference.js";
 
 const snapshotDate = process.env.KOMMO_SNAPSHOT_DATE ?? toLocalDateIso();
 const month = currentMonthRange();
 
 async function main(): Promise<void> {
   if (!isSupabaseConfigured() || !isKommoConfigured()) {
-    console.error("Faltan variables Kommo o Supabase en .env.local");
+    console.error("Falta SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, KOMMO_SUBDOMAIN o KOMMO_ACCESS_TOKEN en .env.local");
     process.exit(1);
   }
 
-  console.log(`Snapshot Kommo · corte ${snapshotDate} · mes ${month.since} → ${month.until}\n`);
+  console.log(`=== Snapshot Kommo (todos los clientes) ===`);
+  console.log(`Corte: ${snapshotDate} · Mes: ${month.since} → ${month.until}\n`);
 
   const { processed, snapshots } = await syncKommoSnapshotMetrics({
     snapshotDate,
@@ -27,15 +29,19 @@ async function main(): Promise<void> {
     monthEnd: month.until,
   });
 
-  const dos = snapshots.find((s) => s.client === "DOS HOGARES");
-  if (dos) {
+  console.log("\n--- Resumen por cliente ---");
+  for (const s of [...snapshots].sort((a, b) => a.client.localeCompare(b.client))) {
+    const ref = getKommoControlMetrics(s.client);
+    const refStr = ref
+      ? `  → control: leads=${ref.leads} mql=${ref.reachedMql} sql=${ref.reachedSql} citas=${ref.reachedCita}`
+      : "";
     console.log(
-      `\nDOS HOGARES (esperado ~99 leads, ~4 MQL reached, ~1 SQL): leads=${dos.leads} mql=${dos.reachedMql} sql=${dos.reachedSql} citas=${dos.reachedCita}`,
+      `${s.client.padEnd(16)} API leads=${String(s.leads).padStart(4)}  mql=${String(s.reachedMql).padStart(3)}  sql=${String(s.reachedSql).padStart(3)}  citas=${String(s.reachedCita).padStart(3)}${refStr}`,
     );
   }
 
-  await refreshAndBroadcast({ since: month.since, until: month.until });
-  console.log(`\nListo: ${processed} clientes escritos en dashboard_metrics_daily`);
+  await refreshAndBroadcast({ since: month.since, until: month.until }, { kommoMode: "meta_only" });
+  console.log(`\nListo: ${processed} clientes en dashboard_metrics_daily (fecha ${snapshotDate}).`);
 }
 
 main().catch((err) => {

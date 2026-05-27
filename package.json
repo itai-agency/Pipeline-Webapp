@@ -18,6 +18,7 @@
     "sync:kommo": "node --use-system-ca --import tsx scripts/sync-kommo-month.ts",
     "backfill:kommo-year": "node --use-system-ca --import tsx scripts/backfill-kommo-created-year.ts",
     "sync:kommo-snapshot": "node --use-system-ca --import tsx scripts/sync-kommo-snapshot.ts",
+    "compare:kommo-html": "node --use-system-ca --import tsx scripts/compare-kommo-html.ts",
     "audit:dos-hogares": "node --use-system-ca --import tsx scripts/audit-dos-hogares-stages.ts",
     "kommo:discover": "node --use-system-ca --import tsx scripts/discover-kommo-config.ts",
     "format": "prettier --write ."
