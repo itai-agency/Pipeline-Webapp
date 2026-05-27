@@ -997,6 +997,39 @@ body::before {
   background: var(--inmo-mist);
 }
 
+.sidebar-user-email {
+  display: block;
+  margin-top: 8px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: .65rem !important;
+  color: var(--inmo-muted) !important;
+}
+
+.sidebar-logout {
+  margin-top: 8px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid rgba(23, 61, 51, .1);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: .72rem;
+  font-weight: 700;
+  background: transparent;
+  color: var(--inmo-muted);
+  cursor: pointer;
+}
+
+.sidebar-logout:hover {
+  background: rgba(23, 61, 51, .06);
+  color: var(--inmo-ink);
+}
+
 .app-workspace {
   padding: 16px clamp(14px, 1.8vw, 24px) 28px;
   gap: 12px;

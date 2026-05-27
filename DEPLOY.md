@@ -63,7 +63,7 @@ El scheduler sincroniza Meta/Kommo cada **5 minutos** en producción.
 |----------|--------|
 | `VITE_API_BASE_URL` | `https://TU-API.onrender.com` (sin `/` final) — **obligatoria** |
 | `VITE_SUPABASE_URL` | Misma URL que en Render |
-| `VITE_SUPABASE_ANON_KEY` | Anon key (Settings → API en Supabase) |
+| `VITE_SUPABASE_ANON_KEY` | Anon key (Settings → API). **Debe llevar prefijo `VITE_`** — `SUPABASE_ANON_KEY` sin prefijo no llega al build del SPA |
 
 Sin `VITE_API_BASE_URL`, el dashboard llama a `/api` en el mismo dominio de Vercel (no hay API ahí).
 

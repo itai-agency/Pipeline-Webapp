@@ -1,7 +1,11 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { isDevAuthBypassEnabled } from "@/const";
-import { isSupabaseBrowserConfigured, supabaseBrowser } from "@/lib/supabase/browserClient";
+import {
+  getSupabaseConfigHint,
+  isSupabaseBrowserConfigured,
+  supabaseBrowser,
+} from "@/lib/supabase/browserClient";
 
 export type LoginResult = { ok: true } | { ok: false; message: string };
 
@@ -65,7 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (email: string, password: string): Promise<LoginResult> => {
     if (devBypass) return { ok: true };
     if (!supabaseBrowser || !isSupabaseBrowserConfigured()) {
-      return { ok: false, message: "Supabase no está configurado en el frontend" };
+      return {
+        ok: false,
+        message: getSupabaseConfigHint() ?? "Supabase no está configurado en el frontend",
+      };
     }
     const { error } = await supabaseBrowser.auth.signInWithPassword({
       email: email.trim(),

@@ -16,10 +16,13 @@ import {
   LayoutDashboard,
   ListChecks,
   Search,
+  LogOut,
   Target,
   TrendingUp,
   Users,
 } from "lucide-react";
+import { useLocation } from "wouter";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Area,
   AreaChart,
@@ -398,6 +401,13 @@ function SemaforoKpi({ item }: { item: FunnelKpi }) {
 
 export default function Home() {
   const { snapshot, loading, error, live, refresh } = useDashboardData();
+  const { logout, user, isDevBypass } = useAuth();
+  const [, setLocation] = useLocation();
+
+  const handleLogout = async () => {
+    await logout();
+    setLocation("/login");
+  };
   const daily = snapshot.daily as unknown as PipelineRow[];
   const history = snapshot.daily as unknown as PipelineRow[];
   const sdrRows = snapshot.sdrHistory as unknown as SdrHistoryRow[];
@@ -582,6 +592,24 @@ export default function Home() {
           <button type="button" className="sidebar-refresh" onClick={() => void refresh()}>
             Actualizar
           </button>
+          {!isDevBypass ? (
+            <>
+              {user?.email ? (
+                <small className="sidebar-user-email" title={user.email}>
+                  {user.email}
+                </small>
+              ) : null}
+              <button
+                type="button"
+                className="sidebar-logout"
+                onClick={() => void handleLogout()}
+                aria-label="Cerrar sesión"
+              >
+                <LogOut size={14} aria-hidden />
+                Cerrar sesión
+              </button>
+            </>
+          ) : null}
         </div>
       </aside>
 
