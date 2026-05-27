@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { z } from "zod";
 import { currentMonthRange } from "../lib/dateRanges.js";
-import { syncKommoLeads, syncKommoSnapshotMetrics } from "../services/kommo.service.js";
+import {
+  rebuildDailyMetricsFromEvents,
+  syncKommoLeads,
+  syncKommoSnapshotMetrics,
+} from "../services/kommo.service.js";
 import { refreshAndBroadcast } from "../services/metrics.service.js";
 
 const syncBodySchema = z.object({
@@ -22,6 +26,13 @@ const snapshotBodySchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
+  /** Peligroso: borra el mes antes del corte. No usar tras backfill. */
+  replaceMonth: z.boolean().optional(),
+});
+
+const rebuildBodySchema = z.object({
+  since: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
 
 export const kommoRouter = Router();
@@ -55,10 +66,11 @@ kommoRouter.post("/snapshot", async (req, res, next) => {
 
     const { processed, snapshots } = await syncKommoSnapshotMetrics({
       snapshotDate,
-      monthStart,
-      monthEnd,
+      monthStart: body.replaceMonth ? monthStart : undefined,
+      monthEnd: body.replaceMonth ? monthEnd : undefined,
+      replaceMonth: body.replaceMonth ?? false,
     });
-    await refreshAndBroadcast({ since: monthStart, until: monthEnd }, { kommoMode: "meta_only" });
+    await refreshAndBroadcast({ since: monthStart, until: monthEnd });
 
     res.json({
       source: "kommo",
@@ -77,6 +89,25 @@ kommoRouter.post("/snapshot", async (req, res, next) => {
         firmas: s.reachedFirmas,
         rechazados: s.byTier.rejected,
       })),
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/** Reconstruye dashboard_metrics_daily día a día desde kommo_lead_events. */
+kommoRouter.post("/rebuild-daily", async (req, res, next) => {
+  try {
+    const body = rebuildBodySchema.parse(req.body ?? {});
+    const rows = await rebuildDailyMetricsFromEvents(body.since, body.until);
+    await refreshAndBroadcast({ since: body.since, until: body.until });
+    res.json({
+      source: "kommo",
+      status: "success",
+      mode: "daily_from_events",
+      since: body.since,
+      until: body.until,
+      metricRowsUpserted: rows,
     });
   } catch (err) {
     next(err);

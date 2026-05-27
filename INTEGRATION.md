@@ -72,9 +72,20 @@ curl --ssl-no-revoke -X POST "https://TU-API/api/kommo/snapshot" \
   -d "{\"snapshotDate\":\"2026-05-26\"}"
 ```
 
-El scheduler en Render ejecuta este snapshot cada 5 min (mes en curso) + sync Meta. Respuesta incluye array `clients` con leads/mql/sql por cliente.
+El scheduler en producción hace **sync por `updated_at` + métricas diarias desde `kommo_lead_events`** (no borra el mes).
 
-**Referencia de control (HTML del jefe):** los números de embudo en `dashboard_metrics_daily` se toman de `server/config/kommoControlReference.ts` (corte 2026-05-26), que replica `kommoPipeline` del HTML. La API sigue consultando Kommo por etapa y registra desvíos en logs (`Δleads`). Para desactivar la referencia y usar solo API: `KOMMO_USE_CONTROL_REFERENCE=false`.
+**Backfill diario (lo correcto para reportes por día):**
+
+```bash
+npm run backfill:kommo-year
+npm run rebuild:kommo-daily   # o POST /api/kommo/rebuild-daily con since/until
+```
+
+Cada lead se guarda con `event_date` = fecha de **creación** (`created_at`). `dashboard_metrics_daily` tiene **una fila por día y cliente** con la suma de ese día.
+
+**No ejecutar** `sync:kommo-snapshot` tras un backfill: antes borraba todo mayo y dejaba un solo día con números del HTML. El snapshot solo sirve como auditoría de censo (`KOMMO_SNAPSHOT_REPLACE_MONTH=true` para el comportamiento antiguo).
+
+**Referencia HTML:** solo si `KOMMO_USE_CONTROL_REFERENCE=true` en el snapshot de auditoría.
 
 **Backfill por `updated_at` (API):** `POST /api/kommo/sync` con rango amplio. Solo trae leads **actualizados** en ese intervalo (no sustituye el censo del snapshot).
 

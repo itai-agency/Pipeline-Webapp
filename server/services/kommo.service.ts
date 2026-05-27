@@ -492,7 +492,11 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<KommoSync
 export type KommoSnapshotParams = {
   /** Fecha del corte (default: hoy). */
   snapshotDate?: string;
-  /** Si se define, borra métricas Kommo del mes antes de escribir el snapshot. */
+  /**
+   * Solo auditoría: si true, borra filas del rango antes de escribir el corte.
+   * Rompe el backfill diario — no usar en scheduler ni tras backfill.
+   */
+  replaceMonth?: boolean;
   monthStart?: string;
   monthEnd?: string;
 };
@@ -550,7 +554,7 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
   const snapshots = await buildKommoPipelineSnapshots();
 
   const gastoByClient = new Map<string, number>();
-  if (params.monthStart && params.monthEnd) {
+  if (params.replaceMonth && params.monthStart && params.monthEnd) {
     const allowed = Array.from(getAllowedDashboardClients());
     for (const client of allowed) {
       const { data: monthRows, error: loadErr } = await supabase
@@ -619,6 +623,35 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
   }
 
   return { processed, snapshots };
+}
+
+/**
+ * Reconstruye embudo diario desde kommo_lead_events (1 fila por fecha+cliente).
+ * Primero pone a 0 conversaciones/mql/sql/citas/firmas en el rango (conserva gasto Meta).
+ */
+export async function rebuildDailyMetricsFromEvents(since: string, until: string): Promise<number> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return 0;
+
+  const allowed = Array.from(getAllowedDashboardClients());
+  for (const client of allowed) {
+    const { error } = await supabase
+      .from("dashboard_metrics_daily")
+      .update({
+        conversaciones: 0,
+        mql: 0,
+        sql: 0,
+        citas: 0,
+        firmas: 0,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("client", client)
+      .gte("metric_date", since)
+      .lte("metric_date", until);
+    if (error) throw new AppError(`Metrics reset failed: ${error.message}`, 500);
+  }
+
+  return aggregateKommoToDailyMetrics(since, until);
 }
 
 export async function aggregateKommoToDailyMetrics(since?: string, until?: string): Promise<number> {

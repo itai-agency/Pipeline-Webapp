@@ -7,7 +7,7 @@ import { getAllowedDashboardClients, isSupabaseConfigured } from "../config/env.
 import { currentMonthRange } from "../lib/dateRanges.js";
 import { AppError } from "../lib/errors.js";
 import { getSupabaseAdmin } from "../lib/supabase.js";
-import { aggregateKommoToDailyMetrics } from "./kommo.service.js";
+import { rebuildDailyMetricsFromEvents } from "./kommo.service.js";
 import { getMetaSpendFromDb } from "./meta.service.js";
 import { getStaticSnapshot } from "./staticFallback.js";
 import { sseHub } from "./sseHub.js";
@@ -116,7 +116,7 @@ export async function mergeMetaSpendIntoDaily(since: string, until: string): Pro
 
 export async function rebuildMetricsFromSources(since?: string, until?: string): Promise<number> {
   const range = since && until ? { since, until } : currentMonthRange();
-  const kommoRows = await aggregateKommoToDailyMetrics(range.since, range.until);
+  const kommoRows = await rebuildDailyMetricsFromEvents(range.since, range.until);
   const metaRows = await mergeMetaSpendIntoDaily(range.since, range.until);
   return kommoRows + metaRows;
 }

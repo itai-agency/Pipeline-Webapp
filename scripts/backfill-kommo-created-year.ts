@@ -11,7 +11,7 @@
  * Requiere .env.local con Kommo + Supabase (service role).
  */
 import { isKommoConfigured, isSupabaseConfigured } from "../server/config/env.js";
-import { currentMonthRange, yearMonthChunks, yearToDateRange } from "../server/lib/dateRanges.js";
+import { yearMonthChunks, yearToDateRange } from "../server/lib/dateRanges.js";
 import { purgeUnmappedKommoData, syncKommoLeads } from "../server/services/kommo.service.js";
 import { rebuildMetricsFromSources } from "../server/services/metrics.service.js";
 
@@ -25,8 +25,16 @@ async function main(): Promise<void> {
   console.log("Año:", year);
   console.log(
     "Modo:",
-    useCensus ? "censo pipeline (estado actual, event_date=hoy)" : wholeYear ? "rango anual created_at" : "mes a mes created_at",
+    useCensus
+      ? "censo pipeline (NO backfill diario — todo en event_date=hoy)"
+      : wholeYear
+        ? "rango anual created_at"
+        : "mes a mes created_at",
   );
+  if (useCensus) {
+    console.error("\nError: --census no es backfill por día. Omite --census.\n");
+    process.exit(1);
+  }
   console.log("Rango anual:", yearRange.since, "→", yearRange.until, "\n");
 
   if (!isSupabaseConfigured()) {
@@ -46,12 +54,7 @@ async function main(): Promise<void> {
   let totalProcessed = 0;
   let totalSkipped = 0;
 
-  if (useCensus) {
-    console.log("--- Censo por pipeline (todos los leads, estado actual) ---");
-    const { processed, skipped } = await syncKommoLeads({ mode: "pipeline_census", skipPurge: true });
-    totalProcessed = processed;
-    totalSkipped = skipped;
-  } else {
+  {
     const runs = wholeYear
       ? [{ ...yearRange, label: String(year) }]
       : yearMonthChunks(year);
@@ -73,14 +76,13 @@ async function main(): Promise<void> {
   }
 
   console.log("--- Reconstruir dashboard_metrics_daily ---");
-  const metricsRange = useCensus ? currentMonthRange() : yearRange;
-  const metricsRows = await rebuildMetricsFromSources(metricsRange.since, metricsRange.until);
+  const metricsRows = await rebuildMetricsFromSources(yearRange.since, yearRange.until);
   console.log(`Filas métricas upserted (aprox.): ${metricsRows}`);
+  console.log("\nListo. Cada lead queda en event_date = fecha de creación (created_at).");
+  console.log("NO ejecutes sync:kommo-snapshot después (pisaba un solo día).");
+  console.log("Si hace falta: npm run rebuild:kommo-daily");
   console.log(
-    "\nListo. Revisa kommo_lead_events por client y dashboard_metrics_daily.",
-  );
-  console.log(
-    "Nota: etapas Rechazado/Perdido siguen con embudo 0; el control externo puede contar volumen distinto.",
+    "\nNota: Kommo devuelve la etapa ACTUAL del lead, no la histórica. Rechazados cuentan conversación=1 ese día.",
   );
 }
 

@@ -1,6 +1,6 @@
 import { env, isKommoConfigured, isMetaConfigured } from "../config/env.js";
 import { currentMonthRange } from "../lib/dateRanges.js";
-import { syncKommoSnapshotMetrics } from "../services/kommo.service.js";
+import { syncKommoLeads } from "../services/kommo.service.js";
 import { syncMetaSpend } from "../services/meta.service.js";
 import { refreshAndBroadcast } from "../services/metrics.service.js";
 
@@ -13,18 +13,17 @@ async function runScheduledSync(): Promise<void> {
       await syncMetaSpend(range);
     }
     if (isKommoConfigured()) {
-      const { processed, snapshots } = await syncKommoSnapshotMetrics({
-        snapshotDate: range.until,
-        monthStart: range.since,
-        monthEnd: range.until,
+      const { processed, skipped } = await syncKommoLeads({
+        since: range.since,
+        until: range.until,
+        dateFilter: "updated_at",
+        eventDateField: "updated_at",
       });
-      const summary = snapshots
-        .map((s) => `${s.client}=${s.leads}`)
-        .sort()
-        .join(", ");
-      console.log(`[scheduler] Kommo snapshot (${processed} clientes): ${summary}`);
+      console.log(
+        `[scheduler] Kommo updated_at: ${processed} leads, ${skipped} omitidos (${range.since}→${range.until})`,
+      );
     }
-    await refreshAndBroadcast(range, { kommoMode: "meta_only" });
+    await refreshAndBroadcast(range);
     console.log("[scheduler] Sync completed", range);
   } catch (err) {
     console.error("[scheduler] Sync failed:", err);
@@ -40,5 +39,5 @@ export function startSyncScheduler(): void {
     void runScheduledSync();
   }, SYNC_INTERVAL_MS);
 
-  console.log("[scheduler] Started (interval 5m)");
+  console.log("[scheduler] Started (interval 5m, métricas diarias desde eventos)");
 }

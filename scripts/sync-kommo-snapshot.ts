@@ -23,8 +23,13 @@ async function main(): Promise<void> {
   console.log(`=== Snapshot Kommo (todos los clientes) ===`);
   console.log(`Corte: ${snapshotDate} · Mes: ${month.since} → ${month.until}\n`);
 
+  console.log(
+    "Nota: no borra el mes. Para métricas por día use: npm run rebuild:kommo-daily\n",
+  );
+
   const { processed, snapshots } = await syncKommoSnapshotMetrics({
     snapshotDate,
+    replaceMonth: process.env.KOMMO_SNAPSHOT_REPLACE_MONTH === "true",
     monthStart: month.since,
     monthEnd: month.until,
   });
@@ -40,8 +45,10 @@ async function main(): Promise<void> {
     );
   }
 
-  await refreshAndBroadcast({ since: month.since, until: month.until }, { kommoMode: "meta_only" });
-  console.log(`\nListo: ${processed} clientes en dashboard_metrics_daily (fecha ${snapshotDate}).`);
+  console.log(
+    `\nListo: auditoría de censo en ${snapshotDate} (${processed} clientes).`,
+  );
+  console.log("Para el dashboard diario: npm run rebuild:kommo-daily");
 }
 
 main().catch((err) => {
