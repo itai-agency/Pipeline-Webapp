@@ -1,11 +1,17 @@
 import { z } from "zod";
 import { env, getAllowedDashboardClients, getKommoClientMap, isKommoConfigured } from "../config/env.js";
 import {
+  accumulateSnapshotTier,
   buildStatusMapFromKommo,
+  classifyKommoStageTier,
   getStageFromKommoStatus,
+  metricsFromClientSnapshot,
+  newClientSnapshot,
+  type KommoClientSnapshot,
   type KommoStatusInfo,
   type StageCounts,
 } from "../config/kommoStageMap.js";
+import { toLocalDateIso } from "../lib/dateRanges.js";
 import { AppError } from "../lib/errors.js";
 import { kommoGet } from "../lib/kommoApi.js";
 import { getSupabaseAdmin } from "../lib/supabase.js";
@@ -72,9 +78,24 @@ const userSchema = z.object({
   name: z.string(),
 });
 
+export type KommoDateField = "updated_at" | "created_at";
+
+export type KommoSyncMode = "date_range" | "pipeline_census";
+
 export type KommoSyncParams = {
-  since: string;
-  until: string;
+  since?: string;
+  until?: string;
+  /** Filtro en la API de Kommo (default: updated_at, el del scheduler). */
+  dateFilter?: KommoDateField;
+  /** Fecha almacenada en event_date (default: igual que dateFilter). */
+  eventDateField?: KommoDateField;
+  /** Omite purge de clientes huérfanos (backfills encadenados). */
+  skipPurge?: boolean;
+  /**
+   * pipeline_census: todos los leads del pipeline (estado actual), event_date = hoy.
+   * Alinea con data control; no usa filtro de fecha en Kommo.
+   */
+  mode?: KommoSyncMode;
 };
 
 const KOMMO_PAGE_SIZE = 1000;
@@ -156,9 +177,19 @@ function toUnixRange(since: string, until: string): { from: number; to: number }
   return { from, to };
 }
 
-function resolveEventDate(lead: KommoLead, since: string, until: string): string | null {
-  const ts = lead.updated_at ?? lead.created_at;
-  if (!ts) return null;
+function leadTimestamp(lead: KommoLead, field: KommoDateField): number | null {
+  const ts = field === "created_at" ? lead.created_at : lead.updated_at;
+  return ts ?? null;
+}
+
+function resolveEventDate(
+  lead: KommoLead,
+  since: string,
+  until: string,
+  eventDateField: KommoDateField,
+): string | null {
+  const ts = leadTimestamp(lead, eventDateField);
+  if (ts == null) return null;
   const date = new Date(ts * 1000).toISOString().slice(0, 10);
   if (date < since || date > until) return null;
   return date;
@@ -210,17 +241,28 @@ async function fetchKommoUsers(): Promise<Map<number, string>> {
   return map;
 }
 
+async function fetchKommoLeadsPageByPipeline(page: number, pipelineId: number): Promise<KommoLead[]> {
+  const params: Record<string, string | number> = {
+    page,
+    limit: 250,
+    "filter[pipeline_id]": pipelineId,
+  };
+  const data = await kommoGet<unknown>("/leads", { params });
+  return parseLeadsPage(data);
+}
+
 async function fetchKommoLeadsPage(
   page: number,
   since: string,
   until: string,
+  dateFilter: KommoDateField,
 ): Promise<KommoLead[]> {
   const { from, to } = toUnixRange(since, until);
   const params: Record<string, string | number> = {
     page,
     limit: 250,
-    "filter[updated_at][from]": from,
-    "filter[updated_at][to]": to,
+    [`filter[${dateFilter}][from]`]: from,
+    [`filter[${dateFilter}][to]`]: to,
   };
   if (env.KOMMO_PIPELINE_ID) params["filter[pipeline_id]"] = env.KOMMO_PIPELINE_ID;
 
@@ -228,7 +270,9 @@ async function fetchKommoLeadsPage(
   return parseLeadsPage(data);
 }
 
-export async function syncKommoLeads(params: KommoSyncParams): Promise<number> {
+export type KommoSyncResult = { processed: number; skipped: number };
+
+export async function syncKommoLeads(params: KommoSyncParams): Promise<KommoSyncResult> {
   if (!isKommoConfigured()) {
     throw new AppError("Kommo API is not configured", 503, "KOMMO_NOT_CONFIGURED");
   }
@@ -246,14 +290,81 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<number> {
 
   let processed = 0;
   let skipped = 0;
-  let page = 1;
+
+  const mode = params.mode ?? "date_range";
+  const dateFilter = params.dateFilter ?? "updated_at";
+  const eventDateField = params.eventDateField ?? dateFilter;
+  const snapshotDate = toLocalDateIso();
 
   await supabase.from("sync_runs").insert({ source: "kommo", status: "running" });
-  await purgeUnmappedKommoData();
+  if (!params.skipPurge) {
+    await purgeUnmappedKommoData();
+  }
 
   try {
-    while (true) {
-      const leads = await fetchKommoLeadsPage(page, params.since, params.until);
+    if (mode === "pipeline_census") {
+      for (const [pipelineKey, client] of Object.entries(clientMap)) {
+        const pipelineId = Number(pipelineKey);
+        if (!Number.isFinite(pipelineId)) continue;
+        let page = 1;
+        while (true) {
+          const leads = await fetchKommoLeadsPageByPipeline(page, pipelineId);
+          if (leads.length === 0) break;
+
+          for (const lead of leads) {
+            if (!allowedClients.has(client)) {
+              skipped += 1;
+              continue;
+            }
+
+            const stage: StageCounts = getStageFromKommoStatus(
+              lead.status_id,
+              lead.pipeline_id ?? pipelineId,
+              statusMap,
+            );
+            const responsibleName =
+              (lead.responsible_user_id != null ? users.get(lead.responsible_user_id) : undefined) ??
+              (lead.responsible_user_id ? `SDR-${lead.responsible_user_id}` : "Sin asignar");
+
+            const { error } = await supabase.from("kommo_lead_events").upsert(
+              {
+                kommo_lead_id: lead.id,
+                event_date: snapshotDate,
+                client,
+                pipeline_id: lead.pipeline_id ?? pipelineId,
+                status_id: lead.status_id ?? null,
+                stage_name: statuses.find((s) => s.id === lead.status_id && s.pipeline_id === pipelineId)?.name ?? null,
+                responsible_user_id: lead.responsible_user_id ?? null,
+                responsible_name: responsibleName,
+                conversations: stage.conversaciones,
+                mql: stage.mql,
+                sql: stage.sql,
+                citas: stage.citas,
+                firmas: stage.firmas,
+                raw_payload: lead,
+                synced_at: new Date().toISOString(),
+              },
+              { onConflict: "kommo_lead_id,event_date" },
+            );
+            if (error) throw new AppError(`Kommo upsert failed: ${error.message}`, 500);
+            processed += 1;
+          }
+
+          if (leads.length < 250) break;
+          page += 1;
+        }
+      }
+
+      console.log(
+        `[kommo] Census ${snapshotDate}: ${processed} leads, ${skipped} omitidos (mapa)`,
+      );
+    } else {
+      if (!params.since || !params.until) {
+        throw new AppError("since and until are required for date_range sync", 400);
+      }
+      let page = 1;
+      while (true) {
+      const leads = await fetchKommoLeadsPage(page, params.since, params.until, dateFilter);
       if (leads.length === 0) break;
 
       for (const lead of leads) {
@@ -263,13 +374,17 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<number> {
           continue;
         }
 
-        const eventDate = resolveEventDate(lead, params.since, params.until);
+        const eventDate = resolveEventDate(lead, params.since, params.until, eventDateField);
         if (!eventDate) {
           skipped += 1;
           continue;
         }
 
-        const stage: StageCounts = getStageFromKommoStatus(lead.status_id, statusMap);
+        const stage: StageCounts = getStageFromKommoStatus(
+          lead.status_id,
+          lead.pipeline_id,
+          statusMap,
+        );
         const responsibleName =
           (lead.responsible_user_id != null ? users.get(lead.responsible_user_id) : undefined) ??
           (lead.responsible_user_id ? `SDR-${lead.responsible_user_id}` : "Sin asignar");
@@ -303,8 +418,9 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<number> {
     }
 
     console.log(
-      `[kommo] Sync ${params.since}→${params.until}: ${processed} leads, ${skipped} omitidos (fuera de mapa/fecha)`,
+      `[kommo] Sync ${params.since}→${params.until} (${dateFilter}→${eventDateField}): ${processed} leads, ${skipped} omitidos`,
     );
+    }
 
     await supabase.from("sync_runs").insert({
       source: "kommo",
@@ -313,8 +429,8 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<number> {
       finished_at: new Date().toISOString(),
     });
 
-    sseHub.broadcast("kommo_updated", { recordsProcessed: processed });
-    return processed;
+    sseHub.broadcast("kommo_updated", { recordsProcessed: processed, recordsSkipped: skipped });
+    return { processed, skipped };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     await supabase.from("sync_runs").insert({
@@ -325,6 +441,136 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<number> {
     });
     throw err;
   }
+}
+
+export type KommoSnapshotParams = {
+  /** Fecha del corte (default: hoy). */
+  snapshotDate?: string;
+  /** Si se define, borra métricas Kommo del mes antes de escribir el snapshot. */
+  monthStart?: string;
+  monthEnd?: string;
+};
+
+/** Censo Kommo por pipeline (como index-1.html): un lead = una etapa; reached* para embudo. */
+export async function buildKommoPipelineSnapshots(): Promise<KommoClientSnapshot[]> {
+  const clientMap = getKommoClientMap();
+  const statuses = await fetchKommoStatuses();
+  const statusNameByKey = new Map<string, string>();
+  for (const s of statuses) {
+    statusNameByKey.set(`${s.pipeline_id}:${s.id}`, s.name);
+    statusNameByKey.set(String(s.id), s.name);
+  }
+
+  const byClient = new Map<string, KommoClientSnapshot>();
+
+  for (const [pipelineKey, client] of Object.entries(clientMap)) {
+    const pipelineId = Number(pipelineKey);
+    if (!Number.isFinite(pipelineId)) continue;
+
+    let page = 1;
+    while (true) {
+      const leads = await fetchKommoLeadsPageByPipeline(page, pipelineId);
+      if (leads.length === 0) break;
+
+      for (const lead of leads) {
+        const statusId = lead.status_id;
+        const pid = lead.pipeline_id ?? pipelineId;
+        const statusName =
+          statusNameByKey.get(`${pid}:${statusId}`) ??
+          statusNameByKey.get(String(statusId)) ??
+          "Leads Entrantes";
+        const tier = classifyKommoStageTier(statusName);
+        const snap = byClient.get(client) ?? newClientSnapshot(client);
+        accumulateSnapshotTier(snap, tier);
+        byClient.set(client, snap);
+      }
+
+      if (leads.length < 250) break;
+      page += 1;
+    }
+  }
+
+  return Array.from(byClient.values());
+}
+
+/** Escribe snapshot en dashboard_metrics_daily (métricas de embudo alineadas al control). */
+export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {}): Promise<{
+  processed: number;
+  snapshots: KommoClientSnapshot[];
+}> {
+  if (!isKommoConfigured()) {
+    throw new AppError("Kommo API is not configured", 503, "KOMMO_NOT_CONFIGURED");
+  }
+  const supabase = getSupabaseAdmin();
+  if (!supabase) {
+    throw new AppError("Supabase is not configured", 503, "SUPABASE_NOT_CONFIGURED");
+  }
+
+  const snapshotDate = params.snapshotDate ?? toLocalDateIso();
+  const snapshots = await buildKommoPipelineSnapshots();
+
+  const gastoByClient = new Map<string, number>();
+  if (params.monthStart && params.monthEnd) {
+    const allowed = Array.from(getAllowedDashboardClients());
+    for (const client of allowed) {
+      const { data: monthRows, error: loadErr } = await supabase
+        .from("dashboard_metrics_daily")
+        .select("gasto_total")
+        .eq("client", client)
+        .gte("metric_date", params.monthStart)
+        .lte("metric_date", params.monthEnd);
+      if (loadErr) throw new AppError(`Metrics load failed: ${loadErr.message}`, 500);
+      const gastoSum = (monthRows ?? []).reduce(
+        (sum, row) => sum + (row.gasto_total != null ? Number(row.gasto_total) : 0),
+        0,
+      );
+      if (gastoSum > 0) gastoByClient.set(client, gastoSum);
+
+      const { error } = await supabase
+        .from("dashboard_metrics_daily")
+        .delete()
+        .eq("client", client)
+        .gte("metric_date", params.monthStart)
+        .lte("metric_date", params.monthEnd);
+      if (error) throw new AppError(`Metrics delete failed: ${error.message}`, 500);
+    }
+  }
+
+  let processed = 0;
+  for (const snap of snapshots) {
+    const metrics = metricsFromClientSnapshot(snap);
+    const preservedGasto = gastoByClient.get(snap.client);
+    const { data: existing } = await supabase
+      .from("dashboard_metrics_daily")
+      .select("gasto_total")
+      .eq("metric_date", snapshotDate)
+      .eq("client", snap.client)
+      .maybeSingle();
+
+    const { error: upsertError } = await supabase.from("dashboard_metrics_daily").upsert(
+      {
+        metric_date: snapshotDate,
+        client: snap.client,
+        conversaciones: metrics.conversaciones,
+        mql: metrics.mql,
+        sql: metrics.sql,
+        citas: metrics.citas,
+        firmas: metrics.firmas,
+        gasto_total: preservedGasto ?? existing?.gasto_total ?? null,
+        mes: snapshotDate.slice(0, 7),
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "metric_date,client" },
+    );
+    if (upsertError) throw new AppError(upsertError.message, 500);
+    processed += 1;
+
+    console.log(
+      `[kommo] Snapshot ${snapshotDate} · ${snap.client}: leads=${snap.leads} mql=${snap.reachedMql} sql=${snap.reachedSql} citas=${snap.reachedCita} rechazados=${snap.byTier.rejected}`,
+    );
+  }
+
+  return { processed, snapshots };
 }
 
 export async function aggregateKommoToDailyMetrics(since?: string, until?: string): Promise<number> {

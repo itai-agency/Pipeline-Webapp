@@ -13,9 +13,16 @@ export const kommoRouter = Router();
 kommoRouter.post("/sync", async (req, res, next) => {
   try {
     const body = syncBodySchema.parse(req.body ?? {});
-    const recordsProcessed = await syncKommoLeads(body);
-    await refreshAndBroadcast();
-    res.json({ source: "kommo", status: "success", recordsProcessed });
+    const { processed, skipped } = await syncKommoLeads(body);
+    await refreshAndBroadcast({ since: body.since, until: body.until });
+    res.json({
+      source: "kommo",
+      status: "success",
+      recordsProcessed: processed,
+      recordsSkipped: skipped,
+      since: body.since,
+      until: body.until,
+    });
   } catch (err) {
     next(err);
   }

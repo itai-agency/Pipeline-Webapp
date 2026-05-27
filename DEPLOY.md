@@ -159,6 +159,7 @@ Si ves errores de CORS en la consola, añade la URL exacta del front a `CORS_ALL
 - [ ] Vercel: `VITE_API_BASE_URL` apuntando al API
 - [ ] Vercel: sin `VITE_DEV_BYPASS_AUTH`
 - [ ] Dashboard muestra gasto Meta y embudo Kommo (no solo datos estáticos)
+- [ ] Móvil (`≤780px`): barra de sesión visible con Actualizar y Salir — ver [docs/RESPONSIVE_QA.md](./docs/RESPONSIVE_QA.md)
 
 Si el build falla con **`vite: not found`** o **`esbuild: not found`**: Render omite `devDependencies` cuando `NODE_ENV=production`. Usa `--include=dev` en el install y `build:api` (solo backend; el front va en Vercel).
 

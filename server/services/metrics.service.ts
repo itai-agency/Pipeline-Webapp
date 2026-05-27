@@ -219,8 +219,11 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
   };
 }
 
-export async function refreshAndBroadcast(): Promise<DashboardSnapshotDto> {
-  const range = currentMonthRange();
+/** Si no pasas rango, reconstruye solo el mes en curso (comportamiento del scheduler). */
+export async function refreshAndBroadcast(
+  metricRange?: { since: string; until: string },
+): Promise<DashboardSnapshotDto> {
+  const range = metricRange ?? currentMonthRange();
   await rebuildMetricsFromSources(range.since, range.until);
   const snapshot = await getDashboardSnapshot();
   sseHub.broadcast("snapshot_refreshed", snapshot);

@@ -3,7 +3,7 @@ import type { DashboardSnapshotDto, SseEventType } from "../../shared/types/dash
 
 type SsePayload = {
   type: SseEventType;
-  payload?: DashboardSnapshotDto | { recordsProcessed: number };
+  payload?: DashboardSnapshotDto | { recordsProcessed: number; recordsSkipped?: number };
   timestamp: string;
 };
 

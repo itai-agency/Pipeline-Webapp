@@ -15,8 +15,9 @@ import {
   Filter,
   LayoutDashboard,
   ListChecks,
-  Search,
   LogOut,
+  RefreshCw,
+  Search,
   Target,
   TrendingUp,
   Users,
@@ -563,55 +564,98 @@ export default function Home() {
 
   return (
     <main className="app-shell">
-      <aside className="app-sidebar">
-        <div className="brand-block">
-          <div className="brand-mark">IL</div>
-          <div>
-            <strong>Inmoleads Pipeline</strong>
-            <span>Sinahi · operación diaria</span>
+      <div className="app-shell__nav-column">
+        <aside className="app-sidebar">
+          <div className="brand-block">
+            <div className="brand-mark">IL</div>
+            <div>
+              <strong>Inmoleads Pipeline</strong>
+              <span>Sinahi · operación diaria</span>
+            </div>
           </div>
+          <nav className="side-nav" aria-label="Navegación del dashboard">
+            <button className={activeTab === "diario" ? "active" : ""} onClick={() => setActiveTab("diario")}><LayoutDashboard size={17} /> Diario</button>
+            <button className={activeTab === "historico" ? "active" : ""} onClick={() => setActiveTab("historico")}><CalendarDays size={17} /> Histórico</button>
+            <a href="#metas"><Target size={17} /> Semáforo</a>
+            <a href="#bloqueos"><AlertTriangle size={17} /> Bloqueos</a>
+            <a href="#detalle"><ListChecks size={17} /> Detalle</a>
+          </nav>
+          <div className="sidebar-status">
+            <span>Último corte</span>
+            <strong>{formatDate(todayIso)}</strong>
+            <small>
+              {loading ? "Sincronizando…" : `${todayRows.length} registros`}
+              {live ? " · en vivo" : ""}
+            </small>
+            <small>Build {APP_BUILD_MARKER}</small>
+            {error ? (
+              <small className="table-note table-note--warn">{error}</small>
+            ) : null}
+            <button type="button" className="sidebar-refresh" onClick={() => void refresh()}>
+              Actualizar
+            </button>
+            {!isDevBypass ? (
+              <>
+                {user?.email ? (
+                  <small className="sidebar-user-email" title={user.email}>
+                    {user.email}
+                  </small>
+                ) : null}
+                <button
+                  type="button"
+                  className="sidebar-logout"
+                  onClick={() => void handleLogout()}
+                  aria-label="Cerrar sesión"
+                >
+                  <LogOut size={14} aria-hidden />
+                  Cerrar sesión
+                </button>
+              </>
+            ) : null}
+          </div>
+        </aside>
+
+        <div className="app-mobile-toolbar" role="region" aria-label="Sesión y sincronización">
+          <div className="app-mobile-toolbar__primary">
+            <span className="app-mobile-toolbar__date">{formatDate(todayIso)}</span>
+            <span className="app-mobile-toolbar__sync">
+              {loading ? "Sincronizando…" : `${todayRows.length} reg.`}
+              {live ? " · en vivo" : ""}
+            </span>
+            <span className="app-mobile-toolbar__build">Build {APP_BUILD_MARKER}</span>
+          </div>
+          <div className="app-mobile-toolbar__actions">
+            <button
+              type="button"
+              className="app-mobile-toolbar__btn app-mobile-toolbar__btn--ghost"
+              onClick={() => void refresh()}
+              aria-label="Actualizar datos"
+            >
+              <RefreshCw size={16} aria-hidden />
+              <span>Actualizar</span>
+            </button>
+            {!isDevBypass ? (
+              <>
+                {user?.email ? (
+                  <span className="app-mobile-toolbar__email" title={user.email}>
+                    {user.email}
+                  </span>
+                ) : null}
+                <button
+                  type="button"
+                  className="app-mobile-toolbar__btn app-mobile-toolbar__btn--logout"
+                  onClick={() => void handleLogout()}
+                  aria-label="Cerrar sesión"
+                >
+                  <LogOut size={16} aria-hidden />
+                  <span>Salir</span>
+                </button>
+              </>
+            ) : null}
+          </div>
+          {error ? <p className="app-mobile-toolbar__error">{error}</p> : null}
         </div>
-        <nav className="side-nav" aria-label="Navegación del dashboard">
-          <button className={activeTab === "diario" ? "active" : ""} onClick={() => setActiveTab("diario")}><LayoutDashboard size={17} /> Diario</button>
-          <button className={activeTab === "historico" ? "active" : ""} onClick={() => setActiveTab("historico")}><CalendarDays size={17} /> Histórico</button>
-          <a href="#metas"><Target size={17} /> Semáforo</a>
-          <a href="#bloqueos"><AlertTriangle size={17} /> Bloqueos</a>
-          <a href="#detalle"><ListChecks size={17} /> Detalle</a>
-        </nav>
-        <div className="sidebar-status">
-          <span>Último corte</span>
-          <strong>{formatDate(todayIso)}</strong>
-          <small>
-            {loading ? "Sincronizando…" : `${todayRows.length} registros`}
-            {live ? " · en vivo" : ""}
-          </small>
-          <small>Build {APP_BUILD_MARKER}</small>
-          {error ? (
-            <small className="table-note table-note--warn">{error}</small>
-          ) : null}
-          <button type="button" className="sidebar-refresh" onClick={() => void refresh()}>
-            Actualizar
-          </button>
-          {!isDevBypass ? (
-            <>
-              {user?.email ? (
-                <small className="sidebar-user-email" title={user.email}>
-                  {user.email}
-                </small>
-              ) : null}
-              <button
-                type="button"
-                className="sidebar-logout"
-                onClick={() => void handleLogout()}
-                aria-label="Cerrar sesión"
-              >
-                <LogOut size={14} aria-hidden />
-                Cerrar sesión
-              </button>
-            </>
-          ) : null}
-        </div>
-      </aside>
+      </div>
 
       <section className="app-workspace">
         <header className="app-topbar">

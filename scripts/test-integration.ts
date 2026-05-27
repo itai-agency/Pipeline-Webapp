@@ -38,8 +38,8 @@ async function main(): Promise<void> {
   if (isKommoConfigured()) {
     console.log("\n--- Sync Kommo ---");
     try {
-      const n = await syncKommoLeads({ since, until });
-      console.log(`Kommo: ${n} leads procesados`);
+      const { processed, skipped } = await syncKommoLeads({ since, until });
+      console.log(`Kommo: ${processed} leads procesados, ${skipped} omitidos`);
     } catch (err) {
       console.error("Kommo sync falló:", err instanceof Error ? err.message : err);
     }

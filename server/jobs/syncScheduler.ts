@@ -13,7 +13,8 @@ async function runScheduledSync(): Promise<void> {
       await syncMetaSpend(range);
     }
     if (isKommoConfigured()) {
-      await syncKommoLeads(range);
+      const { processed, skipped } = await syncKommoLeads(range);
+      console.log(`[scheduler] Kommo sync: ${processed} procesados, ${skipped} omitidos`);
     }
     await refreshAndBroadcast();
     console.log("[scheduler] Sync completed", range);

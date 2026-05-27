@@ -6,8 +6,8 @@ const range = currentMonthRange();
 
 async function main() {
   console.log(`Sync Kommo ${range.since} → ${range.until}`);
-  const n = await syncKommoLeads(range);
-  console.log(`Leads procesados: ${n}`);
+  const { processed, skipped } = await syncKommoLeads(range);
+  console.log(`Leads procesados: ${processed}, omitidos: ${skipped}`);
   await refreshAndBroadcast();
   console.log("Métricas y snapshot actualizados");
 }

@@ -58,6 +58,20 @@ Body de sync:
 { "since": "2026-05-01", "until": "2026-05-20" }
 ```
 
+**Backfill por `updated_at` (API):** `POST /api/kommo/sync` con rango amplio. Solo trae leads **actualizados** en ese intervalo.
+
+**Backfill por `created_at` (local, recomendado para censo del año):**
+
+```bash
+npm run backfill:kommo-year
+# otro año:
+KOMMO_BACKFILL_YEAR=2025 npm run backfill:kommo-year
+# una sola petición anual (más rápido, puede ser pesado):
+npm run backfill:kommo-year -- --whole-year
+```
+
+Usa `.env.local` (Kommo + Supabase service role). Filtra leads **creados** en cada mes del año, guarda `event_date` = fecha de creación y reconstruye `dashboard_metrics_daily` para todo el año.
+
 ## Desarrollo
 
 ```bash
