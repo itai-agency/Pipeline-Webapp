@@ -1,3 +1,6 @@
+/** timeline = suma de cambios de etapa por día; census = inventario pipeline al corte */
+export type MetricsSourceDto = "timeline" | "census";
+
 export type PipelineRowDto = {
   FECHA: string;
   SEMANA?: string | null;
@@ -10,6 +13,7 @@ export type PipelineRowDto = {
   FIRMAS: number;
   "GASTO TOTAL"?: number | null;
   "COSTO POR CITA"?: number | null;
+  METRICS_SOURCE?: MetricsSourceDto;
 };
 
 export type MetaSpendRowDto = {
@@ -43,6 +47,20 @@ export type DateRangeDto = {
   end: string;
 };
 
+/** Valores del HTML de referencia (index-1.html) por cliente. */
+export type KommoControlClientDto = {
+  leads: number;
+  reachedMql: number;
+  reachedSql: number;
+  reachedCita: number;
+  firmas: number;
+};
+
+export type KommoControlSnapshotDto = {
+  snapshotDate: string;
+  clients: Record<string, KommoControlClientDto>;
+};
+
 export type DashboardSnapshotDto = {
   daily: PipelineRowDto[];
   metaSpend: MetaSpendRowDto[];
@@ -54,6 +72,8 @@ export type DashboardSnapshotDto = {
   sdrHistory: SdrHistoryRowDto[];
   latestDate: string | null;
   syncedAt: string;
+  /** Fuente de verdad HTML para cuadrar KPIs en la fecha de corte. */
+  controlReference: KommoControlSnapshotDto | null;
 };
 
 export type SseEventType =

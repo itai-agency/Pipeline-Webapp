@@ -1,4 +1,5 @@
 import type { DashboardSnapshotDto } from "../../shared/types/dashboard.js";
+import { KOMMO_CONTROL_REFERENCE } from "../config/kommoControlReference.js";
 import { pipelineData } from "../../client/src/lib/pipelineData.js";
 import { metaSpendData, metaSpendPeriod } from "../../client/src/lib/metaSpendData.js";
 import { sdrHistoryData } from "../../client/src/lib/sdrHistoryData.js";
@@ -70,5 +71,6 @@ export function getStaticSnapshot(): DashboardSnapshotDto {
     })),
     latestDate,
     syncedAt: new Date().toISOString(),
+    controlReference: KOMMO_CONTROL_REFERENCE,
   };
 }

@@ -47,6 +47,7 @@ function staticFallbackSnapshot(): DashboardSnapshotDto {
       end: monthRange.end,
     },
     syncedAt: new Date().toISOString(),
+    controlReference: null,
   };
 }
 

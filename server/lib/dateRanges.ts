@@ -7,6 +7,13 @@ export function toLocalDateIso(date: Date = new Date()): string {
 }
 
 /** Rango desde el día 1 del mes actual hasta hoy (ISO date). */
+/** Del día 1 del mes de `endDate` hasta `endDate` (cohorte mensual Kommo). */
+export function monthRangeEndingOn(endDate: string): { since: string; until: string } {
+  const [y, m] = endDate.split("-").map(Number);
+  const mm = String(m).padStart(2, "0");
+  return { since: `${y}-${mm}-01`, until: endDate };
+}
+
 export function currentMonthRange(): { since: string; until: string } {
   const now = new Date();
   const since = new Date(now.getFullYear(), now.getMonth(), 1);

@@ -12,12 +12,23 @@ import {
   metricsFromClientSnapshot,
   newClientSnapshot,
   type KommoClientSnapshot,
+  type KommoStageTier,
   type KommoStatusInfo,
   type StageCounts,
 } from "../config/kommoStageMap.js";
-import { toLocalDateIso } from "../lib/dateRanges.js";
+import { monthRangeEndingOn, toLocalDateIso } from "../lib/dateRanges.js";
+import {
+  dailyMetricsOnConflict,
+  hasLeadCreatedDateColumn,
+  hasMetricsSourceColumn,
+  withMetricsSource,
+} from "../lib/dashboardMetricsDb.js";
 import { AppError } from "../lib/errors.js";
 import { kommoGet } from "../lib/kommoApi.js";
+import {
+  buildStatusTierMap,
+  enrichSnapshotReachedFromTimeline,
+} from "../lib/kommoReachedMetrics.js";
 import { getSupabaseAdmin } from "../lib/supabase.js";
 import { sseHub } from "./sseHub.js";
 
@@ -163,6 +174,14 @@ export async function purgeUnmappedKommoData(): Promise<{ events: number; metric
   return { events: eventsDeleted, metrics: metricsDeleted };
 }
 
+const censusLeadSchema = z
+  .object({
+    id: z.coerce.number(),
+    pipeline_id: z.coerce.number().optional(),
+    status_id: z.coerce.number().optional(),
+  })
+  .passthrough();
+
 function parseLeadsPage(data: unknown): KommoLead[] {
   if (!data || typeof data !== "object") return [];
   const embedded = (data as { _embedded?: { leads?: unknown } })._embedded;
@@ -171,6 +190,20 @@ function parseLeadsPage(data: unknown): KommoLead[] {
   const leads: KommoLead[] = [];
   for (const item of embedded.leads) {
     const parsed = leadSchema.safeParse(item);
+    if (parsed.success) leads.push(parsed.data);
+  }
+  return leads;
+}
+
+/** Parseo permisivo para censo (evita perder leads por campos custom incompletos). */
+function parseCensusLeadsPage(data: unknown): Array<z.infer<typeof censusLeadSchema>> {
+  if (!data || typeof data !== "object") return [];
+  const embedded = (data as { _embedded?: { leads?: unknown } })._embedded;
+  if (!embedded || embedded.leads == null || !Array.isArray(embedded.leads)) return [];
+
+  const leads: Array<z.infer<typeof censusLeadSchema>> = [];
+  for (const item of embedded.leads) {
+    const parsed = censusLeadSchema.safeParse(item);
     if (parsed.success) leads.push(parsed.data);
   }
   return leads;
@@ -200,6 +233,11 @@ function resolveEventDate(
   return date;
 }
 
+function resolveLeadCreatedDate(lead: KommoLead): string | null {
+  if (lead.created_at == null) return null;
+  return new Date(lead.created_at * 1000).toISOString().slice(0, 10);
+}
+
 function resolveClientFromLead(lead: KommoLead, clientMap: Record<string, string>): string | null {
   const pipelineKey = String(lead.pipeline_id ?? "");
   if (clientMap[pipelineKey]) return clientMap[pipelineKey];
@@ -212,7 +250,7 @@ function resolveClientFromLead(lead: KommoLead, clientMap: Record<string, string
   return null;
 }
 
-async function fetchKommoStatuses(): Promise<KommoStatusInfo[]> {
+export async function fetchKommoStatuses(): Promise<KommoStatusInfo[]> {
   const data = await kommoGet<{ _embedded?: { pipelines?: unknown[] } }>("/leads/pipelines");
   const pipelines = z.array(pipelineSchema).parse(data._embedded?.pipelines ?? []);
   const statuses: KommoStatusInfo[] = [];
@@ -257,6 +295,25 @@ async function fetchKommoLeadsPageByPipeline(page: number, pipelineId: number): 
   return parseLeadsPage(data);
 }
 
+/** Leads del pipeline creados en [monthStart, monthEnd] (cohorte mensual). */
+async function fetchKommoLeadsPageByPipelineCreated(
+  page: number,
+  pipelineId: number,
+  monthStart: string,
+  monthEnd: string,
+): Promise<Array<z.infer<typeof censusLeadSchema>>> {
+  const { from, to } = toUnixRange(monthStart, monthEnd);
+  const params: Record<string, string | number> = {
+    page,
+    limit: 250,
+    "filter[pipeline_id]": pipelineId,
+    "filter[created_at][from]": from,
+    "filter[created_at][to]": to,
+  };
+  const data = await kommoGet<unknown>("/leads", { params });
+  return parseCensusLeadsPage(data);
+}
+
 /** Censo por etapa (como export CRM / HTML kommoData). */
 async function fetchKommoLeadsPageByStatus(
   page: number,
@@ -279,21 +336,7 @@ function includeStatusInCensus(status: KommoStatusInfo): boolean {
   return true;
 }
 
-function useKommoControlReference(): boolean {
-  return env.KOMMO_USE_CONTROL_REFERENCE !== false;
-}
-
-function metricsForDashboard(client: string, apiSnap: KommoClientSnapshot) {
-  const ref = getKommoControlMetrics(client);
-  if (useKommoControlReference() && ref) {
-    return {
-      conversaciones: ref.leads,
-      mql: ref.reachedMql,
-      sql: ref.reachedSql,
-      citas: ref.reachedCita,
-      firmas: ref.firmas,
-    };
-  }
+function metricsForDashboard(_client: string, apiSnap: KommoClientSnapshot) {
   return metricsFromClientSnapshot(apiSnap);
 }
 
@@ -333,6 +376,7 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<KommoSync
   const statuses = await fetchKommoStatuses();
   const statusMap = buildStatusMapFromKommo(statuses);
   const users = await fetchKommoUsers();
+  const useLeadCreatedDate = await hasLeadCreatedDateColumn();
 
   let processed = 0;
   let skipped = 0;
@@ -376,6 +420,7 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<KommoSync
               {
                 kommo_lead_id: lead.id,
                 event_date: snapshotDate,
+                ...(useLeadCreatedDate ? { lead_created_date: resolveLeadCreatedDate(lead) } : {}),
                 client,
                 pipeline_id: lead.pipeline_id ?? pipelineId,
                 status_id: lead.status_id ?? null,
@@ -439,6 +484,7 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<KommoSync
           {
             kommo_lead_id: lead.id,
             event_date: eventDate,
+            ...(useLeadCreatedDate ? { lead_created_date: resolveLeadCreatedDate(lead) } : {}),
             client,
             pipeline_id: lead.pipeline_id ?? null,
             status_id: lead.status_id ?? null,
@@ -501,39 +547,98 @@ export type KommoSnapshotParams = {
   monthEnd?: string;
 };
 
-/** Censo Kommo por etapa (filter status), alineado a kommoData del HTML. */
-export async function buildKommoPipelineSnapshots(): Promise<KommoClientSnapshot[]> {
+/**
+ * Censo mensual desde API: leads creados en el mes (cohorte), etapa actual en Kommo.
+ * kommoData.leads ≈ filter created_at del mes (validado mayo 2026).
+ */
+export async function buildKommoMonthlyCohortSnapshots(
+  monthStart: string,
+  monthEnd: string,
+): Promise<KommoClientSnapshot[]> {
   const clientMap = getKommoClientMap();
   const allStatuses = await fetchKommoStatuses();
-  const byClient = new Map<string, KommoClientSnapshot>();
+  const statusNameByKey = new Map<string, string>();
+  for (const s of allStatuses) {
+    if (s.pipeline_id != null) statusNameByKey.set(`${s.pipeline_id}:${s.id}`, s.name);
+    statusNameByKey.set(String(s.id), s.name);
+  }
+
+  const supabase = getSupabaseAdmin();
+  const snapshots: KommoClientSnapshot[] = [];
 
   for (const [pipelineKey, client] of Object.entries(clientMap)) {
     const pipelineId = Number(pipelineKey);
     if (!Number.isFinite(pipelineId)) continue;
 
     const snap = newClientSnapshot(client);
-    const pipelineStatuses = allStatuses.filter(
-      (s) => s.pipeline_id === pipelineId && includeStatusInCensus(s),
-    );
+    const cohort: Array<{ id: number; tier: KommoStageTier }> = [];
+    const statusTierById = buildStatusTierMap(allStatuses, pipelineId);
 
-    for (const status of pipelineStatuses) {
-      const tier = classifyKommoStageTier(status.name);
-      let page = 1;
-      while (true) {
-        const leads = await fetchKommoLeadsPageByStatus(page, pipelineId, status.id);
-        if (leads.length === 0) break;
-        for (let i = 0; i < leads.length; i += 1) {
-          accumulateSnapshotTier(snap, tier);
-        }
-        if (leads.length < 250) break;
-        page += 1;
+    let page = 1;
+    while (true) {
+      const leads = await fetchKommoLeadsPageByPipelineCreated(page, pipelineId, monthStart, monthEnd);
+      if (leads.length === 0) break;
+
+      for (const lead of leads) {
+        const name =
+          statusNameByKey.get(`${lead.pipeline_id ?? pipelineId}:${lead.status_id}`) ??
+          statusNameByKey.get(String(lead.status_id)) ??
+          "";
+        const tier = classifyKommoStageTier(name);
+        if (tier === "firmado") continue;
+        cohort.push({ id: lead.id, tier });
+        accumulateSnapshotTier(snap, tier);
       }
+
+      if (leads.length < 250) break;
+      page += 1;
     }
 
-    byClient.set(client, snap);
+    if (supabase && cohort.length > 0) {
+      const reachedMeta = await enrichSnapshotReachedFromTimeline(
+        supabase,
+        snap,
+        cohort,
+        statusTierById,
+        monthEnd,
+      );
+      // #region agent log
+      fetch("http://127.0.0.1:7880/ingest/6fd1d614-7a66-4dcc-a425-d3b833f324c4", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "a0037c" },
+        body: JSON.stringify({
+          sessionId: "a0037c",
+          runId: "reached-enrich",
+          hypothesisId: "H-Gregorio",
+          location: "kommo.service.ts:buildKommoMonthlyCohortSnapshots",
+          message: "reached* enriched from timeline",
+          data: {
+            client,
+            leads: snap.leads,
+            stageMql: reachedMeta.stageMql,
+            preRejectMql: reachedMeta.preRejectMql,
+            usedGregorio: reachedMeta.usedGregorio,
+            reachedMql: snap.reachedMql,
+            reachedSql: snap.reachedSql,
+            reachedCita: snap.reachedCita,
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      // #endregion
+    }
+
+    snapshots.push(snap);
   }
 
-  return Array.from(byClient.values());
+  return snapshots;
+}
+
+/** @deprecated Usar buildKommoMonthlyCohortSnapshots — el censo por status_id inflaba totales. */
+export async function buildKommoPipelineSnapshots(): Promise<KommoClientSnapshot[]> {
+  const until = toLocalDateIso();
+  const { since } = monthRangeEndingOn(until);
+  return buildKommoMonthlyCohortSnapshots(since, until);
 }
 
 /** Escribe snapshot en dashboard_metrics_daily (métricas de embudo alineadas al control). */
@@ -551,7 +656,14 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
 
   const snapshotDate =
     params.snapshotDate ?? KOMMO_CONTROL_REFERENCE.snapshotDate ?? toLocalDateIso();
-  const snapshots = await buildKommoPipelineSnapshots();
+  const cohortRange =
+    params.monthStart && params.monthEnd
+      ? { since: params.monthStart, until: params.monthEnd }
+      : monthRangeEndingOn(snapshotDate);
+  const snapshots = await buildKommoMonthlyCohortSnapshots(cohortRange.since, cohortRange.until);
+  console.log(
+    `[kommo] Censo cohorte API ${cohortRange.since}→${cohortRange.until} (created_at, sin firmado)`,
+  );
 
   const gastoByClient = new Map<string, number>();
   if (params.replaceMonth && params.monthStart && params.monthEnd) {
@@ -585,14 +697,7 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
     const ref = getKommoControlMetrics(snap.client);
     const metrics = metricsForDashboard(snap.client, snap);
     const preservedGasto = gastoByClient.get(snap.client);
-    const { data: existing } = await supabase
-      .from("dashboard_metrics_daily")
-      .select("gasto_total")
-      .eq("metric_date", snapshotDate)
-      .eq("client", snap.client)
-      .maybeSingle();
-
-    const { error: upsertError } = await supabase.from("dashboard_metrics_daily").upsert(
+    const censusRow = await withMetricsSource(
       {
         metric_date: snapshotDate,
         client: snap.client,
@@ -601,12 +706,15 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
         sql: metrics.sql,
         citas: metrics.citas,
         firmas: metrics.firmas,
-        gasto_total: preservedGasto ?? existing?.gasto_total ?? null,
+        gasto_total: null,
         mes: snapshotDate.slice(0, 7),
         updated_at: new Date().toISOString(),
       },
-      { onConflict: "metric_date,client" },
+      "census",
     );
+    const { error: upsertError } = await supabase.from("dashboard_metrics_daily").upsert(censusRow, {
+      onConflict: await dailyMetricsOnConflict(),
+    });
     if (upsertError) throw new AppError(upsertError.message, 500);
     processed += 1;
 
@@ -634,8 +742,10 @@ export async function rebuildDailyMetricsFromEvents(since: string, until: string
   if (!supabase) return 0;
 
   const allowed = Array.from(getAllowedDashboardClients());
+  const useLeadCreatedDate = await hasLeadCreatedDateColumn();
+  const useSource = await hasMetricsSourceColumn();
   for (const client of allowed) {
-    const { error } = await supabase
+    let reset = supabase
       .from("dashboard_metrics_daily")
       .update({
         conversaciones: 0,
@@ -648,6 +758,10 @@ export async function rebuildDailyMetricsFromEvents(since: string, until: string
       .eq("client", client)
       .gte("metric_date", since)
       .lte("metric_date", until);
+    if (useSource) {
+      reset = reset.eq("metrics_source", "timeline");
+    }
+    const { error } = await reset;
     if (error) throw new AppError(`Metrics reset failed: ${error.message}`, 500);
   }
 
@@ -659,6 +773,7 @@ export async function aggregateKommoToDailyMetrics(since?: string, until?: strin
   if (!supabase) return 0;
 
   const allowed = Array.from(getAllowedDashboardClients());
+  const useLeadCreatedDate = await hasLeadCreatedDateColumn();
   const grouped = new Map<
     string,
     { date: string; client: string; conversaciones: number; mql: number; sql: number; citas: number; firmas: number }
@@ -668,12 +783,17 @@ export async function aggregateKommoToDailyMetrics(since?: string, until?: strin
   while (true) {
     let query = supabase
       .from("kommo_lead_events")
-      .select("event_date, client, conversations, mql, sql, citas, firmas")
+      .select("*")
       .in("client", allowed)
+      .not("kommo_event_id", "is", null)
       .order("event_date", { ascending: true })
       .range(offset, offset + KOMMO_PAGE_SIZE - 1);
     if (since) query = query.gte("event_date", since);
     if (until) query = query.lte("event_date", until);
+    if (useLeadCreatedDate) {
+      if (since) query = query.gte("lead_created_date", since);
+      if (until) query = query.lte("lead_created_date", until);
+    }
 
     const { data, error } = await query;
     if (error) throw new AppError(`Kommo load failed: ${error.message}`, 500);
@@ -703,16 +823,21 @@ export async function aggregateKommoToDailyMetrics(since?: string, until?: strin
     offset += KOMMO_PAGE_SIZE;
   }
 
+  const useSource = await hasMetricsSourceColumn();
+  const onConflict = await dailyMetricsOnConflict();
   let upserted = 0;
   for (const agg of Array.from(grouped.values())) {
-    const { data: existing } = await supabase
+    let existingQuery = supabase
       .from("dashboard_metrics_daily")
       .select("gasto_total")
       .eq("metric_date", agg.date)
-      .eq("client", agg.client)
-      .maybeSingle();
+      .eq("client", agg.client);
+    if (useSource) {
+      existingQuery = existingQuery.eq("metrics_source", "timeline");
+    }
+    const { data: existing } = await existingQuery.maybeSingle();
 
-    const { error: upsertError } = await supabase.from("dashboard_metrics_daily").upsert(
+    const row = await withMetricsSource(
       {
         metric_date: agg.date,
         client: agg.client,
@@ -725,8 +850,11 @@ export async function aggregateKommoToDailyMetrics(since?: string, until?: strin
         mes: agg.date.slice(0, 7),
         updated_at: new Date().toISOString(),
       },
-      { onConflict: "metric_date,client" },
+      "timeline",
     );
+    const { error: upsertError } = await supabase.from("dashboard_metrics_daily").upsert(row, {
+      onConflict,
+    });
     if (upsertError) throw new AppError(upsertError.message, 500);
     upserted += 1;
   }

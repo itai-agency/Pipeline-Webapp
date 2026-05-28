@@ -4,6 +4,12 @@ import type {
   PipelineRowDto,
 } from "../../shared/types/dashboard.js";
 import { getAllowedDashboardClients, isSupabaseConfigured } from "../config/env.js";
+import { KOMMO_CONTROL_REFERENCE } from "../config/kommoControlReference.js";
+import {
+  dailyMetricsOnConflict,
+  hasMetricsSourceColumn,
+  withMetricsSource,
+} from "../lib/dashboardMetricsDb.js";
 import { currentMonthRange } from "../lib/dateRanges.js";
 import { AppError } from "../lib/errors.js";
 import { getSupabaseAdmin } from "../lib/supabase.js";
@@ -86,15 +92,20 @@ export async function mergeMetaSpendIntoDaily(since: string, until: string): Pro
   if (!supabase) return 0;
 
   const metaSpend = await getMetaSpendFromDb(since, until);
+  const useSource = await hasMetricsSourceColumn();
+  const onConflict = await dailyMetricsOnConflict();
   for (const row of metaSpend) {
-    const { data: existing } = await supabase
+    let existingQuery = supabase
       .from("dashboard_metrics_daily")
       .select("conversaciones, mql, sql, citas, firmas")
       .eq("metric_date", row.date)
-      .eq("client", row.client)
-      .maybeSingle();
+      .eq("client", row.client);
+    if (useSource) {
+      existingQuery = existingQuery.eq("metrics_source", "timeline");
+    }
+    const { data: existing } = await existingQuery.maybeSingle();
 
-    await supabase.from("dashboard_metrics_daily").upsert(
+    const payload = await withMetricsSource(
       {
         metric_date: row.date,
         client: row.client,
@@ -107,8 +118,9 @@ export async function mergeMetaSpendIntoDaily(since: string, until: string): Pro
         mes: row.date.slice(0, 7),
         updated_at: new Date().toISOString(),
       },
-      { onConflict: "metric_date,client" },
+      "timeline",
     );
+    await supabase.from("dashboard_metrics_daily").upsert(payload, { onConflict });
   }
 
   return metaSpend.length;
@@ -150,6 +162,10 @@ async function loadMetricsDaily(): Promise<PipelineRowDto[]> {
       (row.citas as number) > 0 && row.gasto_total != null
         ? Number(row.gasto_total) / (row.citas as number)
         : null,
+    METRICS_SOURCE:
+      row.metrics_source != null
+        ? (row.metrics_source as "timeline" | "census")
+        : "timeline",
   }));
 }
 
@@ -222,6 +238,7 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     sdrHistory: sdrHistory.length > 0 ? sdrHistory : getStaticSnapshot().sdrHistory,
     latestDate: availableDates.at(-1) ?? null,
     syncedAt: new Date().toISOString(),
+    controlReference: KOMMO_CONTROL_REFERENCE,
   };
 }
 

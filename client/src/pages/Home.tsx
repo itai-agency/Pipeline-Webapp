@@ -464,14 +464,31 @@ export default function Home() {
     setRangeEnd(end);
   }, [snapshot.syncedAt]);
 
+  const timelineDaily = useMemo(
+    () => daily.filter((row) => !row.METRICS_SOURCE || row.METRICS_SOURCE === "timeline"),
+    [daily],
+  );
+
   const filteredRows = useMemo(() => {
-    return daily.filter((row) => {
+    return timelineDaily.filter((row) => {
       const dateMatch = (!dailyRangeStart || String(row.FECHA) >= dailyRangeStart) && (!dailyRangeEnd || String(row.FECHA) <= dailyRangeEnd);
       const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
       const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase());
       return dateMatch && clientMatch && queryMatch;
     });
-  }, [daily, dailyRangeStart, dailyRangeEnd, selectedClient, query]);
+  }, [timelineDaily, dailyRangeStart, dailyRangeEnd, selectedClient, query]);
+
+  const censusAtEnd = useMemo(() => {
+    if (!dailyRangeEnd) return [];
+    return daily.filter((row) => {
+      if (row.METRICS_SOURCE !== "census" || row.FECHA !== dailyRangeEnd) return false;
+      const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
+      const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase());
+      return clientMatch && queryMatch;
+    });
+  }, [daily, dailyRangeEnd, selectedClient, query]);
+
+  const censusKpisActive = censusAtEnd.length > 0;
 
   const filteredSpendRows = useMemo(() => {
     return metaSpendData.filter((row) => {
@@ -494,7 +511,10 @@ export default function Home() {
     });
   }, [sdrRows, selectedMonth, selectedHistoricalDate, selectedClient, selectedSdr, rangeStart, rangeEnd, query]);
 
-  const totals = useMemo(() => sumRows(filteredRows), [filteredRows]);
+  const totals = useMemo(() => {
+    if (censusKpisActive) return sumRows(censusAtEnd);
+    return sumRows(filteredRows);
+  }, [censusKpisActive, censusAtEnd, filteredRows]);
   const spendTotal = useMemo(() => sumSpend(filteredSpendRows), [filteredSpendRows]);
   const metaSpendCoversFilter = useMemo(() => {
     if (!metaSpendPeriod.start || !metaSpendPeriod.end || !dailyRangeStart || !dailyRangeEnd) return true;
@@ -521,26 +541,50 @@ export default function Home() {
   const endDate = dailyRangeEnd ? new Date(dailyRangeEnd + "T00:00:00") : new Date();
   const funnelKpis = useMemo(() => buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null, endDate), [totals, spendTotal, endDate]);
   const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
-  const todayRows = useMemo(() => daily.filter((row) => row.FECHA === latestDate), [daily, latestDate]);
+  const todayRows = useMemo(
+    () => timelineDaily.filter((row) => row.FECHA === latestDate),
+    [timelineDaily, latestDate],
+  );
   const risks = useMemo(() => buildRisks(filteredRows, spendByClient), [filteredRows, spendByClient]);
   const criticalCount = risks.filter((risk) => risk.level !== "Estable").length;
-  const clientRows = useMemo(() => groupByClient(filteredRows).map((row) => {
-    const spend = spendByClient.get(row.client) ?? 0;
-    return { ...row, spend, costPerAppointment: row.CITAS > 0 ? spend / row.CITAS : null };
-  }).sort((a, b) => b.CONVERSACIONES - a.CONVERSACIONES), [filteredRows, spendByClient]);
+  const clientRows = useMemo(() => {
+    if (censusKpisActive) {
+      return censusAtEnd
+        .map((row) => {
+          const spend = spendByClient.get(row.CLIENTE) ?? 0;
+          return {
+            client: row.CLIENTE,
+            CONVERSACIONES: row.CONVERSACIONES,
+            MQL: row.MQL,
+            SQL: row.SQL,
+            CITAS: row.CITAS,
+            FIRMAS: row.FIRMAS,
+            spend,
+            costPerAppointment: row.CITAS > 0 ? spend / row.CITAS : null,
+          };
+        })
+        .sort((a, b) => b.CONVERSACIONES - a.CONVERSACIONES);
+    }
+    return groupByClient(filteredRows)
+      .map((row) => {
+        const spend = spendByClient.get(row.client) ?? 0;
+        return { ...row, spend, costPerAppointment: row.CITAS > 0 ? spend / row.CITAS : null };
+      })
+      .sort((a, b) => b.CONVERSACIONES - a.CONVERSACIONES);
+  }, [censusKpisActive, censusAtEnd, filteredRows, spendByClient]);
 
   const dailyTrend = useMemo(() => {
     return availableDates
       .filter((date) => (!dailyRangeStart || date >= dailyRangeStart) && (!dailyRangeEnd || date <= dailyRangeEnd))
       .map((date) => {
-        const rows = daily.filter((row) => {
+        const rows = timelineDaily.filter((row) => {
           const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
           const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase());
           return row.FECHA === date && clientMatch && queryMatch;
         });
         return { fecha: shortDate(date), ...sumRows(rows) };
       });
-  }, [availableDates, daily, dailyRangeStart, dailyRangeEnd, selectedClient, query]);
+  }, [availableDates, timelineDaily, dailyRangeStart, dailyRangeEnd, selectedClient, query]);
 
   const historicalByMonth = useMemo(() => {
     const months = Array.from(new Set(history.map((row) => row.MES).filter(Boolean)));
@@ -674,6 +718,21 @@ export default function Home() {
           <button className={activeTab === "historico" ? "active" : ""} onClick={() => setActiveTab("historico")}>Histórico por fechas</button>
         </section>
 
+        {activeTab === "diario" ? (
+          <p className="metrics-hint" style={{ margin: "0 0 12px", fontSize: "0.85rem", color: "#5c6b66" }}>
+            {censusKpisActive ? (
+              <>
+                KPIs = <strong>cohorte Kommo API</strong> (leads creados en el mes, etapa actual al {formatDate(dailyRangeEnd)}).
+                La gráfica diaria = actividad timeline (movimientos de etapa).
+              </>
+            ) : (
+              <>
+                Totales = actividad timeline. Ejecuta <code>npm run sync:kommo-snapshot</code> para censo API al cierre del periodo.
+              </>
+            )}
+          </p>
+        ) : null}
+
         <section className="filter-bar" aria-label="Controles de operación">
           <div className="search-box">
             <Search size={17} />
@@ -758,8 +817,17 @@ export default function Home() {
             </section>
 
             <section id="resumen" className="app-grid app-grid--kpis">
-              <Kpi label="Conversaciones" value={fmt.format(totals.CONVERSACIONES)} detail="volumen capturado" />
-              <Kpi label="MQL" value={fmt.format(totals.MQL)} detail={`${pctFmt.format(funnelConversionRate(totals.CONVERSACIONES, totals.MQL))} de conversión`} tone="good" />
+              <Kpi
+                label={censusKpisActive ? "Leads (cohorte)" : "Transiciones"}
+                value={fmt.format(totals.CONVERSACIONES)}
+                detail={censusKpisActive ? "Kommo created_at · mes del filtro" : "cambios de etapa · leads creados en el mes"}
+              />
+              <Kpi
+                label="MQL"
+                value={fmt.format(totals.MQL)}
+                detail={censusKpisActive ? "reached* · etapa actual" : `${pctFmt.format(funnelConversionRate(totals.CONVERSACIONES, totals.MQL))} de transiciones`}
+                tone="good"
+              />
               <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(funnelConversionRate(totals.MQL, totals.SQL))} de MQL`} tone={funnelConversionRate(totals.MQL, totals.SQL) < 0.25 ? "warn" : "good"} />
               <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(funnelConversionRate(totals.SQL || totals.MQL, totals.CITAS))} avance`} />
               <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(funnelConversionRate(totals.CITAS, totals.FIRMAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
@@ -771,6 +839,47 @@ export default function Home() {
               />
               <Kpi label="Costo por cita" value={costPerAppointment === null ? "Sin cita" : moneyFmt.format(costPerAppointment)} detail={`${fmt.format(totals.CITAS)} citas filtradas`} tone={costPerAppointment === null || costPerAppointment > 1800 ? "warn" : "good"} />
             </section>
+
+            {censusAtEnd.length > 0 ? (
+              <section className="app-card" style={{ marginBottom: 16 }}>
+                <div className="card-head">
+                  <div>
+                    <span>Censo API</span>
+                    <h2>Pipeline al cierre ({formatDate(dailyRangeEnd)})</h2>
+                  </div>
+                  <ListChecks />
+                </div>
+                <p style={{ fontSize: "0.85rem", color: "#5c6b66", marginBottom: 12 }}>
+                  Censo desde Kommo API (leads creados en el mes del filtro). Comparar con HTML solo en auditoría.
+                </p>
+                <div className="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Leads</th>
+                        <th>MQL</th>
+                        <th>SQL</th>
+                        <th>Citas</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {censusAtEnd
+                        .sort((a, b) => a.CLIENTE.localeCompare(b.CLIENTE))
+                        .map((row) => (
+                          <tr key={row.CLIENTE}>
+                            <td>{row.CLIENTE}</td>
+                            <td>{fmt.format(row.CONVERSACIONES)}</td>
+                            <td>{fmt.format(row.MQL)}</td>
+                            <td>{fmt.format(row.SQL)}</td>
+                            <td>{fmt.format(row.CITAS)}</td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            ) : null}
 
             <section className="ops-layout">
               <article className="app-card priority-card" id="bloqueos">

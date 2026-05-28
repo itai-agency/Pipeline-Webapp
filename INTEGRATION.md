@@ -74,14 +74,19 @@ curl --ssl-no-revoke -X POST "https://TU-API/api/kommo/snapshot" \
 
 El scheduler en producción hace **sync por `updated_at` + métricas diarias desde `kommo_lead_events`** (no borra el mes).
 
-**Backfill diario (lo correcto para reportes por día):**
+**Backfill con historial real de Kommo (cambios de etapa):**
+
+Aplica migración `supabase/migrations/002_kommo_timeline_events.sql` en Supabase.
 
 ```bash
-npm run backfill:kommo-year
-npm run rebuild:kommo-daily   # o POST /api/kommo/rebuild-daily con since/until
+npm run probe:kommo-events          # cuenta eventos en API (sin escribir)
+npm run backfill:kommo-year         # importa GET /api/v4/events (lead_status_changed)
+npm run rebuild:kommo-daily -- --since 2026-05-01 --until 2026-05-26
 ```
 
-Cada lead se guarda con `event_date` = fecha de **creación** (`created_at`). `dashboard_metrics_daily` tiene **una fila por día y cliente** con la suma de ese día.
+Cada fila en `kommo_lead_events` = un **movimiento de etapa** (`event_date` = día del cambio en Kommo). No es el estado actual del lead.
+
+`POST /api/kommo/sync-timeline` con `{ "since", "until" }` hace lo mismo vía API.
 
 **No ejecutar** `sync:kommo-snapshot` tras un backfill: antes borraba todo mayo y dejaba un solo día con números del HTML. El snapshot solo sirve como auditoría de censo (`KOMMO_SNAPSHOT_REPLACE_MONTH=true` para el comportamiento antiguo).
 

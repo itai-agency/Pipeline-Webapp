@@ -19,6 +19,8 @@ export type PipelineRow = {
   FIRMAS: number;
   "GASTO TOTAL"?: number | null;
   "COSTO POR CITA"?: number | null;
+  /** timeline = actividad por cambios de etapa; census = inventario al corte */
+  METRICS_SOURCE?: "timeline" | "census";
 };
 
 export type AggregateRow = {

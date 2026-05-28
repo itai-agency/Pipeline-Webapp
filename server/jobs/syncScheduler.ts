@@ -1,6 +1,6 @@
 import { env, isKommoConfigured, isMetaConfigured } from "../config/env.js";
 import { currentMonthRange } from "../lib/dateRanges.js";
-import { syncKommoLeads } from "../services/kommo.service.js";
+import { syncKommoStatusChangeEvents } from "../services/kommoTimeline.service.js";
 import { syncMetaSpend } from "../services/meta.service.js";
 import { refreshAndBroadcast } from "../services/metrics.service.js";
 
@@ -13,14 +13,12 @@ async function runScheduledSync(): Promise<void> {
       await syncMetaSpend(range);
     }
     if (isKommoConfigured()) {
-      const { processed, skipped } = await syncKommoLeads({
+      const { processed, skipped } = await syncKommoStatusChangeEvents({
         since: range.since,
         until: range.until,
-        dateFilter: "updated_at",
-        eventDateField: "updated_at",
       });
       console.log(
-        `[scheduler] Kommo updated_at: ${processed} leads, ${skipped} omitidos (${range.since}→${range.until})`,
+        `[scheduler] Kommo timeline: ${processed} cambios etapa, ${skipped} omitidos (${range.since}→${range.until})`,
       );
     }
     await refreshAndBroadcast(range);

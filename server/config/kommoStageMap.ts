@@ -63,15 +63,15 @@ export function classifyKommoStageTier(statusName: string): KommoStageTier {
   return "entrada";
 }
 
-function tierReachedMql(tier: KommoStageTier): boolean {
+export function tierReachedMql(tier: KommoStageTier): boolean {
   return tier === "mql" || tier === "sql" || tier === "cita" || tier === "ofertado" || tier === "firmado";
 }
 
-function tierReachedSql(tier: KommoStageTier): boolean {
+export function tierReachedSql(tier: KommoStageTier): boolean {
   return tier === "sql" || tier === "cita" || tier === "ofertado" || tier === "firmado";
 }
 
-function tierReachedCita(tier: KommoStageTier): boolean {
+export function tierReachedCita(tier: KommoStageTier): boolean {
   return tier === "cita" || tier === "ofertado" || tier === "firmado";
 }
 

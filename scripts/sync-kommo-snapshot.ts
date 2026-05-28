@@ -7,6 +7,7 @@
  */
 import { currentMonthRange, toLocalDateIso } from "../server/lib/dateRanges.js";
 import { syncKommoSnapshotMetrics } from "../server/services/kommo.service.js";
+import { monthRangeEndingOn } from "../server/lib/dateRanges.js";
 import { refreshAndBroadcast } from "../server/services/metrics.service.js";
 import { isKommoConfigured, isSupabaseConfigured } from "../server/config/env.js";
 import { getKommoControlMetrics } from "../server/config/kommoControlReference.js";
@@ -27,11 +28,12 @@ async function main(): Promise<void> {
     "Nota: no borra el mes. Para métricas por día use: npm run rebuild:kommo-daily\n",
   );
 
+  const cohort = monthRangeEndingOn(snapshotDate);
   const { processed, snapshots } = await syncKommoSnapshotMetrics({
     snapshotDate,
+    monthStart: cohort.since,
+    monthEnd: cohort.until,
     replaceMonth: process.env.KOMMO_SNAPSHOT_REPLACE_MONTH === "true",
-    monthStart: month.since,
-    monthEnd: month.until,
   });
 
   console.log("\n--- Resumen por cliente ---");

@@ -6,6 +6,7 @@ import {
   syncKommoLeads,
   syncKommoSnapshotMetrics,
 } from "../services/kommo.service.js";
+import { syncKommoStatusChangeEvents } from "../services/kommoTimeline.service.js";
 import { refreshAndBroadcast } from "../services/metrics.service.js";
 
 const syncBodySchema = z.object({
@@ -36,6 +37,26 @@ const rebuildBodySchema = z.object({
 });
 
 export const kommoRouter = Router();
+
+/** Historial real: cambios de etapa desde GET /api/v4/events */
+kommoRouter.post("/sync-timeline", async (req, res, next) => {
+  try {
+    const body = syncBodySchema.parse(req.body ?? {});
+    const { processed, skipped } = await syncKommoStatusChangeEvents(body);
+    await refreshAndBroadcast({ since: body.since, until: body.until });
+    res.json({
+      source: "kommo",
+      status: "success",
+      mode: "timeline_lead_status_changed",
+      recordsProcessed: processed,
+      recordsSkipped: skipped,
+      since: body.since,
+      until: body.until,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 kommoRouter.post("/sync", async (req, res, next) => {
   try {
