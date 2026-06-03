@@ -37,7 +37,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { getCurrentMonthRange, toUtcDateIso } from "@/lib/dateRanges";
+import { getCurrentMonthRange, toAccountDateIso } from "@/lib/dateRanges";
 import { stageLabels, type PipelineRow } from "@/lib/pipelineData";
 import type { SdrHistoryRow } from "@/lib/sdrHistoryData";
 import { useDashboardData } from "@/hooks/useDashboardData";
@@ -420,7 +420,7 @@ export default function Home() {
     return Array.from(new Set(daily.map((row) => row.FECHA).filter((date): date is string => Boolean(date)))).sort();
   }, [snapshot.availableDates, daily]);
 
-  const todayIso = toUtcDateIso();
+  const todayIso = toAccountDateIso();
   const defaultMonthRange = getCurrentMonthRange();
 
   const dataPeriodMin = metaSpendPeriod.start ?? availableDates[0] ?? defaultMonthRange.start;
@@ -727,7 +727,7 @@ export default function Home() {
               </>
             ) : (
               <>
-                Conversaciones = cohorte Kommo (created_at). MQL/SQL/Citas = etapa final del día de creación. Censo: <code>npm run sync:kommo-snapshot</code>.
+                Conversaciones = cohorte Kommo (created_at · America/Mexico_City). MQL/SQL/Citas = etapa actual en timeline. Censo: <code>npm run sync:kommo-snapshot</code>.
               </>
             )}
           </p>

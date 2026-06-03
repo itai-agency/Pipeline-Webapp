@@ -1,15 +1,26 @@
-/** Fecha calendario UTC (YYYY-MM-DD). Mismo criterio que el API. */
+/** Zona cuenta — misma que el API (America/Mexico_City). */
+export const ACCOUNT_TIMEZONE = "America/Mexico_City";
+
+const accountDateFormatter = new Intl.DateTimeFormat("en-CA", { timeZone: ACCOUNT_TIMEZONE });
+
+/** Fecha calendario en zona cuenta (YYYY-MM-DD). */
+export function toAccountDateIso(date: Date = new Date()): string {
+  return accountDateFormatter.format(date);
+}
+
+/** @deprecated Usar toAccountDateIso */
 export function toUtcDateIso(date: Date = new Date()): string {
-  return date.toISOString().slice(0, 10);
+  return toAccountDateIso(date);
 }
 
-/** @deprecated Usar toUtcDateIso */
+/** @deprecated Usar toAccountDateIso */
 export function toLocalDateIso(date: Date = new Date()): string {
-  return toUtcDateIso(date);
+  return toAccountDateIso(date);
 }
 
-/** Del día 1 del mes en curso (UTC) al día vigente (UTC). */
+/** Del día 1 del mes en curso (zona cuenta) al día vigente. */
 export function getCurrentMonthRange(reference: Date = new Date()): { start: string; end: string } {
-  const start = `${reference.getUTCFullYear()}-${String(reference.getUTCMonth() + 1).padStart(2, "0")}-01`;
-  return { start, end: toUtcDateIso(reference) };
+  const end = toAccountDateIso(reference);
+  const [y, m] = end.split("-");
+  return { start: `${y}-${m}-01`, end };
 }

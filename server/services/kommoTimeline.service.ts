@@ -9,7 +9,7 @@ import {
   getStageFromKommoStatus,
   type KommoStatusInfo,
 } from "../config/kommoStageMap.js";
-import { toUtcDateIso, toUtcUnixRange } from "../lib/dateRanges.js";
+import { toAccountDateIso, toAccountUnixRange } from "../lib/dateRanges.js";
 import { hasLeadCreatedDateColumn } from "../lib/dashboardMetricsDb.js";
 import { AppError } from "../lib/errors.js";
 import { kommoGet } from "../lib/kommoApi.js";
@@ -70,7 +70,7 @@ type TimelineRow = {
 };
 
 function eventDateFromUnix(ts: number): string {
-  return toUtcDateIso(new Date(ts * 1000));
+  return toAccountDateIso(new Date(ts * 1000));
 }
 
 function parseLeadStatusAfter(
@@ -119,7 +119,7 @@ async function fetchStatusChangeEventsPage(
 
 function toIsoDateFromUnix(ts: number | null | undefined): string | null {
   if (ts == null || !Number.isFinite(ts)) return null;
-  return toUtcDateIso(new Date(ts * 1000));
+  return toAccountDateIso(new Date(ts * 1000));
 }
 
 async function fetchLeadCreatedDates(leadIds: number[]): Promise<Map<number, string | null>> {
@@ -183,7 +183,7 @@ export async function syncKommoStatusChangeEvents(
 
   const statuses = await fetchKommoStatuses();
   const statusMap = buildStatusMapFromKommo(statuses);
-  const { from, to } = toUtcUnixRange(params.since, params.until);
+  const { from, to } = toAccountUnixRange(params.since, params.until);
 
   let processed = 0;
   let skipped = 0;

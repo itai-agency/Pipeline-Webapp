@@ -16,7 +16,7 @@ import {
   type KommoStatusInfo,
   type StageCounts,
 } from "../config/kommoStageMap.js";
-import { monthRangeEndingOn, toUtcDateIso, toUtcUnixRange } from "../lib/dateRanges.js";
+import { addAccountDaysIso, monthRangeEndingOn, toAccountDateIso, toAccountUnixRange } from "../lib/dateRanges.js";
 import {
   dailyMetricsOnConflict,
   hasLeadCreatedDateColumn,
@@ -228,14 +228,14 @@ function resolveEventDate(
 ): string | null {
   const ts = leadTimestamp(lead, eventDateField);
   if (ts == null) return null;
-  const date = new Date(ts * 1000).toISOString().slice(0, 10);
+  const date = toAccountDateIso(new Date(ts * 1000));
   if (date < since || date > until) return null;
   return date;
 }
 
 function resolveLeadCreatedDate(lead: KommoLead): string | null {
   if (lead.created_at == null) return null;
-  return toUtcDateIso(new Date(lead.created_at * 1000));
+  return toAccountDateIso(new Date(lead.created_at * 1000));
 }
 
 function resolveClientFromLead(lead: KommoLead, clientMap: Record<string, string>): string | null {
@@ -302,7 +302,7 @@ export async function fetchKommoLeadsPageByPipelineCreated(
   monthStart: string,
   monthEnd: string,
 ): Promise<Array<z.infer<typeof censusLeadSchema>>> {
-  const { from, to } = toUtcUnixRange(monthStart, monthEnd);
+  const { from, to } = toAccountUnixRange(monthStart, monthEnd);
   const params: Record<string, string | number> = {
     page,
     limit: 250,
@@ -346,7 +346,7 @@ async function fetchKommoLeadsPage(
   until: string,
   dateFilter: KommoDateField,
 ): Promise<KommoLead[]> {
-  const { from, to } = toUtcUnixRange(since, until);
+  const { from, to } = toAccountUnixRange(since, until);
   const params: Record<string, string | number> = {
     page,
     limit: 250,
@@ -384,7 +384,7 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<KommoSync
   const mode = params.mode ?? "date_range";
   const dateFilter = params.dateFilter ?? "updated_at";
   const eventDateField = params.eventDateField ?? dateFilter;
-  const snapshotDate = toUtcDateIso();
+  const snapshotDate = toAccountDateIso();
 
   await supabase.from("sync_runs").insert({ source: "kommo", status: "running" });
   if (!params.skipPurge) {
@@ -636,7 +636,7 @@ export async function buildKommoMonthlyCohortSnapshots(
 
 /** @deprecated Usar buildKommoMonthlyCohortSnapshots — el censo por status_id inflaba totales. */
 export async function buildKommoPipelineSnapshots(): Promise<KommoClientSnapshot[]> {
-  const until = toUtcDateIso();
+  const until = toAccountDateIso();
   const { since } = monthRangeEndingOn(until);
   return buildKommoMonthlyCohortSnapshots(since, until);
 }
@@ -655,7 +655,7 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
   }
 
   const snapshotDate =
-    params.snapshotDate ?? KOMMO_CONTROL_REFERENCE.snapshotDate ?? toUtcDateIso();
+    params.snapshotDate ?? KOMMO_CONTROL_REFERENCE.snapshotDate ?? toAccountDateIso();
   const cohortRange =
     params.monthStart && params.monthEnd
       ? { since: params.monthStart, until: params.monthEnd }
@@ -820,6 +820,8 @@ export async function aggregateKommoToDailyMetrics(
   const timelineEvents: TimelineEventRow[] = [];
   const leadCohort = new Map<number, LeadCohortMeta>();
 
+  const enrichFromApi = shouldEnrichCohortFromApi(since, until, options?.enrichCohortFromApi);
+
   let offset = 0;
   while (true) {
     let query = supabase
@@ -831,12 +833,8 @@ export async function aggregateKommoToDailyMetrics(
       .not("kommo_event_id", "is", null)
       .order("event_date", { ascending: true })
       .range(offset, offset + KOMMO_PAGE_SIZE - 1);
-    if (since) query = query.gte("event_date", since);
-    if (until) query = query.lte("event_date", until);
-    if (useLeadCreatedDate) {
-      if (since) query = query.gte("lead_created_date", since);
-      if (until) query = query.lte("lead_created_date", until);
-    }
+    if (since) query = query.gte("event_date", addAccountDaysIso(since, -1));
+    if (until) query = query.lte("event_date", addAccountDaysIso(until, 1));
 
     const { data, error } = await query;
     if (error) throw new AppError(`Kommo load failed: ${error.message}`, 500);
@@ -849,7 +847,7 @@ export async function aggregateKommoToDailyMetrics(
       const created =
         (row.lead_created_date as string | null) ??
         leadCohort.get(leadId)?.createdDate;
-      if (created && !leadCohort.has(leadId)) {
+      if (!enrichFromApi && created && !leadCohort.has(leadId)) {
         leadCohort.set(leadId, { client, createdDate: created });
       }
       timelineEvents.push({
@@ -868,7 +866,6 @@ export async function aggregateKommoToDailyMetrics(
     offset += KOMMO_PAGE_SIZE;
   }
 
-  const enrichFromApi = shouldEnrichCohortFromApi(since, until, options?.enrichCohortFromApi);
   if (enrichFromApi && since && until) {
     for (const [pipelineKey, client] of Object.entries(getKommoClientMap())) {
       const pipelineId = Number(pipelineKey);
@@ -897,6 +894,49 @@ export async function aggregateKommoToDailyMetrics(
     console.log(
       `[kommo] Sin enriquecimiento API (rango ${rangeDayCount(since, until)} días). Cohorte solo desde kommo_lead_events.`,
     );
+  }
+
+  const cohortLeadIds = [...leadCohort.keys()];
+  if (cohortLeadIds.length > 0) {
+    const seenEventIds = new Set<string>();
+    for (const ev of timelineEvents) {
+      const payload = ev.raw_payload as { id?: string } | null;
+      if (payload?.id) seenEventIds.add(payload.id);
+    }
+    const COHORT_BATCH = 150;
+    for (let i = 0; i < cohortLeadIds.length; i += COHORT_BATCH) {
+      const batch = cohortLeadIds.slice(i, i + COHORT_BATCH);
+      let cohortOffset = 0;
+      while (true) {
+        const { data: cohortRows, error: cohortErr } = await supabase
+          .from("kommo_lead_events")
+          .select(
+            "kommo_lead_id, event_date, client, pipeline_id, status_id, stage_name, lead_created_date, raw_payload, kommo_event_id",
+          )
+          .in("kommo_lead_id", batch)
+          .not("kommo_event_id", "is", null)
+          .range(cohortOffset, cohortOffset + KOMMO_PAGE_SIZE - 1);
+        if (cohortErr) throw new AppError(`Kommo cohort events load failed: ${cohortErr.message}`, 500);
+        const rows = cohortRows ?? [];
+        for (const row of rows) {
+          const eventId = row.kommo_event_id as string;
+          if (seenEventIds.has(eventId)) continue;
+          seenEventIds.add(eventId);
+          timelineEvents.push({
+            kommo_lead_id: row.kommo_lead_id as number,
+            event_date: row.event_date as string,
+            client: row.client as string,
+            pipeline_id: row.pipeline_id as number | null,
+            status_id: row.status_id as number | null,
+            stage_name: row.stage_name as string | null,
+            lead_created_date: row.lead_created_date as string | null,
+            raw_payload: row.raw_payload,
+          });
+        }
+        if (rows.length < KOMMO_PAGE_SIZE) break;
+        cohortOffset += KOMMO_PAGE_SIZE;
+      }
+    }
   }
 
   const grouped = moldDailyMetricsFromTimeline(

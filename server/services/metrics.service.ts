@@ -34,7 +34,7 @@ function buildMetaPeriod(metaSpend: MetaSpendRowDto[]): DashboardSnapshotDto["me
     start,
     end,
     sourceLabel: "Meta Ads · Supabase",
-      note: "Conversaciones: Kommo created_at (cohorte UTC). Gasto: Meta. MQL/SQL/Citas: etapa final del día de creación (cohorte).",
+      note: "Conversaciones: Kommo created_at (cohorte · America/Mexico_City). Gasto: Meta. MQL+: etapa final del día de creación.",
   };
 }
 

@@ -5,14 +5,14 @@
  *   npm run sync:kommo-snapshot
  *   KOMMO_SNAPSHOT_DATE=2026-05-26 npm run sync:kommo-snapshot
  */
-import { currentMonthRange, toUtcDateIso } from "../server/lib/dateRanges.js";
+import { currentMonthRange, toAccountDateIso } from "../server/lib/dateRanges.js";
 import { syncKommoSnapshotMetrics } from "../server/services/kommo.service.js";
 import { monthRangeEndingOn } from "../server/lib/dateRanges.js";
 import { refreshAndBroadcast } from "../server/services/metrics.service.js";
 import { isKommoConfigured, isSupabaseConfigured } from "../server/config/env.js";
 import { getKommoControlMetrics } from "../server/config/kommoControlReference.js";
 
-const snapshotDate = process.env.KOMMO_SNAPSHOT_DATE ?? toUtcDateIso();
+const snapshotDate = process.env.KOMMO_SNAPSHOT_DATE ?? toAccountDateIso();
 const month = currentMonthRange();
 
 async function main(): Promise<void> {
