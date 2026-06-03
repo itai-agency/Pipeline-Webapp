@@ -7,6 +7,7 @@ import {
   parseAuthHashFlow,
   type AuthHashFlow,
 } from "@/lib/auth/authCallback";
+import { mapAuthError } from "@/lib/auth/authMessages";
 import {
   getSupabaseConfigHint,
   isSupabaseBrowserConfigured,
@@ -30,20 +31,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-function mapAuthError(message: string): string {
-  const lower = message.toLowerCase();
-  if (lower.includes("invalid login credentials")) {
-    return "Email o contraseña incorrectos";
-  }
-  if (lower.includes("email not confirmed")) {
-    return "Confirma tu email antes de ingresar";
-  }
-  if (lower.includes("same password")) {
-    return "La nueva contraseña debe ser distinta a la anterior";
-  }
-  return message;
-}
 
 function flowFromAuthEvent(event: AuthChangeEvent, hashFlow: AuthHashFlow | null): AuthHashFlow | null {
   if (event === "PASSWORD_RECOVERY") return "recovery";

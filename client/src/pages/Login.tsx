@@ -3,7 +3,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { InlineAuthAlert } from "@/components/auth/AuthFeedbackPanel";
+import { AUTH_LINK_VALIDITY_LABEL, PASSWORD_RESET_EMAIL_SENT } from "@/lib/auth/authMessages";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -41,7 +42,7 @@ export default function Login() {
     setIsLoading(true);
     const result = await requestPasswordReset(email);
     if (result.ok) {
-      setSuccess("Revisa tu correo. El enlace te llevará a definir una contraseña nueva.");
+      setSuccess("sent");
       setShowForgot(false);
     } else {
       setError(result.message);
@@ -62,6 +63,10 @@ export default function Login() {
 
           {showForgot ? (
             <form onSubmit={handleForgot} className="space-y-4">
+              <InlineAuthAlert
+                variant="info"
+                message={`Te enviaremos un enlace válido durante ${AUTH_LINK_VALIDITY_LABEL}. Úsalo pronto; si pide otro, el anterior dejará de funcionar.`}
+              />
               <div>
                 <label htmlFor="email-reset" className="block text-sm font-medium text-slate-700 mb-2">
                   Email
@@ -77,14 +82,9 @@ export default function Login() {
                   className="w-full"
                 />
               </div>
-              {error ? (
-                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
-                  <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-                  <p className="text-sm text-red-600">{error}</p>
-                </div>
-              ) : null}
+              {error ? <InlineAuthAlert message={error} /> : null}
               <Button type="submit" disabled={isLoading || !email} className="w-full bg-slate-900 text-white">
-                {isLoading ? "Enviando…" : "Enviar enlace"}
+                {isLoading ? "Enviando…" : "Enviar enlace de recuperación"}
               </Button>
               <button
                 type="button"
@@ -131,17 +131,16 @@ export default function Login() {
                 />
               </div>
 
-              {error ? (
-                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
-                  <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-                  <p className="text-sm text-red-600">{error}</p>
-                </div>
-              ) : null}
+              {error ? <InlineAuthAlert message={error} /> : null}
 
-              {success ? (
-                <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-md">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
-                  <p className="text-sm text-green-700">{success}</p>
+              {success === "sent" ? (
+                <div className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+                  <p className="font-medium mb-2">Correo enviado</p>
+                  <ul className="list-disc pl-5 space-y-1 leading-relaxed">
+                    {PASSWORD_RESET_EMAIL_SENT.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
                 </div>
               ) : null}
 
@@ -168,8 +167,9 @@ export default function Login() {
           )}
 
           <div className="mt-6 pt-6 border-t border-slate-200">
-            <p className="text-xs text-slate-500 text-center">
-              Acceso solo con invitación. El enlace del correo te pedirá crear tu contraseña antes de entrar.
+            <p className="text-xs text-slate-500 text-center leading-relaxed">
+              Acceso solo con invitación. Los enlaces del correo caducan en {AUTH_LINK_VALIDITY_LABEL}; abre el más
+              reciente si pediste varios.
             </p>
           </div>
         </div>

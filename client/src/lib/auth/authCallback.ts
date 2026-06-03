@@ -10,11 +10,10 @@ export function parseAuthHashFlow(): AuthHashFlow | null {
   return null;
 }
 
-/** Quita tokens del hash de la URL tras procesar el enlace. */
+/** Quita tokens y errores de hash/query tras procesar el enlace. */
 export function clearAuthHashFromUrl(): void {
   if (typeof window === "undefined") return;
-  const path = window.location.pathname + window.location.search;
-  window.history.replaceState(null, "", path);
+  window.history.replaceState(null, "", window.location.pathname);
 }
 
 export function getPasswordRedirectUrl(): string {
