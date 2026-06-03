@@ -20,6 +20,8 @@
     "sync:kommo-snapshot": "node --use-system-ca --import tsx scripts/sync-kommo-snapshot.ts",
     "probe:census-month": "node --use-system-ca --import tsx scripts/probe-census-created-month.ts",
     "verify:reached": "node --use-system-ca --import tsx scripts/verify-reached-enrich.ts",
+    "probe:excel-daily": "node --use-system-ca --import tsx scripts/probe-excel-daily-formula.ts",
+    "verify:mold-excel": "node --use-system-ca --import tsx scripts/verify-mold-vs-excel.ts",
     "compare:kommo-html": "node --use-system-ca --import tsx scripts/compare-kommo-html.ts",
     "explain:metrics-gap": "node --use-system-ca --import tsx scripts/explain-metrics-gap.ts",
     "rebuild:kommo-daily": "node --use-system-ca --import tsx scripts/rebuild-kommo-daily.ts",

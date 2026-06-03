@@ -6,8 +6,13 @@ const range = currentMonthRange();
 
 async function main() {
   console.log(`Sync Meta ${range.since} → ${range.until}`);
-  const n = await syncMetaSpend(range);
-  console.log(`Upserted ${n} filas`);
+  const result = await syncMetaSpend(range);
+  console.log(`Upserted ${result.processed} filas`);
+  if (result.skipped.length > 0) {
+    for (const s of result.skipped) {
+      console.warn(`  omitido ${s.client}: ${s.reason}`);
+    }
+  }
   await refreshAndBroadcast();
   console.log("Métricas actualizadas");
 }

@@ -22,6 +22,8 @@ export type MetaSpendRowDto = {
   accountName: string;
   accountId: string;
   spend: number;
+  /** Leads Meta Insights (conversaciones diarias). */
+  leads: number;
   source: string;
 };
 

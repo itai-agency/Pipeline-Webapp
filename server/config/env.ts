@@ -91,18 +91,29 @@ export const DEFAULT_META_ACCOUNTS: MetaAccountConfig[] = [
   { client: "INQ", accountName: "inq inmobiliaria cp", accountId: "act_1584938395981836" },
   { client: "HOGARES", accountName: "CInmubles Bajio", accountId: "act_349294690945338" },
   { client: "GRUPO ELIJO", accountName: "GRUPO ELIJO CP", accountId: "act_864948876563125" },
+  // INSPIRA — omitida del sync Meta (ver META_SYNC_EXCLUDED_CLIENTS); Kommo sigue activo.
   { client: "INSPIRA", accountName: "Inspira Bienes Raices CP", accountId: "act_949679304398951" },
   { client: "DOS HOGARES", accountName: "IIHogares GDL CP", accountId: "act_2175146543225091" },
 ];
 
+/** Omitidas del sync Meta Ads (sin llamada API). Quitar de la lista para reactivar. */
+export const META_SYNC_EXCLUDED_CLIENTS = new Set<string>([
+  "INSPIRA", // posible baja de cliente · 403 ads_read (may 2026)
+]);
+
 export function getMetaAccounts(): MetaAccountConfig[] {
-  if (!env.META_ACCOUNTS) return DEFAULT_META_ACCOUNTS;
-  try {
-    const parsed = JSON.parse(env.META_ACCOUNTS) as MetaAccountConfig[];
-    return Array.isArray(parsed) ? parsed : DEFAULT_META_ACCOUNTS;
-  } catch {
-    return DEFAULT_META_ACCOUNTS;
+  let accounts: MetaAccountConfig[];
+  if (!env.META_ACCOUNTS) {
+    accounts = DEFAULT_META_ACCOUNTS;
+  } else {
+    try {
+      const parsed = JSON.parse(env.META_ACCOUNTS) as MetaAccountConfig[];
+      accounts = Array.isArray(parsed) ? parsed : DEFAULT_META_ACCOUNTS;
+    } catch {
+      accounts = DEFAULT_META_ACCOUNTS;
+    }
   }
+  return accounts.filter((a) => !META_SYNC_EXCLUDED_CLIENTS.has(a.client));
 }
 
 /** Pipelines Kommo ↔ clientes del dashboard operativo Inmoleads */

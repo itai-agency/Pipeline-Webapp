@@ -727,7 +727,7 @@ export default function Home() {
               </>
             ) : (
               <>
-                Totales = actividad timeline. Ejecuta <code>npm run sync:kommo-snapshot</code> para censo API al cierre del periodo.
+                Conversaciones diarias = leads Meta (Insights); MQL/SQL/Citas = movimientos Kommo. Censo: <code>npm run sync:kommo-snapshot</code>.
               </>
             )}
           </p>

@@ -13,9 +13,14 @@ export const metaRouter = Router();
 metaRouter.post("/sync", async (req, res, next) => {
   try {
     const body = syncBodySchema.parse(req.body ?? {});
-    const recordsProcessed = await syncMetaSpend(body);
+    const result = await syncMetaSpend(body);
     await refreshAndBroadcast({ since: body.since, until: body.until });
-    res.json({ source: "meta", status: "success", recordsProcessed });
+    res.json({
+      source: "meta",
+      status: "success",
+      recordsProcessed: result.processed,
+      skipped: result.skipped,
+    });
   } catch (err) {
     next(err);
   }

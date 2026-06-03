@@ -1,0 +1,278 @@
+{
+  "daily_rows_parsed": 142,
+  "date_range": {
+    "min": "2026-05-01",
+    "max": "2026-05-28"
+  },
+  "clients_in_sheet": [
+    "DOS HOGARES",
+    "GRUPO ELIJO",
+    "HOGARES",
+    "INQ",
+    "INSPIRA",
+    "MANOS AL HOGAR"
+  ],
+  "unknown_clients": [],
+  "mayo_1_26_sum": {
+    "HOGARES": {
+      "conv": 158.0,
+      "mql": 40.0,
+      "sql": 18.0,
+      "citas": 11.0,
+      "firmas": 3.0,
+      "gasto": 5080.94,
+      "days": 22
+    },
+    "INQ": {
+      "conv": 340.0,
+      "mql": 17.0,
+      "sql": 3.0,
+      "citas": 6.0,
+      "firmas": 2.0,
+      "gasto": 6518.650000000001,
+      "days": 22
+    },
+    "INSPIRA": {
+      "conv": 77.0,
+      "mql": 6.0,
+      "sql": 1.0,
+      "citas": 2.0,
+      "firmas": 0.0,
+      "gasto": 3871.6300000000006,
+      "days": 22
+    },
+    "GRUPO ELIJO": {
+      "conv": 362.0,
+      "mql": 18.0,
+      "sql": 3.0,
+      "citas": 4.0,
+      "firmas": 2.0,
+      "gasto": 3105.8199999999997,
+      "days": 22
+    },
+    "DOS HOGARES": {
+      "conv": 84.0,
+      "mql": 5.0,
+      "sql": 1.0,
+      "citas": 1.0,
+      "firmas": 0.0,
+      "gasto": 1777.63,
+      "days": 22
+    },
+    "MANOS AL HOGAR": {
+      "conv": 274.0,
+      "mql": 16.0,
+      "sql": 3.0,
+      "citas": 6.0,
+      "firmas": 3.0,
+      "gasto": 6576.88,
+      "days": 22
+    }
+  },
+  "mayo_26_day_only": {
+    "HOGARES": {
+      "conv": 9.0,
+      "mql": 3.0,
+      "sql": 3.0,
+      "citas": 1.0,
+      "firmas": 0.0,
+      "gasto": 399.38,
+      "days": 1
+    },
+    "INQ": {
+      "conv": 9.0,
+      "mql": 0.0,
+      "sql": 0.0,
+      "citas": 0.0,
+      "firmas": 0.0,
+      "gasto": 519.62,
+      "days": 1
+    },
+    "INSPIRA": {
+      "conv": 0.0,
+      "mql": 0.0,
+      "sql": 0.0,
+      "citas": 0.0,
+      "firmas": 0.0,
+      "gasto": 187.07,
+      "days": 1
+    },
+    "GRUPO ELIJO": {
+      "conv": 7.0,
+      "mql": 0.0,
+      "sql": 0.0,
+      "citas": 0.0,
+      "firmas": 0.0,
+      "gasto": 164.06,
+      "days": 1
+    },
+    "DOS HOGARES": {
+      "conv": 6.0,
+      "mql": 0.0,
+      "sql": 0.0,
+      "citas": 0.0,
+      "firmas": 0.0,
+      "gasto": 267.69,
+      "days": 1
+    },
+    "MANOS AL HOGAR": {
+      "conv": 14.0,
+      "mql": 1.0,
+      "sql": 0.0,
+      "citas": 0.0,
+      "firmas": 1.0,
+      "gasto": 830.35,
+      "days": 1
+    }
+  },
+  "mayo_1_25_sum": {
+    "HOGARES": {
+      "conv": 149.0,
+      "mql": 37.0,
+      "sql": 15.0,
+      "citas": 10.0,
+      "firmas": 3.0,
+      "gasto": 4681.5599999999995,
+      "days": 21
+    },
+    "INQ": {
+      "conv": 331.0,
+      "mql": 17.0,
+      "sql": 3.0,
+      "citas": 6.0,
+      "firmas": 2.0,
+      "gasto": 5999.030000000001,
+      "days": 21
+    },
+    "INSPIRA": {
+      "conv": 77.0,
+      "mql": 6.0,
+      "sql": 1.0,
+      "citas": 2.0,
+      "firmas": 0.0,
+      "gasto": 3684.5600000000004,
+      "days": 21
+    },
+    "GRUPO ELIJO": {
+      "conv": 355.0,
+      "mql": 18.0,
+      "sql": 3.0,
+      "citas": 4.0,
+      "firmas": 2.0,
+      "gasto": 2941.7599999999998,
+      "days": 21
+    },
+    "DOS HOGARES": {
+      "conv": 78.0,
+      "mql": 5.0,
+      "sql": 1.0,
+      "citas": 1.0,
+      "firmas": 0.0,
+      "gasto": 1509.94,
+      "days": 21
+    },
+    "MANOS AL HOGAR": {
+      "conv": 260.0,
+      "mql": 15.0,
+      "sql": 3.0,
+      "citas": 6.0,
+      "firmas": 2.0,
+      "gasto": 5746.53,
+      "days": 21
+    }
+  },
+  "semanal_may_like_sum": {},
+  "semanal_sample": [],
+  "comparison": [
+    {
+      "cliente": "HOGARES",
+      "xlsx_daily_sum_conv_1_26": 158.0,
+      "xlsx_daily_sum_mql_1_26": 40.0,
+      "xlsx_day_26_conv": 9.0,
+      "xlsx_day_26_mql": 3.0,
+      "html_kommo_leads": 187,
+      "html_reached_mql": 65,
+      "interpretacion": {
+        "conv_es_actividad_diaria": true,
+        "html_leads_es_censo_cohorte": true,
+        "mql_sheet_es_movimientos_dia": true,
+        "html_mql_es_reached_embudo": true
+      }
+    },
+    {
+      "cliente": "INQ",
+      "xlsx_daily_sum_conv_1_26": 340.0,
+      "xlsx_daily_sum_mql_1_26": 17.0,
+      "xlsx_day_26_conv": 9.0,
+      "xlsx_day_26_mql": 0.0,
+      "html_kommo_leads": 402,
+      "html_reached_mql": 32,
+      "interpretacion": {
+        "conv_es_actividad_diaria": true,
+        "html_leads_es_censo_cohorte": true,
+        "mql_sheet_es_movimientos_dia": true,
+        "html_mql_es_reached_embudo": true
+      }
+    },
+    {
+      "cliente": "INSPIRA",
+      "xlsx_daily_sum_conv_1_26": 77.0,
+      "xlsx_daily_sum_mql_1_26": 6.0,
+      "xlsx_day_26_conv": 0.0,
+      "xlsx_day_26_mql": 0.0,
+      "html_kommo_leads": 80,
+      "html_reached_mql": 9,
+      "interpretacion": {
+        "conv_es_actividad_diaria": true,
+        "html_leads_es_censo_cohorte": true,
+        "mql_sheet_es_movimientos_dia": true,
+        "html_mql_es_reached_embudo": true
+      }
+    },
+    {
+      "cliente": "GRUPO ELIJO",
+      "xlsx_daily_sum_conv_1_26": 362.0,
+      "xlsx_daily_sum_mql_1_26": 18.0,
+      "xlsx_day_26_conv": 7.0,
+      "xlsx_day_26_mql": 0.0,
+      "html_kommo_leads": 438,
+      "html_reached_mql": 7,
+      "interpretacion": {
+        "conv_es_actividad_diaria": true,
+        "html_leads_es_censo_cohorte": true,
+        "mql_sheet_es_movimientos_dia": true,
+        "html_mql_es_reached_embudo": true
+      }
+    },
+    {
+      "cliente": "DOS HOGARES",
+      "xlsx_daily_sum_conv_1_26": 84.0,
+      "xlsx_daily_sum_mql_1_26": 5.0,
+      "xlsx_day_26_conv": 6.0,
+      "xlsx_day_26_mql": 0.0,
+      "html_kommo_leads": 99,
+      "html_reached_mql": 4,
+      "interpretacion": {
+        "conv_es_actividad_diaria": true,
+        "html_leads_es_censo_cohorte": true,
+        "mql_sheet_es_movimientos_dia": true,
+        "html_mql_es_reached_embudo": true
+      }
+    },
+    {
+      "cliente": "MANOS AL HOGAR",
+      "xlsx_daily_sum_conv_1_26": 274.0,
+      "xlsx_daily_sum_mql_1_26": 16.0,
+      "xlsx_day_26_conv": 14.0,
+      "xlsx_day_26_mql": 1.0,
+      "html_kommo_leads": 287,
+      "html_reached_mql": 20,
+      "interpretacion": {
+        "conv_es_actividad_diaria": true,
+        "html_leads_es_censo_cohorte": true,
+        "mql_sheet_es_movimientos_dia": true,
+        "html_mql_es_reached_embudo": true
+      }
+    }
+  ]
+}

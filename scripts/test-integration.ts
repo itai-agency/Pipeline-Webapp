@@ -28,8 +28,11 @@ async function main(): Promise<void> {
   if (isMetaConfigured()) {
     console.log("--- Sync Meta ---");
     try {
-      const n = await syncMetaSpend({ since, until });
-      console.log(`Meta: ${n} filas upserted`);
+      const result = await syncMetaSpend({ since, until });
+      console.log(`Meta: ${result.processed} filas upserted`);
+      if (result.skipped.length > 0) {
+        console.warn("Meta omitidos:", result.skipped.map((s) => s.client).join(", "));
+      }
     } catch (err) {
       console.error("Meta sync falló:", err instanceof Error ? err.message : err);
     }

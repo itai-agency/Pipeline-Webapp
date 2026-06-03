@@ -1,0 +1,686 @@
+{
+  "file": "c:\\Users\\calec\\Downloads\\Data_Clientes_2026.xlsx",
+  "sheet_names": [
+    "RESPALDO_DIARIO",
+    "SEMANAL",
+    "MENSUAL",
+    "HISTORICO-MENSUAL",
+    "COMISIONES"
+  ],
+  "sheets_meta": {
+    "RESPALDO_DIARIO": {
+      "dimension": "",
+      "max_row": 1015,
+      "max_col": 9
+    },
+    "SEMANAL": {
+      "dimension": "",
+      "max_row": 999,
+      "max_col": 7
+    },
+    "MENSUAL": {
+      "dimension": "",
+      "max_row": 983,
+      "max_col": 9
+    },
+    "HISTORICO-MENSUAL": {
+      "dimension": "",
+      "max_row": 1002,
+      "max_col": 9
+    },
+    "COMISIONES": {
+      "dimension": "",
+      "max_row": 1006,
+      "max_col": 11
+    }
+  },
+  "headers": {
+    "RESPALDO_DIARIO": [
+      "fecha",
+      "CLIENTE",
+      "CONVERSACIONES",
+      "MQL",
+      "SQL",
+      "CITAS",
+      "FIRMAS",
+      "Gasto Diario",
+      "SEMANA"
+    ],
+    "SEMANAL": [
+      "SEMANA",
+      "CLIENTE",
+      "CONVERSACIONES",
+      "MQL",
+      "SQL",
+      "CITAS",
+      "FIRMAS"
+    ],
+    "MENSUAL": [
+      "MES",
+      "CLIENTE",
+      "CONVERSACIONES",
+      "MQL",
+      "SQL",
+      "CITAS",
+      "FIRMAS",
+      "GASTO TOTAL",
+      "COSTO POR CITA"
+    ],
+    "HISTORICO-MENSUAL": [
+      "MES",
+      "CLIENTE",
+      "CONVERSACIONES",
+      "MQL",
+      "SQL",
+      "CITAS",
+      "FIRMAS",
+      "GASTO TOTAL",
+      "COSTO POR CITA"
+    ],
+    "COMISIONES": [
+      "CLIENTES",
+      "FIRMADO",
+      "FECHA DE FIRMA",
+      "FECHA DE PAGO",
+      "ESTATUS",
+      "Monto",
+      "",
+      "Pagado",
+      "Por Pagar",
+      "",
+      ""
+    ]
+  },
+  "respaldo_daily_rows": 142,
+  "respaldo_date_range": {
+    "min": "2026-05-01",
+    "max": "2026-05-28"
+  },
+  "mayo_01_26_daily_sum": {
+    "HOGARES": {
+      "conv": 158.0,
+      "mql": 40.0,
+      "sql": 18.0,
+      "citas": 11.0,
+      "firmas": 3.0,
+      "gasto": 0.0,
+      "days": 22
+    },
+    "INQ": {
+      "conv": 340.0,
+      "mql": 17.0,
+      "sql": 3.0,
+      "citas": 6.0,
+      "firmas": 2.0,
+      "gasto": 0.0,
+      "days": 22
+    },
+    "INSPIRA": {
+      "conv": 77.0,
+      "mql": 6.0,
+      "sql": 1.0,
+      "citas": 2.0,
+      "firmas": 0.0,
+      "gasto": 0.0,
+      "days": 22
+    },
+    "GRUPO ELIJO": {
+      "conv": 362.0,
+      "mql": 18.0,
+      "sql": 3.0,
+      "citas": 4.0,
+      "firmas": 2.0,
+      "gasto": 0.0,
+      "days": 22
+    },
+    "DOS HOGARES": {
+      "conv": 84.0,
+      "mql": 5.0,
+      "sql": 1.0,
+      "citas": 1.0,
+      "firmas": 0.0,
+      "gasto": 0.0,
+      "days": 22
+    },
+    "MANOS AL HOGAR": {
+      "conv": 274.0,
+      "mql": 16.0,
+      "sql": 3.0,
+      "citas": 6.0,
+      "firmas": 3.0,
+      "gasto": 0.0,
+      "days": 22
+    }
+  },
+  "mayo_full_daily_sum": {
+    "HOGARES": {
+      "conv": 166.0,
+      "mql": 42.0,
+      "sql": 19.0,
+      "citas": 13.0,
+      "firmas": 3.0,
+      "gasto": 0.0,
+      "days": 24
+    },
+    "INQ": {
+      "conv": 355.0,
+      "mql": 17.0,
+      "sql": 3.0,
+      "citas": 8.0,
+      "firmas": 2.0,
+      "gasto": 0.0,
+      "days": 24
+    },
+    "INSPIRA": {
+      "conv": 77.0,
+      "mql": 6.0,
+      "sql": 1.0,
+      "citas": 2.0,
+      "firmas": 0.0,
+      "gasto": 0.0,
+      "days": 22
+    },
+    "GRUPO ELIJO": {
+      "conv": 391.0,
+      "mql": 21.0,
+      "sql": 3.0,
+      "citas": 4.0,
+      "firmas": 2.0,
+      "gasto": 0.0,
+      "days": 24
+    },
+    "DOS HOGARES": {
+      "conv": 90.0,
+      "mql": 6.0,
+      "sql": 1.0,
+      "citas": 1.0,
+      "firmas": 0.0,
+      "gasto": 0.0,
+      "days": 24
+    },
+    "MANOS AL HOGAR": {
+      "conv": 294.0,
+      "mql": 20.0,
+      "sql": 3.0,
+      "citas": 6.0,
+      "firmas": 3.0,
+      "gasto": 0.0,
+      "days": 24
+    }
+  },
+  "mensual_rows": 1,
+  "mayo_mensual_sheet": {},
+  "mayo_historico_mensual": {},
+  "compare_mayo_vs_html": [
+    {
+      "cliente": "HOGARES",
+      "html_kommo_leads": 187,
+      "html_reached_mql": 65,
+      "sheet_daily_sum_conv_may1_26": 158.0,
+      "sheet_daily_sum_mql_may1_26": 40.0,
+      "sheet_mensual_conv": 0,
+      "sheet_mensual_mql": 0,
+      "delta_conv_vs_html_leads": -29.0,
+      "delta_mql_vs_html_reached": -25.0
+    },
+    {
+      "cliente": "INQ",
+      "html_kommo_leads": 402,
+      "html_reached_mql": 32,
+      "sheet_daily_sum_conv_may1_26": 340.0,
+      "sheet_daily_sum_mql_may1_26": 17.0,
+      "sheet_mensual_conv": 0,
+      "sheet_mensual_mql": 0,
+      "delta_conv_vs_html_leads": -62.0,
+      "delta_mql_vs_html_reached": -15.0
+    },
+    {
+      "cliente": "INSPIRA",
+      "html_kommo_leads": 80,
+      "html_reached_mql": 9,
+      "sheet_daily_sum_conv_may1_26": 77.0,
+      "sheet_daily_sum_mql_may1_26": 6.0,
+      "sheet_mensual_conv": 0,
+      "sheet_mensual_mql": 0,
+      "delta_conv_vs_html_leads": -3.0,
+      "delta_mql_vs_html_reached": -3.0
+    },
+    {
+      "cliente": "GRUPO ELIJO",
+      "html_kommo_leads": 438,
+      "html_reached_mql": 7,
+      "sheet_daily_sum_conv_may1_26": 362.0,
+      "sheet_daily_sum_mql_may1_26": 18.0,
+      "sheet_mensual_conv": 0,
+      "sheet_mensual_mql": 0,
+      "delta_conv_vs_html_leads": -76.0,
+      "delta_mql_vs_html_reached": 11.0
+    },
+    {
+      "cliente": "DOS HOGARES",
+      "html_kommo_leads": 99,
+      "html_reached_mql": 4,
+      "sheet_daily_sum_conv_may1_26": 84.0,
+      "sheet_daily_sum_mql_may1_26": 5.0,
+      "sheet_mensual_conv": 0,
+      "sheet_mensual_mql": 0,
+      "delta_conv_vs_html_leads": -15.0,
+      "delta_mql_vs_html_reached": 1.0
+    },
+    {
+      "cliente": "MANOS AL HOGAR",
+      "html_kommo_leads": 287,
+      "html_reached_mql": 20,
+      "sheet_daily_sum_conv_may1_26": 274.0,
+      "sheet_daily_sum_mql_may1_26": 16.0,
+      "sheet_mensual_conv": 0,
+      "sheet_mensual_mql": 0,
+      "delta_conv_vs_html_leads": -13.0,
+      "delta_mql_vs_html_reached": -4.0
+    }
+  ],
+  "mayo_last_5_days_sample": {
+    "HOGARES": [
+      {
+        "row": 116,
+        "fecha": "2026-05-23",
+        "cliente": "HOGARES",
+        "conv": 10.0,
+        "mql": 5.0,
+        "sql": 2.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$480,42",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 122,
+        "fecha": "2026-05-25",
+        "cliente": "HOGARES",
+        "conv": 14.0,
+        "mql": 3.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$667,38",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 128,
+        "fecha": "2026-05-26",
+        "cliente": "HOGARES",
+        "conv": 9.0,
+        "mql": 3.0,
+        "sql": 3.0,
+        "citas": 1.0,
+        "firmas": 0.0,
+        "semana": "$399,38",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 134,
+        "fecha": "2026-05-27",
+        "cliente": "HOGARES",
+        "conv": 4.0,
+        "mql": 1.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$377,51",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 139,
+        "fecha": "2026-05-28",
+        "cliente": "HOGARES",
+        "conv": 4.0,
+        "mql": 1.0,
+        "sql": 1.0,
+        "citas": 2.0,
+        "firmas": 0.0,
+        "semana": "$315,38",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      }
+    ],
+    "INQ": [
+      {
+        "row": 117,
+        "fecha": "2026-05-23",
+        "cliente": "INQ",
+        "conv": 10.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$438,11",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 123,
+        "fecha": "2026-05-25",
+        "cliente": "INQ",
+        "conv": 17.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$943,48",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 129,
+        "fecha": "2026-05-26",
+        "cliente": "INQ",
+        "conv": 9.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$519,62",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 135,
+        "fecha": "2026-05-27",
+        "cliente": "INQ",
+        "conv": 10.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 1.0,
+        "firmas": 0.0,
+        "semana": "$586,97",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 140,
+        "fecha": "2026-05-28",
+        "cliente": "INQ",
+        "conv": 5.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 1.0,
+        "firmas": 0.0,
+        "semana": "$467,04",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      }
+    ],
+    "INSPIRA": [
+      {
+        "row": 106,
+        "fecha": "2026-05-21",
+        "cliente": "INSPIRA",
+        "conv": 1.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$209,84",
+        "mes": "46158.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 112,
+        "fecha": "2026-05-22",
+        "cliente": "INSPIRA",
+        "conv": 0.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$211,40",
+        "mes": "46158.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 118,
+        "fecha": "2026-05-23",
+        "cliente": "INSPIRA",
+        "conv": 4.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$345,48",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 124,
+        "fecha": "2026-05-25",
+        "cliente": "INSPIRA",
+        "conv": 12.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$734,34",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 130,
+        "fecha": "2026-05-26",
+        "cliente": "INSPIRA",
+        "conv": 0.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$187,07",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      }
+    ],
+    "GRUPO ELIJO": [
+      {
+        "row": 119,
+        "fecha": "2026-05-23",
+        "cliente": "GRUPO ELIJO",
+        "conv": 15.0,
+        "mql": 1.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$224,38",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 125,
+        "fecha": "2026-05-25",
+        "cliente": "GRUPO ELIJO",
+        "conv": 31.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 1.0,
+        "semana": "$447,64",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 131,
+        "fecha": "2026-05-26",
+        "cliente": "GRUPO ELIJO",
+        "conv": 7.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$164,06",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 136,
+        "fecha": "2026-05-27",
+        "cliente": "GRUPO ELIJO",
+        "conv": 15.0,
+        "mql": 2.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$277,70",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 141,
+        "fecha": "2026-05-28",
+        "cliente": "GRUPO ELIJO",
+        "conv": 14.0,
+        "mql": 1.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$159,24",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      }
+    ],
+    "DOS HOGARES": [
+      {
+        "row": 120,
+        "fecha": "2026-05-23",
+        "cliente": "DOS HOGARES",
+        "conv": 8.0,
+        "mql": 1.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$315,02",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 126,
+        "fecha": "2026-05-25",
+        "cliente": "DOS HOGARES",
+        "conv": 9.0,
+        "mql": 1.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$516,66",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 132,
+        "fecha": "2026-05-26",
+        "cliente": "DOS HOGARES",
+        "conv": 6.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$267,69",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 137,
+        "fecha": "2026-05-27",
+        "cliente": "DOS HOGARES",
+        "conv": 5.0,
+        "mql": 1.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$259,73",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 142,
+        "fecha": "2026-05-28",
+        "cliente": "DOS HOGARES",
+        "conv": 1.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$170,51",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      }
+    ],
+    "MANOS AL HOGAR": [
+      {
+        "row": 121,
+        "fecha": "2026-05-23",
+        "cliente": "MANOS AL HOGAR",
+        "conv": 14.0,
+        "mql": 2.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$726,34",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 127,
+        "fecha": "2026-05-25",
+        "cliente": "MANOS AL HOGAR",
+        "conv": 19.0,
+        "mql": 0.0,
+        "sql": 0.0,
+        "citas": 1.0,
+        "firmas": 0.0,
+        "semana": "$1.211,48",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 133,
+        "fecha": "2026-05-26",
+        "cliente": "MANOS AL HOGAR",
+        "conv": 14.0,
+        "mql": 1.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 1.0,
+        "semana": "$830,35",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 138,
+        "fecha": "2026-05-27",
+        "cliente": "MANOS AL HOGAR",
+        "conv": 10.0,
+        "mql": 1.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$788,83",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      },
+      {
+        "row": 143,
+        "fecha": "2026-05-28",
+        "cliente": "MANOS AL HOGAR",
+        "conv": 10.0,
+        "mql": 3.0,
+        "sql": 0.0,
+        "citas": 0.0,
+        "firmas": 0.0,
+        "semana": "$597,81",
+        "mes": "46165.0",
+        "gasto_ads": 0.0
+      }
+    ]
+  }
+}

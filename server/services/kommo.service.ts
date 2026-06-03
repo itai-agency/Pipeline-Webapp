@@ -26,6 +26,11 @@ import {
 import { AppError } from "../lib/errors.js";
 import { kommoGet } from "../lib/kommoApi.js";
 import {
+  moldDailyMetricsFromTimeline,
+  type LeadCohortMeta,
+  type TimelineEventRow,
+} from "../lib/kommoDailyMold.js";
+import {
   buildStatusTierMap,
   enrichSnapshotReachedFromTimeline,
 } from "../lib/kommoReachedMetrics.js";
@@ -296,7 +301,7 @@ async function fetchKommoLeadsPageByPipeline(page: number, pipelineId: number): 
 }
 
 /** Leads del pipeline creados en [monthStart, monthEnd] (cohorte mensual). */
-async function fetchKommoLeadsPageByPipelineCreated(
+export async function fetchKommoLeadsPageByPipelineCreated(
   page: number,
   pipelineId: number,
   monthStart: string,
@@ -737,7 +742,35 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
  * Reconstruye embudo diario desde kommo_lead_events (1 fila por fecha+cliente).
  * Primero pone a 0 conversaciones/mql/sql/citas/firmas en el rango (conserva gasto Meta).
  */
-export async function rebuildDailyMetricsFromEvents(since: string, until: string): Promise<number> {
+export type RebuildDailyMetricsOptions = {
+  /** false = solo kommo_lead_events en BD (recomendado para rangos > 1 mes). */
+  enrichCohortFromApi?: boolean;
+};
+
+function rangeDayCount(since: string, until: string): number {
+  const start = new Date(`${since}T12:00:00`).getTime();
+  const end = new Date(`${until}T12:00:00`).getTime();
+  return Math.max(1, Math.round((end - start) / 86_400_000) + 1);
+}
+
+function shouldEnrichCohortFromApi(
+  since: string | undefined,
+  until: string | undefined,
+  override?: boolean,
+): boolean {
+  if (override === false) return false;
+  if (override === true) return isKommoConfigured();
+  if (!since || !until || !isKommoConfigured()) return false;
+  if (process.env.KOMMO_ENRICH_COHORT_API === "1") return true;
+  if (process.env.KOMMO_REBUILD_SKIP_API === "1") return false;
+  return rangeDayCount(since, until) <= 35;
+}
+
+export async function rebuildDailyMetricsFromEvents(
+  since: string,
+  until: string,
+  options?: RebuildDailyMetricsOptions,
+): Promise<number> {
   const supabase = getSupabaseAdmin();
   if (!supabase) return 0;
 
@@ -765,25 +798,40 @@ export async function rebuildDailyMetricsFromEvents(since: string, until: string
     if (error) throw new AppError(`Metrics reset failed: ${error.message}`, 500);
   }
 
-  return aggregateKommoToDailyMetrics(since, until);
+  return aggregateKommoToDailyMetrics(since, until, options);
 }
 
-export async function aggregateKommoToDailyMetrics(since?: string, until?: string): Promise<number> {
+export async function aggregateKommoToDailyMetrics(
+  since?: string,
+  until?: string,
+  options?: RebuildDailyMetricsOptions,
+): Promise<number> {
   const supabase = getSupabaseAdmin();
   if (!supabase) return 0;
 
   const allowed = Array.from(getAllowedDashboardClients());
   const useLeadCreatedDate = await hasLeadCreatedDateColumn();
-  const grouped = new Map<
-    string,
-    { date: string; client: string; conversaciones: number; mql: number; sql: number; citas: number; firmas: number }
-  >();
+  const allStatuses = await fetchKommoStatuses();
+  const statusNameByKey = new Map<string, string>();
+  for (const s of allStatuses) {
+    if (s.pipeline_id != null) statusNameByKey.set(`${s.pipeline_id}:${s.id}`, s.name);
+    statusNameByKey.set(String(s.id), s.name);
+  }
+  const pipelineIdByClient = new Map<string, number>();
+  for (const [pid, client] of Object.entries(getKommoClientMap())) {
+    pipelineIdByClient.set(client, Number(pid));
+  }
+
+  const timelineEvents: TimelineEventRow[] = [];
+  const leadCohort = new Map<number, LeadCohortMeta>();
 
   let offset = 0;
   while (true) {
     let query = supabase
       .from("kommo_lead_events")
-      .select("*")
+      .select(
+        "kommo_lead_id, event_date, client, pipeline_id, status_id, stage_name, lead_created_date, raw_payload, kommo_event_id",
+      )
       .in("client", allowed)
       .not("kommo_event_id", "is", null)
       .order("event_date", { ascending: true })
@@ -801,32 +849,89 @@ export async function aggregateKommoToDailyMetrics(since?: string, until?: strin
     if (rows.length === 0) break;
 
     for (const row of rows) {
-      const key = `${row.event_date}::${row.client}`;
-      const current = grouped.get(key) ?? {
-        date: row.event_date as string,
-        client: row.client as string,
-        conversaciones: 0,
-        mql: 0,
-        sql: 0,
-        citas: 0,
-        firmas: 0,
-      };
-      current.conversaciones += (row.conversations as number) ?? 0;
-      current.mql += (row.mql as number) ?? 0;
-      current.sql += (row.sql as number) ?? 0;
-      current.citas += (row.citas as number) ?? 0;
-      current.firmas += (row.firmas as number) ?? 0;
-      grouped.set(key, current);
+      const leadId = row.kommo_lead_id as number;
+      const client = row.client as string;
+      const created =
+        (row.lead_created_date as string | null) ??
+        leadCohort.get(leadId)?.createdDate;
+      if (created && !leadCohort.has(leadId)) {
+        leadCohort.set(leadId, { client, createdDate: created });
+      }
+      timelineEvents.push({
+        kommo_lead_id: leadId,
+        event_date: row.event_date as string,
+        client,
+        pipeline_id: row.pipeline_id as number | null,
+        status_id: row.status_id as number | null,
+        stage_name: row.stage_name as string | null,
+        lead_created_date: row.lead_created_date as string | null,
+        raw_payload: row.raw_payload,
+      });
     }
 
     if (rows.length < KOMMO_PAGE_SIZE) break;
     offset += KOMMO_PAGE_SIZE;
   }
 
+  const enrichFromApi = shouldEnrichCohortFromApi(since, until, options?.enrichCohortFromApi);
+  if (enrichFromApi && since && until) {
+    for (const [pipelineKey, client] of Object.entries(getKommoClientMap())) {
+      const pipelineId = Number(pipelineKey);
+      if (!Number.isFinite(pipelineId)) continue;
+      try {
+        let page = 1;
+        while (true) {
+          const leads = await fetchKommoLeadsPageByPipelineCreated(page, pipelineId, since, until);
+          if (leads.length === 0) break;
+          for (const lead of leads) {
+            const created = resolveLeadCreatedDate(lead as KommoLead);
+            if (!created) continue;
+            leadCohort.set(lead.id, { client, createdDate: created });
+          }
+          if (leads.length < 250) break;
+          page += 1;
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn(
+          `[kommo] cohort API omitido ${client} (${pipelineId}): ${message} — conversaciones desde lead_created_date en eventos`,
+        );
+      }
+    }
+  } else if (since && until && isKommoConfigured()) {
+    console.log(
+      `[kommo] Sin enriquecimiento API (rango ${rangeDayCount(since, until)} días). Cohorte solo desde kommo_lead_events.`,
+    );
+  }
+
+  const grouped = moldDailyMetricsFromTimeline(
+    timelineEvents,
+    leadCohort,
+    statusNameByKey,
+    pipelineIdByClient,
+    { monthStart: since, monthEnd: until },
+  );
+
+  // #region agent log
+  fetch("http://127.0.0.1:7880/ingest/6fd1d614-7a66-4dcc-a425-d3b833f324c4", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "a0037c" },
+    body: JSON.stringify({
+      sessionId: "a0037c",
+      runId: "daily-mold-aggregate",
+      hypothesisId: "H-daily-mold",
+      location: "kommo.service.ts:aggregateKommoToDailyMetrics",
+      message: "timeline molded to daily",
+      data: { rows: grouped.size, events: timelineEvents.length, cohortLeads: leadCohort.size, since, until },
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
+
   const useSource = await hasMetricsSourceColumn();
   const onConflict = await dailyMetricsOnConflict();
   let upserted = 0;
-  for (const agg of Array.from(grouped.values())) {
+  for (const agg of grouped.values()) {
     let existingQuery = supabase
       .from("dashboard_metrics_daily")
       .select("gasto_total")

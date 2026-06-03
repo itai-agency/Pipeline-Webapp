@@ -9,7 +9,7 @@
  */
 import "../server/config/env.js";
 import { getAllowedDashboardClients, isSupabaseConfigured } from "../server/config/env.js";
-import { yearToDateRange } from "../server/lib/dateRanges.js";
+import { currentMonthRange, yearToDateRange } from "../server/lib/dateRanges.js";
 import { getSupabaseAdmin } from "../server/lib/supabase.js";
 import { hasMetricsSourceColumn } from "../server/lib/dashboardMetricsDb.js";
 import { rebuildDailyMetricsFromEvents } from "../server/services/kommo.service.js";
@@ -22,10 +22,24 @@ function parseArg(flag: string): string | undefined {
 }
 
 const year = Number(process.env.KOMMO_REBUILD_YEAR) || new Date().getFullYear();
+const useFullYear = parseArg("--full-year") != null || process.env.KOMMO_REBUILD_FULL_YEAR === "1";
+const defaultRange = useFullYear ? yearToDateRange(year) : currentMonthRange();
 const since =
-  parseArg("--since") ?? process.env.KOMMO_REBUILD_SINCE ?? yearToDateRange(year).since;
+  parseArg("--since") ?? process.env.KOMMO_REBUILD_SINCE ?? defaultRange.since;
 const until =
-  parseArg("--until") ?? process.env.KOMMO_REBUILD_UNTIL ?? yearToDateRange(year).until;
+  parseArg("--until") ?? process.env.KOMMO_REBUILD_UNTIL ?? defaultRange.until;
+function rangeDays(s: string, u: string): number {
+  const start = new Date(`${s}T12:00:00`).getTime();
+  const end = new Date(`${u}T12:00:00`).getTime();
+  return Math.max(1, Math.round((end - start) / 86_400_000) + 1);
+}
+
+const enrichApi =
+  process.env.KOMMO_ENRICH_COHORT_API === "1"
+    ? true
+    : process.env.KOMMO_REBUILD_SKIP_API === "1"
+      ? false
+      : rangeDays(since, until) <= 35;
 
 async function auditEventsInRange(): Promise<{
   min: string | null;
@@ -82,8 +96,9 @@ async function main(): Promise<void> {
   console.log("=== Rebuild métricas diarias Kommo ===");
   console.log(`Rango solicitado: ${since} → ${until}`);
   console.log(
-    `Origen: ${parseArg("--since") ? "CLI --since/--until" : process.env.KOMMO_REBUILD_SINCE ? "env KOMMO_REBUILD_*" : "default año"}`,
+    `Origen: ${parseArg("--since") ? "CLI --since/--until" : process.env.KOMMO_REBUILD_SINCE ? "env KOMMO_REBUILD_*" : useFullYear ? "default año (--full-year)" : "default mes en curso"}`,
   );
+  console.log(`Enriquecimiento API Kommo (created_at): ${enrichApi ? "sí" : "no (solo BD)"}`);
   if (!(await hasMetricsSourceColumn())) {
     console.log(
       "\n⚠ Falta migración 004 (metrics_source). El rebuild funciona en modo legacy.",
@@ -115,9 +130,11 @@ async function main(): Promise<void> {
     );
   }
 
-  const upserted = await rebuildDailyMetricsFromEvents(since, until);
+  const upserted = await rebuildDailyMetricsFromEvents(since, until, {
+    enrichCohortFromApi: enrichApi,
+  });
   await mergeMetaSpendIntoDaily(since, until);
-  await refreshAndBroadcast({ since, until });
+  await refreshAndBroadcast({ since, until }, { kommoMode: "meta_only" });
 
   console.log(`\nFilas día×cliente escritas desde eventos: ${upserted}`);
   await printSample("DOS HOGARES");
