@@ -14,7 +14,7 @@ import { currentMonthRange } from "../lib/dateRanges.js";
 import { AppError } from "../lib/errors.js";
 import { getSupabaseAdmin } from "../lib/supabase.js";
 import { rebuildDailyMetricsFromEvents } from "./kommo.service.js";
-import { getMetaSpendFromDb, hasMetaLeadsColumn } from "./meta.service.js";
+import { getMetaSpendFromDb } from "./meta.service.js";
 import { getStaticSnapshot } from "./staticFallback.js";
 import { sseHub } from "./sseHub.js";
 
@@ -34,14 +34,13 @@ function buildMetaPeriod(metaSpend: MetaSpendRowDto[]): DashboardSnapshotDto["me
     start,
     end,
     sourceLabel: "Meta Ads · Supabase",
-      note: "Conversaciones: Meta leads (Insights). Embudo MQL+: Kommo timeline. Sin columna leads: conversaciones = created_at Kommo.",
+      note: "Conversaciones: Kommo created_at (cohorte). Gasto: Meta Ads. Embudo MQL+: transiciones Kommo timeline.",
   };
 }
 
 function mergeDailyWithMetaSpend(
   metricsRows: PipelineRowDto[],
   metaSpend: MetaSpendRowDto[],
-  useMetaForConversaciones: boolean,
 ): PipelineRowDto[] {
   const byKey = new Map<string, PipelineRowDto>();
 
@@ -54,9 +53,6 @@ function mergeDailyWithMetaSpend(
     const existing = byKey.get(key);
     if (existing) {
       existing["GASTO TOTAL"] = spend.spend;
-      if (useMetaForConversaciones) {
-        existing.CONVERSACIONES = spend.leads;
-      }
       existing["COSTO POR CITA"] =
         existing.CITAS > 0 ? spend.spend / existing.CITAS : existing["COSTO POR CITA"] ?? null;
       continue;
@@ -66,7 +62,7 @@ function mergeDailyWithMetaSpend(
       SEMANA: weekStartIso(spend.date),
       MES: spend.date.slice(0, 7),
       CLIENTE: spend.client,
-      CONVERSACIONES: useMetaForConversaciones ? spend.leads : 0,
+      CONVERSACIONES: 0,
       MQL: 0,
       SQL: 0,
       CITAS: 0,
@@ -96,11 +92,8 @@ export async function mergeMetaSpendIntoDaily(since: string, until: string): Pro
   if (!supabase) return 0;
 
   const metaSpend = await getMetaSpendFromDb(since, until);
-  const useMetaLeads = await hasMetaLeadsColumn();
   const useSource = await hasMetricsSourceColumn();
   const onConflict = await dailyMetricsOnConflict();
-  let convMetaApplied = 0;
-  let convKommoKept = 0;
   for (const row of metaSpend) {
     let existingQuery = supabase
       .from("dashboard_metrics_daily")
@@ -112,10 +105,7 @@ export async function mergeMetaSpendIntoDaily(since: string, until: string): Pro
     }
     const { data: existing } = await existingQuery.maybeSingle();
 
-    const kommoConv = existing?.conversaciones ?? 0;
-    const conversaciones = useMetaLeads ? row.leads : kommoConv;
-    if (useMetaLeads) convMetaApplied += 1;
-    else convKommoKept += 1;
+    const conversaciones = existing?.conversaciones ?? 0;
 
     const payload = await withMetricsSource(
       {
@@ -145,7 +135,7 @@ export async function mergeMetaSpendIntoDaily(since: string, until: string): Pro
       hypothesisId: "H1",
       location: "metrics.service.ts:mergeMetaSpendIntoDaily",
       message: "conversaciones source",
-      data: { useMetaLeads, convMetaApplied, convKommoKept, rows: metaSpend.length, since, until },
+      data: { conversacionesSource: "kommo", rows: metaSpend.length, since, until },
       timestamp: Date.now(),
     }),
   }).catch(() => {});
@@ -211,9 +201,8 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     return fallback;
   }
 
-  const useMetaLeads = await hasMetaLeadsColumn();
   const metricsRows = await loadMetricsDaily();
-  const daily = mergeDailyWithMetaSpend(metricsRows, metaSpend, useMetaLeads);
+  const daily = mergeDailyWithMetaSpend(metricsRows, metaSpend);
   const metaSpendPeriod = buildMetaPeriod(metaSpend);
   const availableDates = collectAvailableDates(metaSpend, daily);
   const kommoDates = metricsRows.map((r) => r.FECHA).filter(Boolean).sort();

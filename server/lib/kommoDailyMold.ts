@@ -1,7 +1,7 @@
 /**
  * Moldeado diario al estilo RESPALDO_DIARIO (Excel manual):
- * - CONVERSACIONES: fuente operativa = Meta Insights (leads). Respaldo válido = created_at Kommo
- *   (captación Meta → lead en Kommo). mergeMetaSpendIntoDaily aplica Meta cuando existe columna leads.
+ * - CONVERSACIONES: leads creados ese día (cohorte por lead_created_date / created_at Kommo).
+ *   Meta puede reportar más mensajes; Kommo es la fuente operativa del dashboard.
  * - MQL/SQL/CITAS/FIRMAS: transiciones reales Kommo (value_before -> value_after)
  *   que ENTRAN a la etapa correspondiente (una por evento).
  */

@@ -16,7 +16,7 @@ import {
   type KommoStatusInfo,
   type StageCounts,
 } from "../config/kommoStageMap.js";
-import { monthRangeEndingOn, toLocalDateIso } from "../lib/dateRanges.js";
+import { monthRangeEndingOn, toBusinessDateIso, toLocalDateIso } from "../lib/dateRanges.js";
 import {
   dailyMetricsOnConflict,
   hasLeadCreatedDateColumn,
@@ -240,7 +240,7 @@ function resolveEventDate(
 
 function resolveLeadCreatedDate(lead: KommoLead): string | null {
   if (lead.created_at == null) return null;
-  return new Date(lead.created_at * 1000).toISOString().slice(0, 10);
+  return toBusinessDateIso(new Date(lead.created_at * 1000));
 }
 
 function resolveClientFromLead(lead: KommoLead, clientMap: Record<string, string>): string | null {

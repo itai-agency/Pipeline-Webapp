@@ -1,4 +1,12 @@
-/** Fecha local en ISO (YYYY-MM-DD). */
+/** Zona horaria de cuentas Meta/Kommo (México). */
+export const BUSINESS_TIMEZONE = "America/Mexico_City";
+
+/** Fecha calendario en zona de negocio (YYYY-MM-DD), alineada con filtros Kommo/Meta. */
+export function toBusinessDateIso(date: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: BUSINESS_TIMEZONE }).format(date);
+}
+
+/** Fecha local del servidor en ISO (YYYY-MM-DD). */
 export function toLocalDateIso(date: Date = new Date()): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");

@@ -9,7 +9,7 @@ import {
   getStageFromKommoStatus,
   type KommoStatusInfo,
 } from "../config/kommoStageMap.js";
-import { toLocalDateIso } from "../lib/dateRanges.js";
+import { toBusinessDateIso } from "../lib/dateRanges.js";
 import { hasLeadCreatedDateColumn } from "../lib/dashboardMetricsDb.js";
 import { AppError } from "../lib/errors.js";
 import { kommoGet } from "../lib/kommoApi.js";
@@ -76,7 +76,7 @@ function toUnixRange(since: string, until: string): { from: number; to: number }
 }
 
 function eventDateFromUnix(ts: number): string {
-  return toLocalDateIso(new Date(ts * 1000));
+  return toBusinessDateIso(new Date(ts * 1000));
 }
 
 function parseLeadStatusAfter(
@@ -125,7 +125,7 @@ async function fetchStatusChangeEventsPage(
 
 function toIsoDateFromUnix(ts: number | null | undefined): string | null {
   if (ts == null || !Number.isFinite(ts)) return null;
-  return toLocalDateIso(new Date(ts * 1000));
+  return toBusinessDateIso(new Date(ts * 1000));
 }
 
 async function fetchLeadCreatedDates(leadIds: number[]): Promise<Map<number, string | null>> {
