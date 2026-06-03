@@ -19,7 +19,7 @@ import { getStaticSnapshot } from "./staticFallback.js";
 import { sseHub } from "./sseHub.js";
 
 function weekStartIso(dateStr: string): string {
-  const d = new Date(`${dateStr}T12:00:00`);
+  const d = new Date(`${dateStr}T12:00:00.000Z`);
   const day = d.getDay();
   const diff = day === 0 ? 6 : day - 1;
   d.setDate(d.getDate() - diff);
@@ -34,7 +34,7 @@ function buildMetaPeriod(metaSpend: MetaSpendRowDto[]): DashboardSnapshotDto["me
     start,
     end,
     sourceLabel: "Meta Ads · Supabase",
-      note: "Conversaciones: Kommo created_at (cohorte). Gasto: Meta Ads. Embudo MQL+: transiciones Kommo timeline.",
+      note: "Conversaciones: Kommo created_at (cohorte UTC). Gasto: Meta. MQL/SQL/Citas: etapa final del día de creación (cohorte).",
   };
 }
 

@@ -37,7 +37,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { getCurrentMonthRange, toLocalDateIso } from "@/lib/dateRanges";
+import { getCurrentMonthRange, toUtcDateIso } from "@/lib/dateRanges";
 import { stageLabels, type PipelineRow } from "@/lib/pipelineData";
 import type { SdrHistoryRow } from "@/lib/sdrHistoryData";
 import { useDashboardData } from "@/hooks/useDashboardData";
@@ -420,7 +420,7 @@ export default function Home() {
     return Array.from(new Set(daily.map((row) => row.FECHA).filter((date): date is string => Boolean(date)))).sort();
   }, [snapshot.availableDates, daily]);
 
-  const todayIso = toLocalDateIso();
+  const todayIso = toUtcDateIso();
   const defaultMonthRange = getCurrentMonthRange();
 
   const dataPeriodMin = metaSpendPeriod.start ?? availableDates[0] ?? defaultMonthRange.start;
@@ -727,7 +727,7 @@ export default function Home() {
               </>
             ) : (
               <>
-                Conversaciones diarias = leads Meta (Insights); MQL/SQL/Citas = movimientos Kommo. Censo: <code>npm run sync:kommo-snapshot</code>.
+                Conversaciones = cohorte Kommo (created_at). MQL/SQL/Citas = etapa final del día de creación. Censo: <code>npm run sync:kommo-snapshot</code>.
               </>
             )}
           </p>
@@ -825,7 +825,7 @@ export default function Home() {
               <Kpi
                 label="MQL"
                 value={fmt.format(totals.MQL)}
-                detail={censusKpisActive ? "reached* · etapa actual" : `${pctFmt.format(funnelConversionRate(totals.CONVERSACIONES, totals.MQL))} de transiciones`}
+                detail={censusKpisActive ? "reached* · etapa actual" : `${pctFmt.format(funnelConversionRate(totals.CONVERSACIONES, totals.MQL))} cohorte creada`}
                 tone="good"
               />
               <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(funnelConversionRate(totals.MQL, totals.SQL))} de MQL`} tone={funnelConversionRate(totals.MQL, totals.SQL) < 0.25 ? "warn" : "good"} />

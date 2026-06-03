@@ -16,7 +16,7 @@ import {
   type KommoStatusInfo,
   type StageCounts,
 } from "../config/kommoStageMap.js";
-import { monthRangeEndingOn, toBusinessDateIso, toLocalDateIso } from "../lib/dateRanges.js";
+import { monthRangeEndingOn, toUtcDateIso, toUtcUnixRange } from "../lib/dateRanges.js";
 import {
   dailyMetricsOnConflict,
   hasLeadCreatedDateColumn,
@@ -214,11 +214,6 @@ function parseCensusLeadsPage(data: unknown): Array<z.infer<typeof censusLeadSch
   return leads;
 }
 
-function toUnixRange(since: string, until: string): { from: number; to: number } {
-  const from = Math.floor(new Date(`${since}T00:00:00`).getTime() / 1000);
-  const to = Math.floor(new Date(`${until}T23:59:59`).getTime() / 1000);
-  return { from, to };
-}
 
 function leadTimestamp(lead: KommoLead, field: KommoDateField): number | null {
   const ts = field === "created_at" ? lead.created_at : lead.updated_at;
@@ -240,7 +235,7 @@ function resolveEventDate(
 
 function resolveLeadCreatedDate(lead: KommoLead): string | null {
   if (lead.created_at == null) return null;
-  return toBusinessDateIso(new Date(lead.created_at * 1000));
+  return toUtcDateIso(new Date(lead.created_at * 1000));
 }
 
 function resolveClientFromLead(lead: KommoLead, clientMap: Record<string, string>): string | null {
@@ -307,7 +302,7 @@ export async function fetchKommoLeadsPageByPipelineCreated(
   monthStart: string,
   monthEnd: string,
 ): Promise<Array<z.infer<typeof censusLeadSchema>>> {
-  const { from, to } = toUnixRange(monthStart, monthEnd);
+  const { from, to } = toUtcUnixRange(monthStart, monthEnd);
   const params: Record<string, string | number> = {
     page,
     limit: 250,
@@ -351,7 +346,7 @@ async function fetchKommoLeadsPage(
   until: string,
   dateFilter: KommoDateField,
 ): Promise<KommoLead[]> {
-  const { from, to } = toUnixRange(since, until);
+  const { from, to } = toUtcUnixRange(since, until);
   const params: Record<string, string | number> = {
     page,
     limit: 250,
@@ -389,7 +384,7 @@ export async function syncKommoLeads(params: KommoSyncParams): Promise<KommoSync
   const mode = params.mode ?? "date_range";
   const dateFilter = params.dateFilter ?? "updated_at";
   const eventDateField = params.eventDateField ?? dateFilter;
-  const snapshotDate = toLocalDateIso();
+  const snapshotDate = toUtcDateIso();
 
   await supabase.from("sync_runs").insert({ source: "kommo", status: "running" });
   if (!params.skipPurge) {
@@ -641,7 +636,7 @@ export async function buildKommoMonthlyCohortSnapshots(
 
 /** @deprecated Usar buildKommoMonthlyCohortSnapshots — el censo por status_id inflaba totales. */
 export async function buildKommoPipelineSnapshots(): Promise<KommoClientSnapshot[]> {
-  const until = toLocalDateIso();
+  const until = toUtcDateIso();
   const { since } = monthRangeEndingOn(until);
   return buildKommoMonthlyCohortSnapshots(since, until);
 }
@@ -660,7 +655,7 @@ export async function syncKommoSnapshotMetrics(params: KommoSnapshotParams = {})
   }
 
   const snapshotDate =
-    params.snapshotDate ?? KOMMO_CONTROL_REFERENCE.snapshotDate ?? toLocalDateIso();
+    params.snapshotDate ?? KOMMO_CONTROL_REFERENCE.snapshotDate ?? toUtcDateIso();
   const cohortRange =
     params.monthStart && params.monthEnd
       ? { since: params.monthStart, until: params.monthEnd }
@@ -748,8 +743,8 @@ export type RebuildDailyMetricsOptions = {
 };
 
 function rangeDayCount(since: string, until: string): number {
-  const start = new Date(`${since}T12:00:00`).getTime();
-  const end = new Date(`${until}T12:00:00`).getTime();
+  const start = new Date(`${since}T12:00:00.000Z`).getTime();
+  const end = new Date(`${until}T12:00:00.000Z`).getTime();
   return Math.max(1, Math.round((end - start) / 86_400_000) + 1);
 }
 

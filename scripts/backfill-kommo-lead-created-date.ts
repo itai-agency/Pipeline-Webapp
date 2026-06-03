@@ -2,6 +2,7 @@ import "../server/config/env.js";
 import { isKommoConfigured, isSupabaseConfigured } from "../server/config/env.js";
 import { hasLeadCreatedDateColumn } from "../server/lib/dashboardMetricsDb.js";
 import { kommoGet } from "../server/lib/kommoApi.js";
+import { toUtcDateIso } from "../server/lib/dateRanges.js";
 import { getSupabaseAdmin } from "../server/lib/supabase.js";
 
 type LeadRef = { kommo_lead_id: number };
@@ -12,7 +13,7 @@ const BATCH = 200;
 
 function toIsoDateFromUnix(ts: number | undefined): string | null {
   if (ts == null || !Number.isFinite(ts)) return null;
-  return new Date(ts * 1000).toISOString().slice(0, 10);
+  return toUtcDateIso(new Date(ts * 1000));
 }
 
 async function fetchLeadCreatedDates(leadIds: number[]): Promise<Map<number, string | null>> {
