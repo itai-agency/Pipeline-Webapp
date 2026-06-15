@@ -595,37 +595,13 @@ export async function buildKommoMonthlyCohortSnapshots(
     }
 
     if (supabase && cohort.length > 0) {
-      const reachedMeta = await enrichSnapshotReachedFromTimeline(
+      await enrichSnapshotReachedFromTimeline(
         supabase,
         snap,
         cohort,
         statusTierById,
         monthEnd,
       );
-      // #region agent log
-      fetch("http://127.0.0.1:7880/ingest/6fd1d614-7a66-4dcc-a425-d3b833f324c4", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "a0037c" },
-        body: JSON.stringify({
-          sessionId: "a0037c",
-          runId: "reached-enrich",
-          hypothesisId: "H-Gregorio",
-          location: "kommo.service.ts:buildKommoMonthlyCohortSnapshots",
-          message: "reached* enriched from timeline",
-          data: {
-            client,
-            leads: snap.leads,
-            stageMql: reachedMeta.stageMql,
-            preRejectMql: reachedMeta.preRejectMql,
-            usedGregorio: reachedMeta.usedGregorio,
-            reachedMql: snap.reachedMql,
-            reachedSql: snap.reachedSql,
-            reachedCita: snap.reachedCita,
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      // #endregion
     }
 
     snapshots.push(snap);

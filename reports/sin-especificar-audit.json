@@ -1,0 +1,469 @@
+{
+  "generated_at": "2026-06-12T13:37:03.543Z",
+  "api": {
+    "total_rechazados": 6049,
+    "sin_especificar": 163,
+    "pct": 3
+  },
+  "pdf": {
+    "sin_especificar": 1924,
+    "path": "c:\\Users\\calec\\Downloads\\Auditoria_Kommo_Ene-Jun2026-1 completo.pdf"
+  },
+  "cross_ref": {
+    "in_both": 87,
+    "api_only": 76,
+    "pdf_only": 1837
+  },
+  "by_client": {
+    "DOS HOGARES": {
+      "sin_especificar": 1,
+      "total_rechazados": 200,
+      "pct": 1,
+      "solo_rechazado": 0,
+      "con_timeline_parcial": 1
+    },
+    "GRUPO ELIJO": {
+      "sin_especificar": 2,
+      "total_rechazados": 955,
+      "pct": 0,
+      "solo_rechazado": 1,
+      "con_timeline_parcial": 1
+    },
+    "HOGARES": {
+      "sin_especificar": 1,
+      "total_rechazados": 1679,
+      "pct": 0,
+      "solo_rechazado": 0,
+      "con_timeline_parcial": 1
+    },
+    "INQ": {
+      "sin_especificar": 149,
+      "total_rechazados": 1637,
+      "pct": 9,
+      "solo_rechazado": 5,
+      "con_timeline_parcial": 144
+    },
+    "INSPIRA": {
+      "sin_especificar": 0,
+      "total_rechazados": 282,
+      "pct": 0,
+      "solo_rechazado": 0,
+      "con_timeline_parcial": 0
+    },
+    "MANOS AL HOGAR": {
+      "sin_especificar": 10,
+      "total_rechazados": 1296,
+      "pct": 1,
+      "solo_rechazado": 1,
+      "con_timeline_parcial": 9
+    }
+  },
+  "pdf_by_client": {
+    "HOGARES": 1,
+    "MANOS AL HOGAR": 9,
+    "DOS HOGARES": 191,
+    "INSPIRA": 282,
+    "GRUPO ELIJO": 592,
+    "INQ": 849
+  },
+  "samples_per_client": {
+    "DOS HOGARES": [
+      {
+        "id": 24516787,
+        "name": "Lead #24516787",
+        "fecha_creacion": "21/05/2026",
+        "fecha_rechazo": "26/05/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 2,
+        "solo_rechazado": false
+      }
+    ],
+    "GRUPO ELIJO": [
+      {
+        "id": 24403428,
+        "name": "Lead #24403428",
+        "fecha_creacion": "15/05/2026",
+        "fecha_rechazo": "15/05/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 1,
+        "solo_rechazado": true
+      },
+      {
+        "id": 24696709,
+        "name": "Lead #24696709",
+        "fecha_creacion": "29/05/2026",
+        "fecha_rechazo": "05/06/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 2,
+        "solo_rechazado": false
+      }
+    ],
+    "HOGARES": [
+      {
+        "id": 24863984,
+        "name": "Lead #24863984",
+        "fecha_creacion": "08/06/2026",
+        "fecha_rechazo": "09/06/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 2,
+        "solo_rechazado": false
+      }
+    ],
+    "INQ": [
+      {
+        "id": 20312912,
+        "name": "JESSICA DIAZ",
+        "fecha_creacion": "06/02/2026",
+        "fecha_rechazo": "03/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 5,
+        "solo_rechazado": false
+      },
+      {
+        "id": 20722858,
+        "name": "OZIEL AGUILAR AMAYA",
+        "fecha_creacion": "28/02/2026",
+        "fecha_rechazo": "03/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 4,
+        "solo_rechazado": false
+      },
+      {
+        "id": 20866932,
+        "name": "Lead #20866932",
+        "fecha_creacion": "07/03/2026",
+        "fecha_rechazo": "09/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 1,
+        "solo_rechazado": true
+      },
+      {
+        "id": 20867902,
+        "name": "Lead #20867902",
+        "fecha_creacion": "07/03/2026",
+        "fecha_rechazo": "09/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 1,
+        "solo_rechazado": true
+      },
+      {
+        "id": 20759282,
+        "name": "Lead #20759282",
+        "fecha_creacion": "02/03/2026",
+        "fecha_rechazo": "13/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 2,
+        "solo_rechazado": false
+      }
+    ],
+    "MANOS AL HOGAR": [
+      {
+        "id": 19681382,
+        "name": "MONTSERRAT RAMIREZ",
+        "fecha_creacion": "11/01/2026",
+        "fecha_rechazo": "13/01/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 6,
+        "solo_rechazado": false
+      },
+      {
+        "id": 19768698,
+        "name": "ROSALVA CARDENAS JUAREZ",
+        "fecha_creacion": "15/01/2026",
+        "fecha_rechazo": "27/01/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 3,
+        "solo_rechazado": false
+      },
+      {
+        "id": 19717300,
+        "name": "JORGE EDUARDO RESENDIZ",
+        "fecha_creacion": "13/01/2026",
+        "fecha_rechazo": "04/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 6,
+        "solo_rechazado": false
+      },
+      {
+        "id": 19959342,
+        "name": "Lead #19959342",
+        "fecha_creacion": "24/01/2026",
+        "fecha_rechazo": "27/01/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 3,
+        "solo_rechazado": false
+      },
+      {
+        "id": 20150296,
+        "name": "EDGARDO GONZALEZ SALVATIERRA",
+        "fecha_creacion": "29/01/2026",
+        "fecha_rechazo": "02/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "timeline_event_count": 3,
+        "solo_rechazado": false
+      }
+    ]
+  },
+  "pdf_samples_per_client": {
+    "DOS HOGARES": [
+      {
+        "id": 21680664,
+        "name": "Lead #21680664",
+        "fecha_creacion": "14/04/2026",
+        "fecha_rechazo": "14/04/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 21697042,
+        "name": "Lead #21697042",
+        "fecha_creacion": "15/04/2026",
+        "fecha_rechazo": "15/04/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 21701844,
+        "name": "Lead #21701844",
+        "fecha_creacion": "15/04/2026",
+        "fecha_rechazo": "16/04/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 21730308,
+        "name": "Lead #21730308",
+        "fecha_creacion": "16/04/2026",
+        "fecha_rechazo": "16/04/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 21750564,
+        "name": "Lead #21750564",
+        "fecha_creacion": "17/04/2026",
+        "fecha_rechazo": "17/04/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      }
+    ],
+    "GRUPO ELIJO": [
+      {
+        "id": 20835412,
+        "name": "Lead #20835412",
+        "fecha_creacion": "05/03/2026",
+        "fecha_rechazo": "05/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20826872,
+        "name": "Lead #20826872",
+        "fecha_creacion": "05/03/2026",
+        "fecha_rechazo": "05/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20838054,
+        "name": "Lead #20838054",
+        "fecha_creacion": "05/03/2026",
+        "fecha_rechazo": "06/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20843668,
+        "name": "Lead #20843668",
+        "fecha_creacion": "06/03/2026",
+        "fecha_rechazo": "06/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20844904,
+        "name": "Lead #20844904",
+        "fecha_creacion": "06/03/2026",
+        "fecha_rechazo": "06/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      }
+    ],
+    "HOGARES": [
+      {
+        "id": 24863984,
+        "name": "Lead #24863984",
+        "fecha_creacion": "08/06/2026",
+        "fecha_rechazo": "09/06/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      }
+    ],
+    "INQ": [
+      {
+        "id": 20189644,
+        "name": "Lead #20189644",
+        "fecha_creacion": "31/01/2026",
+        "fecha_rechazo": "02/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20190738,
+        "name": "Lead #20190738",
+        "fecha_creacion": "31/01/2026",
+        "fecha_rechazo": "17/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20200298,
+        "name": "Lead #20200298",
+        "fecha_creacion": "01/02/2026",
+        "fecha_rechazo": "02/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20208314,
+        "name": "Lead #20208314",
+        "fecha_creacion": "01/02/2026",
+        "fecha_rechazo": "02/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20227968,
+        "name": "Lead #20227968",
+        "fecha_creacion": "02/02/2026",
+        "fecha_rechazo": "03/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      }
+    ],
+    "INSPIRA": [
+      {
+        "id": 20676640,
+        "name": "Lead #20676640",
+        "fecha_creacion": "26/02/2026",
+        "fecha_rechazo": "26/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20675610,
+        "name": "Lead #20675610",
+        "fecha_creacion": "26/02/2026",
+        "fecha_rechazo": "27/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20712830,
+        "name": "Lead #20712830",
+        "fecha_creacion": "27/02/2026",
+        "fecha_rechazo": "27/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20697284,
+        "name": "Lead #20697284",
+        "fecha_creacion": "26/02/2026",
+        "fecha_rechazo": "02/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20703642,
+        "name": "Lead #20703642",
+        "fecha_creacion": "27/02/2026",
+        "fecha_rechazo": "03/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      }
+    ],
+    "MANOS AL HOGAR": [
+      {
+        "id": 19681382,
+        "name": "MONTSERRAT RAMIREZ",
+        "fecha_creacion": "11/01/2026",
+        "fecha_rechazo": "13/01/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 19768698,
+        "name": "ROSALVA CARDENAS JUAREZ",
+        "fecha_creacion": "15/01/2026",
+        "fecha_rechazo": "27/01/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 19717300,
+        "name": "JORGE EDUARDO RESENDIZ",
+        "fecha_creacion": "13/01/2026",
+        "fecha_rechazo": "04/02/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 19959342,
+        "name": "Lead #19959342",
+        "fecha_creacion": "24/01/2026",
+        "fecha_rechazo": "27/01/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      },
+      {
+        "id": 20150296,
+        "name": "EDGARDO GONZALEZ SALVATIERRA",
+        "fecha_creacion": "29/01/2026",
+        "fecha_rechazo": "02/03/2026",
+        "etapa": "RECHAZADO",
+        "motivo": "sin especificar",
+        "fuente": "PDF auditoría"
+      }
+    ]
+  }
+}

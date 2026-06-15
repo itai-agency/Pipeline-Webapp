@@ -35,6 +35,14 @@ const envSchema = z.object({
     .string()
     .optional()
     .transform((v) => v === "true" || v === "1"),
+  /**
+   * reachedMql/Sql/Cita: activos + rechazados con máx. tier pre-rechazo en timeline.
+   * true (default) = siempre aplicar timeline. false = rollback umbral Gregorio legacy.
+   */
+  KOMMO_REACHED_REJECTED_TIMELINE: z
+    .string()
+    .optional()
+    .transform((v) => v !== "false" && v !== "0"),
   META_ACCOUNTS: z.string().optional(),
   /** Orígenes del front (Vercel), separados por coma. Ej: https://app.vercel.app */
   CORS_ALLOWED_ORIGINS: z.string().optional(),
@@ -78,6 +86,11 @@ export function isMetaConfigured(): boolean {
 
 export function isKommoConfigured(): boolean {
   return Boolean(env.KOMMO_SUBDOMAIN && env.KOMMO_ACCESS_TOKEN);
+}
+
+/** true = activos + rechazados (timeline). false = rollback umbral Gregorio. */
+export function isKommoReachedRejectedTimelineEnabled(): boolean {
+  return env.KOMMO_REACHED_REJECTED_TIMELINE !== false;
 }
 
 export type MetaAccountConfig = {

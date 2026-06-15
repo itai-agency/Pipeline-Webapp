@@ -1,0 +1,706 @@
+{
+  "rows": [
+    {
+      "month": "2026-01",
+      "client": "HOGARES",
+      "pdf": {
+        "total": 341,
+        "activos": 3,
+        "firmados": 5,
+        "rechazados": 333
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 338,
+        "activos": 3,
+        "rechazados": 335,
+        "preRejectMql": 130,
+        "reachedMql": 133
+      },
+      "dashboard": {
+        "reached_mql": 125,
+        "reached_sql": 76
+      },
+      "pdf_reached_ref": 130,
+      "delta_conv": -3,
+      "delta_rej": 2,
+      "delta_mql": -5,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-01",
+      "client": "INQ",
+      "pdf": {
+        "total": 2,
+        "activos": 0,
+        "firmados": 0,
+        "rechazados": 2
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 3,
+        "activos": 0,
+        "rechazados": 3,
+        "preRejectMql": 0,
+        "reachedMql": 0
+      },
+      "dashboard": {
+        "reached_mql": 0,
+        "reached_sql": 0
+      },
+      "pdf_reached_ref": 0,
+      "delta_conv": 1,
+      "delta_rej": 1,
+      "delta_mql": 0,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-01",
+      "client": "MANOS AL HOGAR",
+      "pdf": {
+        "total": 247,
+        "activos": 0,
+        "firmados": 0,
+        "rechazados": 247
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 247,
+        "activos": 0,
+        "rechazados": 247,
+        "preRejectMql": 40,
+        "reachedMql": 40
+      },
+      "dashboard": {
+        "reached_mql": 38,
+        "reached_sql": 18
+      },
+      "pdf_reached_ref": 40,
+      "delta_conv": 0,
+      "delta_rej": 0,
+      "delta_mql": -2,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-02",
+      "client": "HOGARES",
+      "pdf": {
+        "total": 350,
+        "activos": 8,
+        "firmados": 0,
+        "rechazados": 342
+      },
+      "pdf_activos_mql": 1,
+      "api": {
+        "conv": 352,
+        "activos": 9,
+        "rechazados": 343,
+        "preRejectMql": 155,
+        "reachedMql": 164
+      },
+      "dashboard": {
+        "reached_mql": 151,
+        "reached_sql": 95
+      },
+      "pdf_reached_ref": 156,
+      "delta_conv": 2,
+      "delta_rej": 1,
+      "delta_mql": -5,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-02",
+      "client": "INQ",
+      "pdf": {
+        "total": 274,
+        "activos": 0,
+        "firmados": 1,
+        "rechazados": 273
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 275,
+        "activos": 0,
+        "rechazados": 275,
+        "preRejectMql": 36,
+        "reachedMql": 36
+      },
+      "dashboard": {
+        "reached_mql": 32,
+        "reached_sql": 13
+      },
+      "pdf_reached_ref": 36,
+      "delta_conv": 1,
+      "delta_rej": 2,
+      "delta_mql": -4,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-02",
+      "client": "INSPIRA",
+      "pdf": {
+        "total": 7,
+        "activos": 0,
+        "firmados": 0,
+        "rechazados": 7
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 7,
+        "activos": 0,
+        "rechazados": 7,
+        "preRejectMql": 0,
+        "reachedMql": 0
+      },
+      "dashboard": {
+        "reached_mql": 0,
+        "reached_sql": 0
+      },
+      "pdf_reached_ref": 0,
+      "delta_conv": 0,
+      "delta_rej": 0,
+      "delta_mql": 0,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-02",
+      "client": "MANOS AL HOGAR",
+      "pdf": {
+        "total": 188,
+        "activos": 0,
+        "firmados": 2,
+        "rechazados": 186
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 185,
+        "activos": 0,
+        "rechazados": 185,
+        "preRejectMql": 32,
+        "reachedMql": 32
+      },
+      "dashboard": {
+        "reached_mql": 26,
+        "reached_sql": 14
+      },
+      "pdf_reached_ref": 32,
+      "delta_conv": -3,
+      "delta_rej": -1,
+      "delta_mql": -6,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": false
+    },
+    {
+      "month": "2026-03",
+      "client": "GRUPO ELIJO",
+      "pdf": {
+        "total": 145,
+        "activos": 1,
+        "firmados": 2,
+        "rechazados": 142
+      },
+      "pdf_activos_mql": 1,
+      "api": {
+        "conv": 144,
+        "activos": 1,
+        "rechazados": 143,
+        "preRejectMql": 49,
+        "reachedMql": 50
+      },
+      "dashboard": {
+        "reached_mql": 48,
+        "reached_sql": 12
+      },
+      "pdf_reached_ref": 50,
+      "delta_conv": -1,
+      "delta_rej": 1,
+      "delta_mql": -2,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-03",
+      "client": "HOGARES",
+      "pdf": {
+        "total": 478,
+        "activos": 16,
+        "firmados": 5,
+        "rechazados": 457
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 473,
+        "activos": 14,
+        "rechazados": 459,
+        "preRejectMql": 169,
+        "reachedMql": 183
+      },
+      "dashboard": {
+        "reached_mql": 174,
+        "reached_sql": 118
+      },
+      "pdf_reached_ref": 169,
+      "delta_conv": -5,
+      "delta_rej": 2,
+      "delta_mql": 5,
+      "conv_ok": false,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-03",
+      "client": "INQ",
+      "pdf": {
+        "total": 398,
+        "activos": 1,
+        "firmados": 3,
+        "rechazados": 394
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 396,
+        "activos": 1,
+        "rechazados": 395,
+        "preRejectMql": 51,
+        "reachedMql": 52
+      },
+      "dashboard": {
+        "reached_mql": 50,
+        "reached_sql": 20
+      },
+      "pdf_reached_ref": 51,
+      "delta_conv": -2,
+      "delta_rej": 1,
+      "delta_mql": -1,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-03",
+      "client": "INSPIRA",
+      "pdf": {
+        "total": 115,
+        "activos": 0,
+        "firmados": 0,
+        "rechazados": 115
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 118,
+        "activos": 0,
+        "rechazados": 118,
+        "preRejectMql": 19,
+        "reachedMql": 19
+      },
+      "dashboard": {
+        "reached_mql": 18,
+        "reached_sql": 13
+      },
+      "pdf_reached_ref": 19,
+      "delta_conv": 3,
+      "delta_rej": 3,
+      "delta_mql": -1,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-03",
+      "client": "MANOS AL HOGAR",
+      "pdf": {
+        "total": 233,
+        "activos": 4,
+        "firmados": 2,
+        "rechazados": 227
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 230,
+        "activos": 3,
+        "rechazados": 227,
+        "preRejectMql": 36,
+        "reachedMql": 39
+      },
+      "dashboard": {
+        "reached_mql": 38,
+        "reached_sql": 14
+      },
+      "pdf_reached_ref": 36,
+      "delta_conv": -3,
+      "delta_rej": 0,
+      "delta_mql": 2,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-04",
+      "client": "DOS HOGARES",
+      "pdf": {
+        "total": 49,
+        "activos": 0,
+        "firmados": 0,
+        "rechazados": 49
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 49,
+        "activos": 0,
+        "rechazados": 49,
+        "preRejectMql": 10,
+        "reachedMql": 10
+      },
+      "dashboard": {
+        "reached_mql": 9,
+        "reached_sql": 1
+      },
+      "pdf_reached_ref": 10,
+      "delta_conv": 0,
+      "delta_rej": 0,
+      "delta_mql": -1,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-04",
+      "client": "GRUPO ELIJO",
+      "pdf": {
+        "total": 210,
+        "activos": 0,
+        "firmados": 1,
+        "rechazados": 209
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 209,
+        "activos": 0,
+        "rechazados": 209,
+        "preRejectMql": 48,
+        "reachedMql": 48
+      },
+      "dashboard": {
+        "reached_mql": 45,
+        "reached_sql": 12
+      },
+      "pdf_reached_ref": 48,
+      "delta_conv": -1,
+      "delta_rej": 0,
+      "delta_mql": -3,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-04",
+      "client": "HOGARES",
+      "pdf": {
+        "total": 308,
+        "activos": 18,
+        "firmados": 0,
+        "rechazados": 290
+      },
+      "pdf_activos_mql": 2,
+      "api": {
+        "conv": 305,
+        "activos": 19,
+        "rechazados": 286,
+        "preRejectMql": 103,
+        "reachedMql": 122
+      },
+      "dashboard": {
+        "reached_mql": 118,
+        "reached_sql": 75
+      },
+      "pdf_reached_ref": 105,
+      "delta_conv": -3,
+      "delta_rej": -4,
+      "delta_mql": 13,
+      "conv_ok": true,
+      "rej_ok": false,
+      "mql_ok": false
+    },
+    {
+      "month": "2026-04",
+      "client": "INQ",
+      "pdf": {
+        "total": 470,
+        "activos": 4,
+        "firmados": 2,
+        "rechazados": 464
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 468,
+        "activos": 5,
+        "rechazados": 463,
+        "preRejectMql": 59,
+        "reachedMql": 64
+      },
+      "dashboard": {
+        "reached_mql": 61,
+        "reached_sql": 27
+      },
+      "pdf_reached_ref": 59,
+      "delta_conv": -2,
+      "delta_rej": -1,
+      "delta_mql": 2,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-04",
+      "client": "INSPIRA",
+      "pdf": {
+        "total": 123,
+        "activos": 6,
+        "firmados": 0,
+        "rechazados": 117
+      },
+      "pdf_activos_mql": 6,
+      "api": {
+        "conv": 121,
+        "activos": 6,
+        "rechazados": 115,
+        "preRejectMql": 25,
+        "reachedMql": 31
+      },
+      "dashboard": {
+        "reached_mql": 30,
+        "reached_sql": 15
+      },
+      "pdf_reached_ref": 31,
+      "delta_conv": -2,
+      "delta_rej": -2,
+      "delta_mql": -1,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-04",
+      "client": "MANOS AL HOGAR",
+      "pdf": {
+        "total": 246,
+        "activos": 7,
+        "firmados": 3,
+        "rechazados": 236
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 246,
+        "activos": 7,
+        "rechazados": 239,
+        "preRejectMql": 29,
+        "reachedMql": 36
+      },
+      "dashboard": {
+        "reached_mql": 34,
+        "reached_sql": 13
+      },
+      "pdf_reached_ref": 29,
+      "delta_conv": 0,
+      "delta_rej": 3,
+      "delta_mql": 5,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-05",
+      "client": "DOS HOGARES",
+      "pdf": {
+        "total": 117,
+        "activos": 5,
+        "firmados": 0,
+        "rechazados": 112
+      },
+      "pdf_activos_mql": 3,
+      "api": {
+        "conv": 119,
+        "activos": 4,
+        "rechazados": 115,
+        "preRejectMql": 19,
+        "reachedMql": 20
+      },
+      "dashboard": {
+        "reached_mql": 19,
+        "reached_sql": 1
+      },
+      "pdf_reached_ref": 22,
+      "delta_conv": 2,
+      "delta_rej": 3,
+      "delta_mql": -3,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-05",
+      "client": "GRUPO ELIJO",
+      "pdf": {
+        "total": 540,
+        "activos": 5,
+        "firmados": 0,
+        "rechazados": 535
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 548,
+        "activos": 5,
+        "rechazados": 543,
+        "preRejectMql": 34,
+        "reachedMql": 39
+      },
+      "dashboard": {
+        "reached_mql": 38,
+        "reached_sql": 8
+      },
+      "pdf_reached_ref": 34,
+      "delta_conv": 8,
+      "delta_rej": 8,
+      "delta_mql": 4,
+      "conv_ok": false,
+      "rej_ok": false,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-05",
+      "client": "HOGARES",
+      "pdf": {
+        "total": 215,
+        "activos": 19,
+        "firmados": 0,
+        "rechazados": 196
+      },
+      "pdf_activos_mql": 10,
+      "api": {
+        "conv": 216,
+        "activos": 18,
+        "rechazados": 198,
+        "preRejectMql": 84,
+        "reachedMql": 97
+      },
+      "dashboard": {
+        "reached_mql": 92,
+        "reached_sql": 43
+      },
+      "pdf_reached_ref": 94,
+      "delta_conv": 1,
+      "delta_rej": 2,
+      "delta_mql": -2,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-05",
+      "client": "INQ",
+      "pdf": {
+        "total": 453,
+        "activos": 4,
+        "firmados": 0,
+        "rechazados": 449
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 454,
+        "activos": 3,
+        "rechazados": 451,
+        "preRejectMql": 40,
+        "reachedMql": 43
+      },
+      "dashboard": {
+        "reached_mql": 40,
+        "reached_sql": 14
+      },
+      "pdf_reached_ref": 40,
+      "delta_conv": 1,
+      "delta_rej": 2,
+      "delta_mql": 0,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-05",
+      "client": "INSPIRA",
+      "pdf": {
+        "total": 81,
+        "activos": 38,
+        "firmados": 0,
+        "rechazados": 43
+      },
+      "pdf_activos_mql": 9,
+      "api": {
+        "conv": 80,
+        "activos": 38,
+        "rechazados": 42,
+        "preRejectMql": 5,
+        "reachedMql": 14
+      },
+      "dashboard": {
+        "reached_mql": 14,
+        "reached_sql": 8
+      },
+      "pdf_reached_ref": 14,
+      "delta_conv": -1,
+      "delta_rej": -1,
+      "delta_mql": 0,
+      "conv_ok": true,
+      "rej_ok": true,
+      "mql_ok": true
+    },
+    {
+      "month": "2026-05",
+      "client": "MANOS AL HOGAR",
+      "pdf": {
+        "total": 344,
+        "activos": 24,
+        "firmados": 0,
+        "rechazados": 320
+      },
+      "pdf_activos_mql": 0,
+      "api": {
+        "conv": 342,
+        "activos": 4,
+        "rechazados": 338,
+        "preRejectMql": 38,
+        "reachedMql": 41
+      },
+      "dashboard": {
+        "reached_mql": 40,
+        "reached_sql": 11
+      },
+      "pdf_reached_ref": 38,
+      "delta_conv": -2,
+      "delta_rej": 18,
+      "delta_mql": 2,
+      "conv_ok": true,
+      "rej_ok": false,
+      "mql_ok": true
+    }
+  ],
+  "summary": {
+    "convOkN": 22,
+    "rejOkN": 21,
+    "mqlOkN": 22,
+    "total": 24
+  }
+}

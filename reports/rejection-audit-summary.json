@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-06-12T13:35:43.565Z",
+  "cohort": {
+    "since": "2026-01-01",
+    "until": "2026-06-30"
+  },
+  "totals": {
+    "rejected": 6049,
+    "lxc_irregularity": 657,
+    "sin_especificar": 163,
+    "solo_rechazado": 1448,
+    "reconstruction_candidate": 96
+  },
+  "by_client": {
+    "rejected": {
+      "DOS HOGARES": 200,
+      "GRUPO ELIJO": 955,
+      "HOGARES": 1679,
+      "INQ": 1637,
+      "INSPIRA": 282,
+      "MANOS AL HOGAR": 1296
+    },
+    "lxc_irregularity": {
+      "DOS HOGARES": 28,
+      "GRUPO ELIJO": 48,
+      "HOGARES": 380,
+      "INQ": 40,
+      "INSPIRA": 30,
+      "MANOS AL HOGAR": 131
+    },
+    "sin_especificar": {
+      "DOS HOGARES": 1,
+      "GRUPO ELIJO": 2,
+      "HOGARES": 1,
+      "INQ": 149,
+      "MANOS AL HOGAR": 10
+    },
+    "solo_rechazado": {
+      "DOS HOGARES": 87,
+      "GRUPO ELIJO": 145,
+      "HOGARES": 265,
+      "INQ": 444,
+      "INSPIRA": 53,
+      "MANOS AL HOGAR": 454
+    }
+  }
+}
