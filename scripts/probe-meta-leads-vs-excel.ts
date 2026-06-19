@@ -8,19 +8,12 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { z } from "zod";
 import { env, getMetaAccounts, getKommoClientMap, isMetaConfigured, isKommoConfigured } from "../server/config/env.js";
+import { sumMetaCaptacionActions } from "../server/services/meta.service.js";
 import { kommoGet } from "../server/lib/kommoApi.js";
 import { fetchKommoLeadsPageByPipelineCreated } from "../server/services/kommo.service.js";
 
 const MONTH_START = "2026-05-01";
 const CUTOFF = "2026-05-26";
-
-const LEAD_ACTION_TYPES = new Set([
-  "lead",
-  "onsite_conversion.lead_grouped",
-  "offsite_conversion.fb_pixel_lead",
-  "leadgen_grouped",
-  "onsite_conversion.messaging_conversation_started_7d",
-]);
 
 const insightsSchema = z.object({
   data: z
@@ -35,16 +28,6 @@ const insightsSchema = z.object({
     .optional(),
   error: z.object({ message: z.string() }).optional(),
 });
-
-function sumLeadActions(actions: Array<{ action_type: string; value?: string }> | undefined): number {
-  let n = 0;
-  for (const a of actions ?? []) {
-    if (LEAD_ACTION_TYPES.has(a.action_type)) {
-      n += Number.parseInt(a.value ?? "0", 10) || 0;
-    }
-  }
-  return n;
-}
 
 async function fetchMetaLeadsByDay(accountId: string, since: string, until: string) {
   const url = `https://graph.facebook.com/${env.META_API_VERSION}/${accountId}/insights`;
@@ -65,7 +48,7 @@ async function fetchMetaLeadsByDay(accountId: string, since: string, until: stri
   }
   const byDate = new Map<string, number>();
   for (const row of parsed.data.data ?? []) {
-    byDate.set(row.date_start, sumLeadActions(row.actions));
+    byDate.set(row.date_start, sumMetaCaptacionActions(row.actions));
   }
   return byDate;
 }

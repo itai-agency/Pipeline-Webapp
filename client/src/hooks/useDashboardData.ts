@@ -40,6 +40,7 @@ function staticFallbackSnapshot(): DashboardSnapshotDto {
       note: metaSpendPeriod.note,
     },
     sdrHistory: sdrHistoryData.records as unknown as SdrHistoryRow[],
+    rejectedByStage: [],
     latestDate: dates.at(-1) ?? null,
     availableDates: dates,
     defaultDateRange: {

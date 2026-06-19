@@ -12,6 +12,10 @@ import {
 } from "../lib/dashboardMetricsDb.js";
 import { currentMonthRange } from "../lib/dateRanges.js";
 import { AppError } from "../lib/errors.js";
+import {
+  computeRejectedByStage,
+  type RejectionTimelineEvent,
+} from "../lib/rejectedByStage.js";
 import { getSupabaseAdmin } from "../lib/supabase.js";
 import { rebuildDailyMetricsFromEvents } from "./kommo.service.js";
 import { getMetaSpendFromDb } from "./meta.service.js";
@@ -221,21 +225,43 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     citas: number;
     firmas: number;
   }> = [];
+  const rejectionEvents: RejectionTimelineEvent[] = [];
   let sdrOffset = 0;
   const sdrPage = 1000;
   while (true) {
     const { data: page, error: sdrErr } = await supabase
       .from("kommo_lead_events")
-      .select("event_date, client, responsible_name, citas, firmas")
+      .select(
+        "kommo_lead_id, event_date, lead_created_date, client, responsible_name, status_id, stage_name, raw_payload, citas, firmas",
+      )
       .in("client", allowed)
       .order("event_date", { ascending: true })
       .range(sdrOffset, sdrOffset + sdrPage - 1);
     if (sdrErr) throw new AppError(`SDR load failed: ${sdrErr.message}`, 500);
     if (!page?.length) break;
-    sdrRows.push(...(page as typeof sdrRows));
+    for (const row of page) {
+      sdrRows.push({
+        event_date: row.event_date as string,
+        client: row.client as string,
+        responsible_name: row.responsible_name as string | null,
+        citas: row.citas as number,
+        firmas: row.firmas as number,
+      });
+      rejectionEvents.push({
+        kommo_lead_id: row.kommo_lead_id as number,
+        client: row.client as string,
+        status_id: row.status_id as number | null,
+        event_date: row.event_date as string,
+        stage_name: row.stage_name as string | null,
+        lead_created_date: row.lead_created_date as string | null,
+        raw_payload: row.raw_payload as RejectionTimelineEvent["raw_payload"],
+      });
+    }
     if (page.length < sdrPage) break;
     sdrOffset += sdrPage;
   }
+
+  const rejectedByStage = computeRejectedByStage(rejectionEvents);
 
   const sdrHistory = sdrRows.map((r) => ({
     FECHA: r.event_date as string,
@@ -254,6 +280,7 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     availableDates,
     defaultDateRange,
     sdrHistory: sdrHistory.length > 0 ? sdrHistory : getStaticSnapshot().sdrHistory,
+    rejectedByStage,
     latestDate: availableDates.at(-1) ?? null,
     syncedAt: new Date().toISOString(),
     controlReference: KOMMO_CONTROL_REFERENCE,

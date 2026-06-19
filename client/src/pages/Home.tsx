@@ -357,9 +357,14 @@ function buildRisks(rows: PipelineRow[], spendByClient = new Map<string, number>
     .sort((a, b) => b.score - a.score || b.conversations - a.conversations);
 }
 
-function Kpi({ label, value, detail, tone = "neutral" }: { label: string; value: string; detail: string; tone?: "neutral" | "good" | "warn" }) {
+function Kpi({ label, value, detail, tone = "neutral", rejected }: { label: string; value: string; detail: string; tone?: "neutral" | "good" | "warn"; rejected?: number }) {
   return (
     <article className={`app-kpi app-kpi--${tone}`}>
+      {rejected && rejected > 0 ? (
+        <i className="app-kpi__badge" title={`${rejected} leads rechazados que alcanzaron ${label} como etapa máxima`}>
+          ⊘ {rejected}
+        </i>
+      ) : null}
       <span>{label}</span>
       <strong>{value}</strong>
       <small>{detail}</small>
@@ -515,6 +520,20 @@ export default function Home() {
     if (censusKpisActive) return sumRows(censusAtEnd);
     return sumRows(filteredRows);
   }, [censusKpisActive, censusAtEnd, filteredRows]);
+  const rejectedTotals = useMemo(() => {
+    const acc = { MQL: 0, SQL: 0, CITAS: 0, FIRMAS: 0 };
+    for (const row of snapshot.rejectedByStage ?? []) {
+      const dateMatch = (!dailyRangeStart || row.FECHA >= dailyRangeStart) && (!dailyRangeEnd || row.FECHA <= dailyRangeEnd);
+      const clientMatch = selectedClient === "Todos" || row.CLIENTE === selectedClient;
+      const queryMatch = !query || row.CLIENTE.toLowerCase().includes(query.toLowerCase());
+      if (!dateMatch || !clientMatch || !queryMatch) continue;
+      acc.MQL += row.MQL;
+      acc.SQL += row.SQL;
+      acc.CITAS += row.CITAS;
+      acc.FIRMAS += row.FIRMAS;
+    }
+    return acc;
+  }, [snapshot.rejectedByStage, dailyRangeStart, dailyRangeEnd, selectedClient, query]);
   const spendTotal = useMemo(() => sumSpend(filteredSpendRows), [filteredSpendRows]);
   const metaSpendCoversFilter = useMemo(() => {
     if (!metaSpendPeriod.start || !metaSpendPeriod.end || !dailyRangeStart || !dailyRangeEnd) return true;
@@ -827,10 +846,11 @@ export default function Home() {
                 value={fmt.format(totals.MQL)}
                 detail={censusKpisActive ? "reached* · etapa actual" : `${pctFmt.format(funnelConversionRate(totals.CONVERSACIONES, totals.MQL))} cohorte creada`}
                 tone="good"
+                rejected={rejectedTotals.MQL}
               />
-              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(funnelConversionRate(totals.MQL, totals.SQL))} de MQL`} tone={funnelConversionRate(totals.MQL, totals.SQL) < 0.25 ? "warn" : "good"} />
-              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(funnelConversionRate(totals.SQL || totals.MQL, totals.CITAS))} avance`} />
-              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(funnelConversionRate(totals.CITAS, totals.FIRMAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
+              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(funnelConversionRate(totals.MQL, totals.SQL))} de MQL`} tone={funnelConversionRate(totals.MQL, totals.SQL) < 0.25 ? "warn" : "good"} rejected={rejectedTotals.SQL} />
+              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(funnelConversionRate(totals.SQL || totals.MQL, totals.CITAS))} avance`} rejected={rejectedTotals.CITAS} />
+              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(funnelConversionRate(totals.CITAS, totals.FIRMAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} rejected={rejectedTotals.FIRMAS} />
               <Kpi
                 label="Inversión"
                 value={moneyFmt.format(spendTotal)}

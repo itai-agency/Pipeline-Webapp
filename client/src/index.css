@@ -395,6 +395,25 @@
   font-variant-numeric: tabular-nums;
 }
 .app-kpi small { display: block; margin-top: 10px; color: #748196; font-weight: 750; }
+.app-kpi__badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font: 800 .72rem "Space Grotesk", system-ui, sans-serif;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+  color: #b42318;
+  background: rgba(217,45,32,.10);
+  border: 1px solid rgba(217,45,32,.22);
+  cursor: help;
+}
 
 .ops-layout {
   display: grid;

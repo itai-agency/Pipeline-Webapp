@@ -69,6 +69,7 @@ export function getStaticSnapshot(): DashboardSnapshotDto {
       CITAS: row.CITAS,
       FIRMAS: row.FIRMAS,
     })),
+    rejectedByStage: [],
     latestDate,
     syncedAt: new Date().toISOString(),
     controlReference: KOMMO_CONTROL_REFERENCE,

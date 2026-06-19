@@ -44,6 +44,20 @@ export type SdrHistoryRowDto = {
   FIRMAS: number;
 };
 
+/**
+ * Leads rechazados agrupados por la etapa MÁXIMA que alcanzaron antes del rechazo.
+ * Cada lead cuenta una sola vez, en su bucket máximo (exclusivo, no acumulativo).
+ * FECHA = fecha de creación del lead (cohorte), para filtrar igual que las tarjetas.
+ */
+export type RejectedByStageRowDto = {
+  FECHA: string;
+  CLIENTE: string;
+  MQL: number;
+  SQL: number;
+  CITAS: number;
+  FIRMAS: number;
+};
+
 export type DateRangeDto = {
   start: string;
   end: string;
@@ -72,6 +86,8 @@ export type DashboardSnapshotDto = {
   /** Rango por defecto alineado al sync Meta activo */
   defaultDateRange: DateRangeDto;
   sdrHistory: SdrHistoryRowDto[];
+  /** Rechazados por etapa máxima alcanzada (badge de fuga calificada por tarjeta). */
+  rejectedByStage: RejectedByStageRowDto[];
   latestDate: string | null;
   syncedAt: string;
   /** Fuente de verdad HTML para cuadrar KPIs en la fecha de corte. */

@@ -7,7 +7,10 @@ import { kommoGet } from "../server/lib/kommoApi.js";
 import { getSupabaseAdmin } from "../server/lib/supabase.js";
 import { fetchKommoLeadsPageByPipelineCreated } from "../server/services/kommo.service.js";
 import { classifyKommoStageTier } from "../server/config/kommoStageMap.js";
-import { sumMetaLeadActions } from "../server/services/meta.service.js";
+import {
+  sumMetaFanpageConversations,
+  sumMetaLeadActions,
+} from "../server/services/meta.service.js";
 import { env, getMetaAccounts } from "../server/config/env.js";
 import axios from "axios";
 
@@ -108,7 +111,12 @@ async function metaApiJun02(): Promise<void> {
   for (const a of messaging) {
     console.log(`  ${a.action_type}: ${a.value}`);
   }
-  console.log("sumMetaLeadActions (tipos lead pixel):", sumMetaLeadActions(actions));
+  console.log("sumMetaLeadActions (leadgen/pixel):", sumMetaLeadActions(actions));
+  console.log("sumMetaFanpageConversations:", sumMetaFanpageConversations(actions));
+  console.log(
+    "sumMetaCaptacion (leadgen+fanpage, = meta_spend_events.leads tras sync):",
+    sumMetaLeadActions(actions) + sumMetaFanpageConversations(actions),
+  );
 }
 
 async function main(): Promise<void> {

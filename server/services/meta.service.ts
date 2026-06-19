@@ -5,12 +5,17 @@ import { AppError } from "../lib/errors.js";
 import { getSupabaseAdmin } from "../lib/supabase.js";
 import { sseHub } from "./sseHub.js";
 
-/** Tipos de acción Meta que cuentan como lead / conversación (captación). */
+/** Formularios / pixel lead (sin mensajería de fanpage). */
 const META_LEAD_ACTION_TYPES = new Set([
   "lead",
   "leadgen_grouped",
   "onsite_conversion.lead_grouped",
   "offsite_conversion.fb_pixel_lead",
+]);
+
+/** Conversaciones iniciadas en fanpage / Messenger (Ads Manager). */
+const META_FANPAGE_CONVERSATION_ACTION_TYPES = new Set([
+  "onsite_conversion.messaging_conversation_started_7d",
 ]);
 
 const insightsRowSchema = z.object({
@@ -63,16 +68,38 @@ export async function hasMetaLeadsColumn(): Promise<boolean> {
   return metaLeadsColumnCached;
 }
 
-export function sumMetaLeadActions(
+function sumActionTypes(
   actions: Array<{ action_type: string; value?: string }> | undefined,
+  types: Set<string>,
 ): number {
   let total = 0;
   for (const action of actions ?? []) {
-    if (META_LEAD_ACTION_TYPES.has(action.action_type)) {
+    if (types.has(action.action_type)) {
       total += Number.parseInt(action.value ?? "0", 10) || 0;
     }
   }
   return total;
+}
+
+/** Formularios / pixel (sin fanpage). */
+export function sumMetaLeadActions(
+  actions: Array<{ action_type: string; value?: string }> | undefined,
+): number {
+  return sumActionTypes(actions, META_LEAD_ACTION_TYPES);
+}
+
+/** Conversaciones de fanpage según Meta Insights (referencia; dashboard conv = Kommo). */
+export function sumMetaFanpageConversations(
+  actions: Array<{ action_type: string; value?: string }> | undefined,
+): number {
+  return sumActionTypes(actions, META_FANPAGE_CONVERSATION_ACTION_TYPES);
+}
+
+/** Total Meta para scripts / meta_spend_events.leads (leadgen + fanpage). */
+export function sumMetaCaptacionActions(
+  actions: Array<{ action_type: string; value?: string }> | undefined,
+): number {
+  return sumMetaLeadActions(actions) + sumMetaFanpageConversations(actions);
 }
 
 function metaApiErrorMessage(err: unknown, account: MetaAccountConfig): string {
@@ -114,11 +141,33 @@ async function fetchAccountDailyInsights(
     throw new AppError(`Meta API: ${parsed.data.error.message}`, 502, "META_API_ERROR");
   }
 
-  return (parsed.data.data ?? []).map((row) => ({
-    date: row.date_start,
-    spend: Number.parseFloat(row.spend ?? "0") || 0,
-    leads: sumMetaLeadActions(row.actions),
-  }));
+  return (parsed.data.data ?? []).map((row) => {
+    const fanpage = sumMetaFanpageConversations(row.actions);
+    const leadgen = sumMetaLeadActions(row.actions);
+    const leads = leadgen + fanpage;
+    // #region agent log
+    if (fanpage > 0 || leadgen > 0) {
+      fetch("http://127.0.0.1:7880/ingest/6fd1d614-7a66-4dcc-a425-d3b833f324c4", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "a0037c" },
+        body: JSON.stringify({
+          sessionId: "a0037c",
+          runId: "fanpage-conv",
+          hypothesisId: "H1",
+          location: "meta.service.ts:fetchAccountDailyInsights",
+          message: "meta captacion breakdown",
+          data: { client: account.client, date: row.date_start, leadgen, fanpage, leads },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+    }
+    // #endregion
+    return {
+      date: row.date_start,
+      spend: Number.parseFloat(row.spend ?? "0") || 0,
+      leads,
+    };
+  });
 }
 
 export async function syncMetaSpend(params: MetaSyncParams): Promise<MetaSyncResult> {
