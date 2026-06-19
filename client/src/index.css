@@ -397,7 +397,7 @@
 .app-kpi small { display: block; margin-top: 10px; color: #748196; font-weight: 750; }
 .app-kpi__badge {
   position: absolute;
-  bottom: 14px;
+  bottom: 36px;
   right: 14px;
   z-index: 2;
   display: inline-flex;
