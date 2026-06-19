@@ -70,6 +70,7 @@ type FunnelKpi = {
   statusLabel: string;
   detail: string;
   flowStat?: string;
+  rejected?: number;
 };
 
 const APP_BUILD_MARKER = import.meta.env.VITE_APP_BUILD_MARKER ?? "embudo-local";
@@ -357,14 +358,9 @@ function buildRisks(rows: PipelineRow[], spendByClient = new Map<string, number>
     .sort((a, b) => b.score - a.score || b.conversations - a.conversations);
 }
 
-function Kpi({ label, value, detail, tone = "neutral", rejected }: { label: string; value: string; detail: string; tone?: "neutral" | "good" | "warn"; rejected?: number }) {
+function Kpi({ label, value, detail, tone = "neutral" }: { label: string; value: string; detail: string; tone?: "neutral" | "good" | "warn" }) {
   return (
     <article className={`app-kpi app-kpi--${tone}`}>
-      {rejected && rejected > 0 ? (
-        <i className="app-kpi__badge" title={`${rejected} leads rechazados que alcanzaron ${label} como etapa máxima`}>
-          ⊘ {rejected}
-        </i>
-      ) : null}
       <span>{label}</span>
       <strong>{value}</strong>
       <small>{detail}</small>
@@ -377,6 +373,11 @@ function SemaforoKpi({ item }: { item: FunnelKpi }) {
 
   return (
     <article className={`traffic-kpi traffic-kpi--${item.status}`}>
+      {item.rejected && item.rejected > 0 ? (
+        <i className="app-kpi__badge" title={`${item.rejected} leads rechazados que alcanzaron esta etapa como máximo`}>
+          ⊘ {item.rejected}
+        </i>
+      ) : null}
       <div className="traffic-kpi__signal" aria-hidden="true">
         <span className={item.status === "red" ? "active" : ""} />
         <span className={item.status === "yellow" ? "active" : ""} />
@@ -558,7 +559,15 @@ export default function Home() {
   }, [filteredSpendRows]);
   const costPerAppointment = totals.CITAS > 0 ? spendTotal / totals.CITAS : null;
   const endDate = dailyRangeEnd ? new Date(dailyRangeEnd + "T00:00:00") : new Date();
-  const funnelKpis = useMemo(() => buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null, endDate), [totals, spendTotal, endDate]);
+  const funnelKpis = useMemo(() => {
+    const kpis = buildFunnelKpis(totals, spendTotal > 0 ? spendTotal : null, endDate);
+    const rejectedMap: Record<string, number> = {
+      "lead-to-mql": rejectedTotals.MQL,
+      "mql-to-sql": rejectedTotals.SQL,
+      "sql-to-appointment": rejectedTotals.CITAS,
+    };
+    return kpis.map((k) => ({ ...k, rejected: rejectedMap[k.key] ?? 0 }));
+  }, [totals, spendTotal, endDate, rejectedTotals]);
   const sdrTotals = useMemo(() => sumSdrRows(filteredSdrRows), [filteredSdrRows]);
   const todayRows = useMemo(
     () => timelineDaily.filter((row) => row.FECHA === latestDate),
@@ -846,11 +855,10 @@ export default function Home() {
                 value={fmt.format(totals.MQL)}
                 detail={censusKpisActive ? "reached* · etapa actual" : `${pctFmt.format(funnelConversionRate(totals.CONVERSACIONES, totals.MQL))} cohorte creada`}
                 tone="good"
-                rejected={rejectedTotals.MQL}
               />
-              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(funnelConversionRate(totals.MQL, totals.SQL))} de MQL`} tone={funnelConversionRate(totals.MQL, totals.SQL) < 0.25 ? "warn" : "good"} rejected={rejectedTotals.SQL} />
-              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(funnelConversionRate(totals.SQL || totals.MQL, totals.CITAS))} avance`} rejected={rejectedTotals.CITAS} />
-              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(funnelConversionRate(totals.CITAS, totals.FIRMAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} rejected={rejectedTotals.FIRMAS} />
+              <Kpi label="SQL" value={fmt.format(totals.SQL)} detail={`${pctFmt.format(funnelConversionRate(totals.MQL, totals.SQL))} de MQL`} tone={funnelConversionRate(totals.MQL, totals.SQL) < 0.25 ? "warn" : "good"} />
+              <Kpi label="Citas" value={fmt.format(totals.CITAS)} detail={`${pctFmt.format(funnelConversionRate(totals.SQL || totals.MQL, totals.CITAS))} avance`} />
+              <Kpi label="Firmas" value={fmt.format(totals.FIRMAS)} detail={`${pctFmt.format(funnelConversionRate(totals.CITAS, totals.FIRMAS))} de citas`} tone={totals.FIRMAS === 0 ? "warn" : "good"} />
               <Kpi
                 label="Inversión"
                 value={moneyFmt.format(spendTotal)}
