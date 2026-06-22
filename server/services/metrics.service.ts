@@ -10,7 +10,7 @@ import {
   hasMetricsSourceColumn,
   withMetricsSource,
 } from "../lib/dashboardMetricsDb.js";
-import { currentMonthRange } from "../lib/dateRanges.js";
+import { currentMonthRange, toAccountDateIso } from "../lib/dateRanges.js";
 import { AppError } from "../lib/errors.js";
 import {
   computeRejectedByStage,
@@ -148,8 +148,27 @@ export async function mergeMetaSpendIntoDaily(since: string, until: string): Pro
   return metaSpend.length;
 }
 
+/**
+ * Rango rolling de N meses para el rebuild por defecto del scheduler.
+ * El cohort sigue siendo por lead_created_date (cada lead aparece en su mes de creación),
+ * pero cubrir más meses permite capturar firmas tardías: leads creados en marzo
+ * que cerraron en junio se reflejan en la fila de marzo al re-procesar ese cohort.
+ */
+function defaultRebuildRange(): { since: string; until: string } {
+  const now = new Date();
+  const until = toAccountDateIso(now);
+  // Retroceder 4 meses calendario: cubre el ciclo típico lead-creado → firma
+  const d = new Date(now);
+  d.setMonth(d.getMonth() - 4);
+  d.setDate(1);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const since = `${y}-${m}-01`;
+  return { since, until };
+}
+
 export async function rebuildMetricsFromSources(since?: string, until?: string): Promise<number> {
-  const range = since && until ? { since, until } : currentMonthRange();
+  const range = since && until ? { since, until } : defaultRebuildRange();
   const kommoRows = await rebuildDailyMetricsFromEvents(range.since, range.until);
   const metaRows = await mergeMetaSpendIntoDaily(range.since, range.until);
   return kommoRows + metaRows;
