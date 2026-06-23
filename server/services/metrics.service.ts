@@ -186,28 +186,38 @@ async function loadMetricsDaily(): Promise<PipelineRowDto[]> {
   if (error) throw new AppError(`Metrics load failed: ${error.message}`, 500);
 
   const allowed = getAllowedDashboardClients();
-  return (metrics ?? [])
-    .filter((row) => allowed.has(row.client as string))
-    .map((row) => ({
-    FECHA: row.metric_date as string,
-    SEMANA: weekStartIso(row.metric_date as string),
-    MES: (row.mes as string) ?? (row.metric_date as string).slice(0, 7),
-    CLIENTE: row.client as string,
-    CONVERSACIONES: (row.conversaciones as number) ?? 0,
-    MQL: (row.mql as number) ?? 0,
-    SQL: (row.sql as number) ?? 0,
-    CITAS: (row.citas as number) ?? 0,
-    FIRMAS: (row.firmas as number) ?? 0,
-    "GASTO TOTAL": row.gasto_total != null ? Number(row.gasto_total) : null,
-    "COSTO POR CITA":
-      (row.citas as number) > 0 && row.gasto_total != null
-        ? Number(row.gasto_total) / (row.citas as number)
-        : null,
-    METRICS_SOURCE:
-      row.metrics_source != null
-        ? (row.metrics_source as "timeline" | "census")
-        : "timeline",
-  }));
+
+  // Deduplicar por (metric_date, client) prefiriendo timeline sobre census.
+  // Census salta explícitamente los firmados → si census gana, firmas queda en 0.
+  const byKey = new Map<string, PipelineRowDto>();
+  for (const row of metrics ?? []) {
+    if (!allowed.has(row.client as string)) continue;
+    const key = `${row.metric_date as string}::${row.client as string}`;
+    const existing = byKey.get(key);
+    // Solo sobreescribir si la fila entrante es timeline (o si no hay nada todavía)
+    if (existing && (row.metrics_source as string | null) !== "timeline") continue;
+    byKey.set(key, {
+      FECHA: row.metric_date as string,
+      SEMANA: weekStartIso(row.metric_date as string),
+      MES: (row.mes as string) ?? (row.metric_date as string).slice(0, 7),
+      CLIENTE: row.client as string,
+      CONVERSACIONES: (row.conversaciones as number) ?? 0,
+      MQL: (row.mql as number) ?? 0,
+      SQL: (row.sql as number) ?? 0,
+      CITAS: (row.citas as number) ?? 0,
+      FIRMAS: (row.firmas as number) ?? 0,
+      "GASTO TOTAL": row.gasto_total != null ? Number(row.gasto_total) : null,
+      "COSTO POR CITA":
+        (row.citas as number) > 0 && row.gasto_total != null
+          ? Number(row.gasto_total) / (row.citas as number)
+          : null,
+      METRICS_SOURCE:
+        row.metrics_source != null
+          ? (row.metrics_source as "timeline" | "census")
+          : "timeline",
+    });
+  }
+  return Array.from(byKey.values());
 }
 
 export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
