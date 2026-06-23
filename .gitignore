@@ -112,3 +112,5 @@ temp/
 client/public/__manus__/version.json
 .env.example
 APP_SUMMARY.md
+.env.example
+.env.example

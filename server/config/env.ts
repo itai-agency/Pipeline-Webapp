@@ -51,6 +51,13 @@ const envSchema = z.object({
     .string()
     .optional()
     .transform((v) => v === "true" || v === "1"),
+  /**
+   * Secret que Kommo incluirá en la URL del webhook (?secret=…).
+   * Si no se define, se usa SYNC_API_SECRET como fallback.
+   * Incluir en la URL de webhook registrada en Kommo:
+   *   https://<server>/api/webhook/kommo?secret=<KOMMO_WEBHOOK_SECRET>
+   */
+  KOMMO_WEBHOOK_SECRET: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
