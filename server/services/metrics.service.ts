@@ -318,23 +318,15 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
 
 export type RefreshMetricsMode = "full" | "meta_only";
 
-/**
- * Reconstruye métricas y difunde el snapshot por SSE.
- * Sin rango explícito usa defaultRebuildRange (ventana rolling de 4 meses)
- * para capturar firmas tardías en cohortes anteriores.
- */
 export async function refreshAndBroadcast(
   metricRange?: { since: string; until: string },
   options?: { kommoMode?: RefreshMetricsMode },
 ): Promise<DashboardSnapshotDto> {
+  const range = metricRange ?? currentMonthRange();
   if (options?.kommoMode === "meta_only") {
-    const range = metricRange ?? currentMonthRange();
     await mergeMetaSpendIntoDaily(range.since, range.until);
-  } else if (metricRange) {
-    await rebuildMetricsFromSources(metricRange.since, metricRange.until);
   } else {
-    // Sin rango → 4-month rolling (captura firmas tardías en cohortes anteriores)
-    await rebuildMetricsFromSources();
+    await rebuildMetricsFromSources(range.since, range.until);
   }
   const snapshot = await getDashboardSnapshot();
   sseHub.broadcast("snapshot_refreshed", snapshot);

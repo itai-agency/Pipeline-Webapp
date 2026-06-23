@@ -21,12 +21,8 @@ async function runScheduledSync(): Promise<void> {
         `[scheduler] Kommo timeline: ${processed} cambios etapa, ${skipped} omitidos (${range.since}→${range.until})`,
       );
     }
-    // Sin rango → refreshAndBroadcast usa defaultRebuildRange (4 meses rolling)
-    // para capturar firmas tardías en cohortes anteriores.
-    // El sync de Kommo arriba solo trae eventos del mes en curso (nuevos);
-    // el rebuild cubre los 4 meses donde los leads pueden estar activos.
-    await refreshAndBroadcast();
-    console.log("[scheduler] Sync completed (rebuild 4m rolling)");
+    await refreshAndBroadcast(range);
+    console.log("[scheduler] Sync completed", range);
   } catch (err) {
     console.error("[scheduler] Sync failed:", err);
   }
