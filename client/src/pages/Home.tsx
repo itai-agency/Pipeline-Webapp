@@ -503,7 +503,7 @@ export default function Home() {
       const queryMatch = !query || row.client.toLowerCase().includes(query.toLowerCase());
       return dateMatch && clientMatch && queryMatch;
     });
-  }, [dailyRangeStart, dailyRangeEnd, selectedClient, query]);
+  }, [metaSpendData, dailyRangeStart, dailyRangeEnd, selectedClient, query]);
 
   const filteredSdrRows = useMemo(() => {
     return sdrRows.filter((row) => {
