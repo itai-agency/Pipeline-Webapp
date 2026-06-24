@@ -113,7 +113,7 @@ export const DEFAULT_META_ACCOUNTS: MetaAccountConfig[] = [
   { client: "GRUPO ELIJO", accountName: "GRUPO ELIJO CP", accountId: "act_864948876563125" },
   // INSPIRA — omitida del sync Meta (ver META_SYNC_EXCLUDED_CLIENTS); Kommo sigue activo.
   { client: "INSPIRA", accountName: "Inspira Bienes Raices CP", accountId: "act_949679304398951" },
-  { client: "DOS HOGARES", accountName: "IIHogares GDL CP", accountId: "act_2175146543225091" },
+  { client: "DOS HOGARES", accountName: "IIHogares", accountId: "act_827524056673424" },
 ];
 
 /** Omitidas del sync Meta Ads (sin llamada API). Quitar de la lista para reactivar. */

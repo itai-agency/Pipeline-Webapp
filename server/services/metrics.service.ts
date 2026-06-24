@@ -220,7 +220,11 @@ async function loadMetricsDaily(): Promise<PipelineRowDto[]> {
   return Array.from(byKey.values());
 }
 
+let _cachedSnapshot: DashboardSnapshotDto | null = null;
+
 export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
+  if (_cachedSnapshot !== null) return _cachedSnapshot;
+
   if (!isSupabaseConfigured()) {
     return getStaticSnapshot();
   }
@@ -230,8 +234,7 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
 
   const metaSpend = await getMetaSpendFromDb();
   if (metaSpend.length === 0) {
-    const fallback = getStaticSnapshot();
-    return fallback;
+    return getStaticSnapshot();
   }
 
   const metricsRows = await loadMetricsDaily();
@@ -302,7 +305,7 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     FIRMAS: (r.firmas as number) ?? 0,
   }));
 
-  return {
+  const snapshot: DashboardSnapshotDto = {
     daily,
     metaSpend,
     metaSpendPeriod,
@@ -314,6 +317,8 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     syncedAt: new Date().toISOString(),
     controlReference: KOMMO_CONTROL_REFERENCE,
   };
+  _cachedSnapshot = snapshot;
+  return snapshot;
 }
 
 export type RefreshMetricsMode = "full" | "meta_only";
@@ -328,6 +333,9 @@ export async function refreshAndBroadcast(
   } else {
     await rebuildMetricsFromSources(range.since, range.until);
   }
+  // Invalidate cache only after the full rebuild completes so concurrent
+  // HTTP snapshot requests served from the old cache during the reset window.
+  _cachedSnapshot = null;
   const snapshot = await getDashboardSnapshot();
   sseHub.broadcast("snapshot_refreshed", snapshot);
   return snapshot;
