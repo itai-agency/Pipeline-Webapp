@@ -823,7 +823,7 @@ export async function aggregateKommoToDailyMetrics(
       const created =
         (row.lead_created_date as string | null) ??
         leadCohort.get(leadId)?.createdDate;
-      if (!enrichFromApi && created && !leadCohort.has(leadId)) {
+      if (created && !leadCohort.has(leadId)) {
         leadCohort.set(leadId, { client, createdDate: created });
       }
       timelineEvents.push({
