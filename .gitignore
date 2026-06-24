@@ -7,6 +7,9 @@ dist/
 build/
 *.dist
 
+# Claude Code local settings (contiene tokens — no commitear)
+.claude/settings.local.json
+
 # Environment variables
 .env
 .env.local
@@ -114,3 +117,4 @@ client/public/__manus__/version.json
 APP_SUMMARY.md
 .env.example
 .env.example
+/conector-kommo

@@ -99,6 +99,26 @@ export function resolveBeforeAfterTiers(
   return { before, after };
 }
 
+/**
+ * Fecha del evento más reciente que estableció el tier "firmado" para este lead.
+ * Usado para atribuir la firma al mes en que realmente ocurrió, no al de creación.
+ */
+function firmaEventDate(
+  leadEvents: TimelineEventRow[],
+  statusNameByKey: Map<string, string>,
+  defaultPipelineId: number,
+): string | null {
+  const sorted = [...leadEvents].sort((a, b) => eventUnixTs(a) - eventUnixTs(b));
+  let lastFirmaDate: string | null = null;
+  for (const ev of sorted) {
+    const tiers = resolveBeforeAfterTiers(ev, statusNameByKey, defaultPipelineId);
+    if (tiers?.after === "firmado") {
+      lastFirmaDate = eventAccountDate(ev);
+    }
+  }
+  return lastFirmaDate;
+}
+
 /** Etapa más reciente del lead según timeline (alineado al tablero Kommo «creados en fecha X»). */
 export function latestLeadTierFromTimeline(
   leadEvents: TimelineEventRow[],
@@ -154,19 +174,31 @@ export function moldDailyMetricsFromTimeline(
   }
 
   const snapshotByKey = new Map<DailyMoldKey, ReturnType<typeof newClientSnapshot>>();
+  // Firmas atribuidas a la fecha del evento firma, no a la cohorte de creación
+  const firmasByKey = new Map<string, { date: string; client: string; firmas: number }>();
 
   for (const [leadId, meta] of leadCohort) {
     const { client, createdDate } = meta;
-    if (monthStart && createdDate < monthStart) continue;
-    if (monthEnd && createdDate > monthEnd) continue;
-
-    const key = `${createdDate}::${client}` as DailyMoldKey;
     const pipelineId = pipelineIdByClient.get(client) ?? 0;
     const leadEvents = eventsByLead.get(leadId) ?? [];
     const tier = latestLeadTierFromTimeline(leadEvents, statusNameByKey, pipelineId);
 
-    const snap = snapshotByKey.get(key) ?? newClientSnapshot(client);
-    snapshotByKey.set(key, accumulateSnapshotTier(snap, tier));
+    // Conv/MQL/SQL/Citas: cohorte por fecha de creación (filtro de rango aplica)
+    const inCohortRange =
+      (!monthStart || createdDate >= monthStart) && (!monthEnd || createdDate <= monthEnd);
+    if (inCohortRange) {
+      const key = `${createdDate}::${client}` as DailyMoldKey;
+      const snap = snapshotByKey.get(key) ?? newClientSnapshot(client);
+      snapshotByKey.set(key, accumulateSnapshotTier(snap, tier));
+    }
+
+    // Firmas: sin filtro de cohorte — se atribuyen al mes en que ocurrió la firma
+    if (tier === "firmado") {
+      const fDate = firmaEventDate(leadEvents, statusNameByKey, pipelineId) ?? createdDate;
+      const firmaKey = `${fDate}::${client}`;
+      const prev = firmasByKey.get(firmaKey);
+      firmasByKey.set(firmaKey, { date: fDate, client, firmas: (prev?.firmas ?? 0) + 1 });
+    }
   }
 
   for (const [key, snap] of snapshotByKey) {
@@ -179,8 +211,27 @@ export function moldDailyMetricsFromTimeline(
       mql: metrics.mql,
       sql: metrics.sql,
       citas: metrics.citas,
-      firmas: metrics.firmas,
+      firmas: 0, // Las firmas se superponen abajo desde firmasByKey
     });
+  }
+
+  // Superponer firmas en su fecha real de evento
+  for (const [firmaKey, firmaData] of firmasByKey) {
+    const dKey = firmaKey as DailyMoldKey;
+    const existing = grouped.get(dKey);
+    if (existing) {
+      existing.firmas += firmaData.firmas;
+    } else {
+      grouped.set(dKey, {
+        date: firmaData.date,
+        client: firmaData.client,
+        conversaciones: 0,
+        mql: 0,
+        sql: 0,
+        citas: 0,
+        firmas: firmaData.firmas,
+      });
+    }
   }
 
   // #region agent log
