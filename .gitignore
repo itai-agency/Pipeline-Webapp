@@ -7,8 +7,9 @@ dist/
 build/
 *.dist
 
-# Claude Code local settings (contiene tokens — no commitear)
+# Claude Code local settings y MCP (contienen tokens — no commitear)
 .claude/settings.local.json
+.mcp.json
 
 # Environment variables
 .env
