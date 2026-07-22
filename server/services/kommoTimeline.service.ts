@@ -259,7 +259,12 @@ export async function syncKommoStatusChangeEvents(
         sql: stage.sql,
         citas: stage.citas,
         firmas: stage.firmas,
-        raw_payload: ev,
+        raw_payload: {
+          id: ev.id,
+          created_at: ev.created_at,
+          value_after: ev.value_after,
+          value_before: ev.value_before,
+        } as z.infer<typeof kommoEventSchema>,
         synced_at: new Date().toISOString(),
       });
       processed += 1;

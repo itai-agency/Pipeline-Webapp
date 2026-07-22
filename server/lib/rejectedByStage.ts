@@ -19,7 +19,6 @@ export type RejectionTimelineEvent = {
   event_date: string;
   stage_name: string | null;
   lead_created_date: string | null;
-  raw_payload: { created_at?: number } | null;
 };
 
 type StageKey = "MQL" | "SQL" | "CITAS" | "FIRMAS";
@@ -38,8 +37,6 @@ function bucketForRank(maxRank: number): StageKey | null {
 }
 
 function eventSortKey(ev: RejectionTimelineEvent): number {
-  const fromPayload = ev.raw_payload?.created_at;
-  if (fromPayload != null && Number.isFinite(fromPayload)) return fromPayload;
   return Math.floor(new Date(`${ev.event_date}T12:00:00`).getTime() / 1000);
 }
 

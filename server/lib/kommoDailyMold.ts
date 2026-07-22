@@ -234,26 +234,6 @@ export function moldDailyMetricsFromTimeline(
     }
   }
 
-  // #region agent log
-  const hog = grouped.get("2026-06-02::HOGARES" as DailyMoldKey);
-  const elijo = grouped.get("2026-06-02::GRUPO ELIJO" as DailyMoldKey);
-  if (hog || elijo) {
-    fetch("http://127.0.0.1:7880/ingest/6fd1d614-7a66-4dcc-a425-d3b833f324c4", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "a0037c" },
-      body: JSON.stringify({
-        sessionId: "a0037c",
-        runId: "cohort-snapshot-mold",
-        hypothesisId: "H-funnel-snapshot",
-        location: "kommoDailyMold.ts:moldDailyMetricsFromTimeline",
-        message: "cohort snapshot sample",
-        data: { HOGARES: hog ?? null, GRUPO_ELIJO: elijo ?? null },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-  }
-  // #endregion
-
   return grouped;
 }
 

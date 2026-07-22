@@ -258,15 +258,19 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     firmas: number;
   }> = [];
   const rejectionEvents: RejectionTimelineEvent[] = [];
+  const sdrSinceDate = new Date();
+  sdrSinceDate.setMonth(sdrSinceDate.getMonth() - 13);
+  const sdrSince = toAccountDateIso(sdrSinceDate);
   let sdrOffset = 0;
   const sdrPage = 1000;
   while (true) {
     const { data: page, error: sdrErr } = await supabase
       .from("kommo_lead_events")
       .select(
-        "kommo_lead_id, event_date, lead_created_date, client, responsible_name, status_id, stage_name, raw_payload, citas, firmas",
+        "kommo_lead_id, event_date, lead_created_date, client, responsible_name, status_id, stage_name, citas, firmas",
       )
       .in("client", allowed)
+      .gte("event_date", sdrSince)
       .order("event_date", { ascending: true })
       .range(sdrOffset, sdrOffset + sdrPage - 1);
     if (sdrErr) throw new AppError(`SDR load failed: ${sdrErr.message}`, 500);
@@ -286,7 +290,6 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
         event_date: row.event_date as string,
         stage_name: row.stage_name as string | null,
         lead_created_date: row.lead_created_date as string | null,
-        raw_payload: row.raw_payload as RejectionTimelineEvent["raw_payload"],
       });
     }
     if (page.length < sdrPage) break;
