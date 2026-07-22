@@ -222,34 +222,25 @@ async function loadMetricsDaily(): Promise<PipelineRowDto[]> {
 
 let _cachedSnapshot: DashboardSnapshotDto | null = null;
 
-export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
-  if (_cachedSnapshot !== null) return _cachedSnapshot;
+type SdrRejectionCache = {
+  sdrHistory: DashboardSnapshotDto["sdrHistory"];
+  rejectedByStage: DashboardSnapshotDto["rejectedByStage"];
+};
+let _cachedSdrRejection: SdrRejectionCache | null = null;
 
-  if (!isSupabaseConfigured()) {
-    return getStaticSnapshot();
-  }
+export function invalidateSdrRejectionCache(): void {
+  _cachedSdrRejection = null;
+}
 
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return getStaticSnapshot();
-
-  const metaSpend = await getMetaSpendFromDb();
-  if (metaSpend.length === 0) {
-    return getStaticSnapshot();
-  }
-
-  const metricsRows = await loadMetricsDaily();
-  const daily = mergeDailyWithMetaSpend(metricsRows, metaSpend);
-  const metaSpendPeriod = buildMetaPeriod(metaSpend);
-  const availableDates = collectAvailableDates(metaSpend, daily);
-  const kommoDates = metricsRows.map((r) => r.FECHA).filter(Boolean).sort();
-  const rangeStart = kommoDates[0] ?? metaSpendPeriod.start;
-  const rangeEnd = kommoDates.at(-1) ?? metaSpendPeriod.end;
-  const defaultDateRange = {
-    start: rangeStart || metaSpendPeriod.start,
-    end: rangeEnd || metaSpendPeriod.end,
-  };
+async function loadSdrRejectionData(supabase: ReturnType<typeof getSupabaseAdmin>): Promise<SdrRejectionCache> {
+  if (_cachedSdrRejection !== null) return _cachedSdrRejection;
+  if (!supabase) return { sdrHistory: getStaticSnapshot().sdrHistory, rejectedByStage: [] };
 
   const allowed = Array.from(getAllowedDashboardClients());
+  const sdrSinceDate = new Date();
+  sdrSinceDate.setMonth(sdrSinceDate.getMonth() - 13);
+  const sdrSince = toAccountDateIso(sdrSinceDate);
+
   const sdrRows: Array<{
     event_date: string;
     client: string;
@@ -258,9 +249,6 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     firmas: number;
   }> = [];
   const rejectionEvents: RejectionTimelineEvent[] = [];
-  const sdrSinceDate = new Date();
-  sdrSinceDate.setMonth(sdrSinceDate.getMonth() - 13);
-  const sdrSince = toAccountDateIso(sdrSinceDate);
   let sdrOffset = 0;
   const sdrPage = 1000;
   while (true) {
@@ -297,7 +285,6 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
   }
 
   const rejectedByStage = computeRejectedByStage(rejectionEvents);
-
   const sdrHistory = sdrRows.map((r) => ({
     FECHA: r.event_date as string,
     SEMANA: weekStartIso(r.event_date as string),
@@ -308,13 +295,50 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
     FIRMAS: (r.firmas as number) ?? 0,
   }));
 
+  const result: SdrRejectionCache = {
+    sdrHistory: sdrHistory.length > 0 ? sdrHistory : getStaticSnapshot().sdrHistory,
+    rejectedByStage,
+  };
+  _cachedSdrRejection = result;
+  return result;
+}
+
+export async function getDashboardSnapshot(): Promise<DashboardSnapshotDto> {
+  if (_cachedSnapshot !== null) return _cachedSnapshot;
+
+  if (!isSupabaseConfigured()) {
+    return getStaticSnapshot();
+  }
+
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return getStaticSnapshot();
+
+  const metaSpend = await getMetaSpendFromDb();
+  if (metaSpend.length === 0) {
+    return getStaticSnapshot();
+  }
+
+  const metricsRows = await loadMetricsDaily();
+  const daily = mergeDailyWithMetaSpend(metricsRows, metaSpend);
+  const metaSpendPeriod = buildMetaPeriod(metaSpend);
+  const availableDates = collectAvailableDates(metaSpend, daily);
+  const kommoDates = metricsRows.map((r) => r.FECHA).filter(Boolean).sort();
+  const rangeStart = kommoDates[0] ?? metaSpendPeriod.start;
+  const rangeEnd = kommoDates.at(-1) ?? metaSpendPeriod.end;
+  const defaultDateRange = {
+    start: rangeStart || metaSpendPeriod.start,
+    end: rangeEnd || metaSpendPeriod.end,
+  };
+
+  const { sdrHistory, rejectedByStage } = await loadSdrRejectionData(supabase);
+
   const snapshot: DashboardSnapshotDto = {
     daily,
     metaSpend,
     metaSpendPeriod,
     availableDates,
     defaultDateRange,
-    sdrHistory: sdrHistory.length > 0 ? sdrHistory : getStaticSnapshot().sdrHistory,
+    sdrHistory,
     rejectedByStage,
     latestDate: availableDates.at(-1) ?? null,
     syncedAt: new Date().toISOString(),
@@ -328,7 +352,7 @@ export type RefreshMetricsMode = "full" | "meta_only";
 
 export async function refreshAndBroadcast(
   metricRange?: { since: string; until: string },
-  options?: { kommoMode?: RefreshMetricsMode },
+  options?: { kommoMode?: RefreshMetricsMode; hasNewEvents?: boolean },
 ): Promise<DashboardSnapshotDto> {
   const range = metricRange ?? currentMonthRange();
   if (options?.kommoMode === "meta_only") {
@@ -336,8 +360,11 @@ export async function refreshAndBroadcast(
   } else {
     await rebuildMetricsFromSources(range.since, range.until);
   }
-  // Invalidate cache only after the full rebuild completes so concurrent
-  // HTTP snapshot requests served from the old cache during the reset window.
+  // Invalidate SDR/rejection cache only when new events actually arrived.
+  // Without new events (force-refresh for staleness), keep the cached SDR data.
+  if (options?.hasNewEvents !== false) {
+    invalidateSdrRejectionCache();
+  }
   _cachedSnapshot = null;
   const snapshot = await getDashboardSnapshot();
   sseHub.broadcast("snapshot_refreshed", snapshot);
